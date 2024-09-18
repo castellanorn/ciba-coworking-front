@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import router from "./router/router";
-import { AuthProvider } from "./context/auth/authContext";
+import { AuthProvider } from "./auth/AuthWrapper";
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById("root")).render(
