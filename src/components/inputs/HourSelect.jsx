@@ -1,4 +1,4 @@
-import { Option, Select } from "../../calendar/styled-components";
+import { Option, Select } from "../inputs/styled/InputStyled";
 
 function HourSelect() {
     const hours = [];

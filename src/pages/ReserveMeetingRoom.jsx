@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import Calendar from '../components/calendar/Calendar'
-import {ButtonConfirm, ButtonFind, ButtonPlaces,ButtonPlacesFocus,ButtonsContainer,DivReserve,H2, H3, Hr, Hr2 } from '../components/calendar/styled-components'
-import HourSelect from '../components/popup/reserve/HourSelect'
+import HourSelect from '../components/inputs/HourSelect'
+import { ButtonsContainer, DivReserve, H2, H3, Hr, Hr2 } from '../components/calendar/CalendarStyled'
+import { ButtonConfirm, ButtonFind, ButtonPlaces, ButtonPlacesFocus } from '../components/buttons/ButtonStyled'
 
 const ReserveMeetingRoom = () => {
     return (
@@ -27,5 +28,4 @@ const ReserveMeetingRoom = () => {
         </DivReserve>
     )
 }
-
 export default ReserveMeetingRoom;
