@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import { RadioGroup, RadioLabel } from '../calendar/styled-components';
+import { RadioGroup, RadioLabel } from '../inputs/styled/InputStyled';
 
 function RadioInput({ label, name, selectedOption, onChange }) {
   const isSelected = selectedOption === label;
