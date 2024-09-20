@@ -3,6 +3,9 @@ import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Layout from "../layout/Layout";
+import ReserveTable from "../pages/ReserveTable"
+import ReserveOffice from "../pages/ReserveOffice";
+import ReserveMeetingRoom from "../pages/ReserveMeetingRoom";
 /* import SignIn from "../pages/SignIn"; */
 /* import BranchPage from "../pages/BranchPage"; */
 /* import TopicPage from "../pages/TopicPage"; */
@@ -22,10 +25,18 @@ const router = createBrowserRouter([
                 path: "login",
                 element: <Login />,
             },
-            /*    { */
-            /*        path: "signin", */
-            /*        element: <SignIn /> */
-            /*    }, */
+                { 
+                path: "reserve_office_page", 
+                element: <ReserveOffice /> 
+                }, 
+            { 
+                path: "reserve_table_page", 
+                element: <ReserveTable /> 
+                },
+            {
+                path: "reserve_meeting_room_page",
+                element: <ReserveMeetingRoom/>
+            },
             /*    { */
             /*        path: "branch/:id", */
             /*        element: <BranchPage /> */
