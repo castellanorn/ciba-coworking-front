@@ -11,16 +11,17 @@
   --blue: #17C7D2;
 }
 
-/* body {
+body {
   padding: 0;
   margin: 0;
   display: flex;
+  flex-direction: column;
   width: auto;
   height: 100%;
-} */
+}
 
 :root{
-  margin: 20px;
+  margin: 15px;
   padding: 0;
 }
 .css-23p0if-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected){
@@ -75,5 +76,5 @@
 }
 .css-23p0if-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
   background-color: var(--violet) !important;
-  
+
 }
