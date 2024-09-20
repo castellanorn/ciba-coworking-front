@@ -13,7 +13,6 @@ export const Hr = styled.hr`
     color: #532D6D;
     width:270px;
     border-top: 2px solid #532D6D;
-    margin:0;
 `;
 export const Hr2 = styled.hr`
     margin-top: 20px;
