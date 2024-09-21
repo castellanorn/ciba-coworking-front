@@ -27,5 +27,3 @@ export const ButtonsContainer = styled.div`
     margin-bottom:20px;
 `;
 
-
-
