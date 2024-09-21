@@ -26,7 +26,6 @@ body {
 }
 .css-23p0if-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected){
   font-weight: bold;
-
 }
 .css-1c32n2y-MuiBadge-root{
   color: var(--violet) !important;
@@ -52,7 +51,6 @@ body {
   color:var(--violet) !important;
   font-family: "Marianina XWd FY W03 Medium" !important;
   font-size: 12px !important;
-
 }
 
 /*numbers*/
@@ -63,6 +61,7 @@ body {
 .css-19kok5i-MuiDialogActions-root{
   display: flex !important;
   justify-content: center !important;
+  padding: 10px 30px 10px 30px !important;
 }
 .css-1apkmlw-MuiButtonBase-root-MuiButton-root{
   background-color: var(--white) !important;
@@ -76,5 +75,7 @@ body {
 }
 .css-23p0if-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
   background-color: var(--violet) !important;
-
+}
+img {
+  margin-left: 10px;
 }
