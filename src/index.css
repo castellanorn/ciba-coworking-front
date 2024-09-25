@@ -19,14 +19,29 @@ body {
   width: auto;
   height: 100%;
 }
-
+img {
+  display: flex;
+  justify-content: center;
+  width:50px;
+}
+span{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+svg{
+  color:var(--violet);
+  font-size: 40px;
+  display: flex;
+}
 :root{
-  margin: 15px;
+  margin: 0;
   padding: 0;
 }
 .css-23p0if-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected){
   font-weight: bold;
 }
+
 .css-1c32n2y-MuiBadge-root{
   color: var(--violet) !important;
 }
@@ -41,9 +56,12 @@ body {
 .css-1eeiwjo-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon{
   color:var(--violet);
 }
+/*calendar*/
 .css-1rtg91x-MuiDateCalendar-root{
-
   margin-top: 20px !important;
+  box-shadow: -4px 0px 6px rgba(0, 0, 0, 0.2), 4px 4px 6px rgba(0, 0, 0, 0.2), 0px 0px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  
 }
 /*days*/
 .css-ufcxyz-MuiTypography-root-MuiDayCalendar-weekDayLabel{
@@ -76,6 +94,7 @@ body {
 .css-23p0if-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
   background-color: var(--violet) !important;
 }
-img {
-  margin-left: 10px;
+
+.hUoTwd{
+  margin-bottom: 10px;
 }

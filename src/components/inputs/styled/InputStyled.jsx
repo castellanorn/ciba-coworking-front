@@ -18,6 +18,7 @@ export const LabelOption = styled.label`
 export const RadioGroup = styled.div`
 display: flex;
 flex-direction: column;
+margin-left:20px;
 `;
 
 export const RadioLabel = styled.label`

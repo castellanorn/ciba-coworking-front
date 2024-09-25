@@ -5,6 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import React from 'react';
+import { TitleSelectDate } from './CalendarStyled';
 
 const currentDay = dayjs();
 const getCurrentYear = () => currentDay.year();
@@ -62,27 +63,41 @@ function ServerDay(props) {
   );
 }
 
-export default function Calendar() {
+export default function Calendar({setError}) {
   const [selectedDate, setSelectedDate] = React.useState(null);
+  
 
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
+    if (newDate) {
+      const today = dayjs().startOf('day');
+      if (newDate.isBefore(today)) {
+        setError("Selecció incorrecte. Tria un dia a partir d' avui.");
+      } else {
+        setError('');
+      }
+    } else {
+      setError('Selecciona un día.');
+    }
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ca">
-      <DateCalendar
-        value={selectedDate}
-        onChange={handleDateChange}
-        slots={{
-          day: ServerDay,
-        }}
-        minDate={getDateRangeForYear(getCurrentYear()).minDateValue}
-        maxDate={getDateRangeForYear(getCurrentYear()).maxDateValue}
-        shouldDisableDate={shouldDisableDate}
-        shouldDisableMonth={shouldDisableMonth}
-        dayOfWeekFormatter={dayOfWeekFormatter}
-      />
-    </LocalizationProvider>
+    <>
+      <TitleSelectDate>Selecciona un dia</TitleSelectDate>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ca">
+        <DateCalendar
+          value={selectedDate}
+          onChange={handleDateChange}
+          slots={{
+            day: ServerDay,
+          }}
+          minDate={getDateRangeForYear(getCurrentYear()).minDateValue}
+          maxDate={getDateRangeForYear(getCurrentYear()).maxDateValue}
+          shouldDisableDate={shouldDisableDate}
+          shouldDisableMonth={shouldDisableMonth}
+          dayOfWeekFormatter={dayOfWeekFormatter}
+        />
+      </LocalizationProvider>
+    </>
   );
 }

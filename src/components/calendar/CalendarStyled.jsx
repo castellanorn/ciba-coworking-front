@@ -1,5 +1,11 @@
 import styled from "styled-components";
 
+export const TitleSelectDate = styled.h3` 
+    font-family: "Marianina FY Black";
+    font-size:25px;
+    margin-left:20px;
+`;
+
 export const DivReserve = styled.div` 
     display:flex;
     justify-content:center;
@@ -9,22 +15,10 @@ export const Div = styled.div`
     display:flex;
 `;
 
-export const Hr = styled.hr`
-    color: #532D6D;
-    border-top: 2px solid #532D6D;
-    width:270px;
 
-`;
 export const Hr2 = styled.hr`
     margin-top: 20px;
     width:270px;
 `;
 
-export const ButtonsContainer = styled.div`
-    display:flex;
-    justify-content:center;
-    gap:8px;
-    margin-top:20px;
-    margin-bottom:20px;
-`;
 
