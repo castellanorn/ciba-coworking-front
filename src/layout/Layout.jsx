@@ -1,16 +1,20 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/navbar/Navbar";
+import HeaderMobile from "../components/header/Header";
+import FooterMobile from "../components/footer/Footer";
 
 
 const Layout = () => {
   return (
     <div>
       <nav>
-        <Navbar></Navbar>
+        <HeaderMobile/>
       </nav>
       <main>
         <Outlet />
       </main>
+      <nav>
+        <FooterMobile/>
+      </nav>
     </div>
   );
 };

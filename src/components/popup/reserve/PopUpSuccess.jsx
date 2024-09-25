@@ -1,20 +1,20 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
-import { ContainerTitleMessage, TitleMessage, TitleMessageConfirm } from '../../titles/titleStyled';
 import { ButtonConfirm } from '../../buttons/ButtonStyled';
-import Confirm from '../../../assets/confirm.png'
+import { ContainerTitleMessage, TitleMessageConfirm } from '../../title/TitleStyled';
 
-const PopUpSuccess = ({ open, onClose }) => {
+const PopUpSuccess = ({ open, onClose, title, imageSrc, buttonText }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>
         <DialogContentText>
-            <ContainerTitleMessage>
-                <TitleMessageConfirm>Reserva confirmada<img src={Confirm}></img></TitleMessageConfirm>
-            </ContainerTitleMessage>
+          <ContainerTitleMessage>
+            <span><img src={imageSrc} alt="confirmation-icon" /></span>
+            <TitleMessageConfirm>{title}</TitleMessageConfirm>
+          </ContainerTitleMessage>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <ButtonConfirm onClick={onClose}>Aceptar</ButtonConfirm>
+        <ButtonConfirm onClick={onClose}>{buttonText}</ButtonConfirm>
       </DialogActions>
     </Dialog>
   );

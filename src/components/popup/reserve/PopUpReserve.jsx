@@ -1,24 +1,25 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
-import { ContainerDialog, H6, Line, SubTitleMessage, TitleMessage } from '../../titles/titleStyled';
+import { ContainerDialog, H6, LineSpan, SubTitleMessage, TitleMessage } from '../../title/TitleStyled';
 import { ButtonCancel, ButtonConfirm } from '../../buttons/ButtonStyled';
 
-const PopUpConfirmReserve = ({ open, onConfirm, onCancel,table }) => {
+
+const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, title, subtitle, timeSlot, spaceType, confirmText, cancelText }) => {
   return (
     <ContainerDialog>
-        <Dialog open={open} onClose={onCancel}>
+      <Dialog open={open} onClose={onCancel}>
         <DialogContent>
-            <DialogContentText>
-            <TitleMessage>Confirmar reserva</TitleMessage>
-            </DialogContentText>
-            <SubTitleMessage>Matí<Line>|</Line> Setembre 26</SubTitleMessage>
-            <H6>Espai reservat: Taula individual</H6>
-            <H6>Taula: {table}</H6>
+          <DialogContentText>
+            <TitleMessage>{title}</TitleMessage>
+          </DialogContentText>
+          <SubTitleMessage>{timeSlot}<LineSpan>|</LineSpan>{subtitle}</SubTitleMessage>
+          <H6>{spaceType}</H6>
+          <H6>Taula: {table}</H6>
         </DialogContent>
         <DialogActions>
-            <ButtonConfirm onClick={onConfirm}>Acceptar</ButtonConfirm>
-            <ButtonCancel onClick={onCancel}>Cancel·lar</ButtonCancel>
+          <ButtonConfirm onClick={onConfirm}>{confirmText}</ButtonConfirm>
+          <ButtonCancel onClick={onCancel}>{cancelText}</ButtonCancel>
         </DialogActions>
-        </Dialog>
+      </Dialog>
     </ContainerDialog>
   );
 };

@@ -10,6 +10,7 @@ export const ButtonConfirm = styled.button`
     font-weight:bold;
     font-size:18px;
     cursor:pointer;
+    margin-bottom:50px;
     background-color:white;
         &:active{
                 background-color: #532D6D;
@@ -26,11 +27,11 @@ export const ButtonCancel = styled.button`
     border:none;
     font-size:18px;
     cursor:pointer;
+    margin-bottom:50px;
         &:active{
             background-color: white;
             color:#F8A99C;
-        }
-            
+        }      
 `;
 export const ButtonPlaces = styled.button`
     width:100px;

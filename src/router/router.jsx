@@ -6,6 +6,8 @@ import Layout from "../layout/Layout";
 import ReserveTable from "../pages/ReserveTable"
 import ReserveOffice from "../pages/ReserveOffice";
 import ReserveMeetingRoom from "../pages/ReserveMeetingRoom";
+// import EditReserveTable from "../pages/EditReserveTable";
+import Contact from "../pages/Contact";
 /* import SignIn from "../pages/SignIn"; */
 /* import BranchPage from "../pages/BranchPage"; */
 /* import TopicPage from "../pages/TopicPage"; */
@@ -25,17 +27,26 @@ const router = createBrowserRouter([
                 path: "login",
                 element: <Login />,
             },
-                { 
+            { 
                 path: "reserve_office_page", 
                 element: <ReserveOffice /> 
-                }, 
+            }, 
             { 
                 path: "reserve_table_page", 
                 element: <ReserveTable /> 
+            },
+            
+                {
+                    path: "reserve_meeting_room_page",
+                    element: <ReserveMeetingRoom/>
                 },
+            // {
+            //     path: "edit_reserve_table_page",
+            //     element: <EditReserveTable/>
+            // },
             {
-                path: "reserve_meeting_room_page",
-                element: <ReserveMeetingRoom/>
+                path: "/contact_page",
+                element: <Contact/>
             },
             /*    { */
             /*        path: "branch/:id", */
