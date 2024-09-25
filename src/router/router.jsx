@@ -3,74 +3,117 @@ import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Layout from "../layout/Layout";
-import ReserveTable from "../pages/ReserveTable"
-import ReserveOffice from "../pages/ReserveOffice";
-import ReserveMeetingRoom from "../pages/ReserveMeetingRoom";
-// import EditReserveTable from "../pages/EditReserveTable";
+import OfficeBooking from "../pages/OfficeBooking";
+import MeetingRoomBooking from "../pages/MeetingRoomBooking";
+import TableBooking from "../pages/TableBooking";
 import Contact from "../pages/Contact";
-/* import SignIn from "../pages/SignIn"; */
-/* import BranchPage from "../pages/BranchPage"; */
-/* import TopicPage from "../pages/TopicPage"; */
-/* import CreateTopicPage from "../pages/CreateTopicPage"; */
-/* import EditProfilePage from "../pages/EditProfilePage"; */
-/*  */
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import ManageIndividual from "../pages/admin/ManageIndividual";
+import ManageOffice from "../pages/admin/ManageOffice";
+import ManageMeetingRoom from "../pages/admin/ManageMeetingRoom";
+import UserDashboard from "../pages/user/UserDashboard";
+import EditIndividualTable from "../pages/user/EditIndividualTable";
+import EditOffice from "../pages/user/EditOffice";
+import EditMeetingRoom from "../pages/user/EditMeetingRoom";
+
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Layout />,
-        children: [
-            {
-                index: true,
-                element: <Home />,
-            },
-            {
-                path: "login",
-                element: <Login />,
-            },
-            { 
-                path: "reserve_office_page", 
-                element: <ReserveOffice /> 
-            }, 
-            { 
-                path: "reserve_table_page", 
-                element: <ReserveTable /> 
-            },
-            
-                {
-                    path: "reserve_meeting_room_page",
-                    element: <ReserveMeetingRoom/>
-                },
-            // {
-            //     path: "edit_reserve_table_page",
-            //     element: <EditReserveTable/>
-            // },
-            {
-                path: "/contact_page",
-                element: <Contact/>
-            },
-            /*    { */
-            /*        path: "branch/:id", */
-            /*        element: <BranchPage /> */
-            /*    }, */
-            /*    { */
-            /*        path: "topic/:id", */
-            /*        element: <TopicPage /> */
-            /*    }, */
-            {
-                path: "create_topic",
-                element: (
-                    <PrivateRoute>
-                        {/* <CreateTopicPage /> */}
-                    </PrivateRoute>)
-            },
-            {
-                path: "edit_profile/:id",
-                element: (
-                    <PrivateRoute>
-                        {/*  <EditProfilePage /> */}
-                    </PrivateRoute>
-                )
-            }]
-},
-])
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "inici-sessio",
+        element: <Login />,
+      },
+      {
+        path: "contacte",
+        element: <Contact />,
+      },
+      // Rutas compartidas entre admin y usuario
+      {
+        path: "reservar-taula",
+        element: <TableBooking />,
+      },
+      {
+        path: "reservar-despatx",
+        element: <OfficeBooking />,
+      },
+      {
+        path: "reservar-reunio",
+        element: <MeetingRoomBooking />,
+      },
+      // Rutas admin
+      {
+        path: "panell-administrador",
+        element: (
+          <PrivateRoute requiredRole="admin">
+            <AdminDashboard />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "gestio-de-taulas",
+        element: (
+          <PrivateRoute requiredRole="admin">
+            <ManageIndividual />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "gestio-despatx",
+        element: (
+          <PrivateRoute requiredRole="admin">
+            <ManageOffice />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "gestio-reunio",
+        element: (
+          <PrivateRoute requiredRole="admin">
+            <ManageMeetingRoom />
+          </PrivateRoute>
+        ),
+      },
+      // Rutas user
+      {
+        path: "panell-usuari",
+        element: (
+          <PrivateRoute requiredRole="user">
+            <UserDashboard />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "edit-reserve-taula",
+        element: (
+          <PrivateRoute requiredRole="user">
+            <EditIndividualTable />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "edit-reserve-despatx",
+        element: (
+          <PrivateRoute requiredRole="user">
+            <EditOffice />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "edit-reserva-sala-reunions",
+        element: (
+          <PrivateRoute requiredRole="user">
+            <EditMeetingRoom />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+]);
+
 export default router;

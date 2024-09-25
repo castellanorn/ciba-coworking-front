@@ -54,8 +54,8 @@ const ReserveTable = () => {
   return (
     <>
       <DivReserve>
-      <TitleMobile title="Fer reserva de taula individual" />
-{/*
+        <TitleMobile title="Fer reserva de taula individual" />
+        {/*
         <ContainerButtons>
           <PlacesButton text="Taules individuals" focus={true} />
           <PlacesButton
@@ -129,8 +129,7 @@ const ReserveTable = () => {
         />
         */}
       </DivReserve>
-      
-    </> 
+    </>
   );
 };
 

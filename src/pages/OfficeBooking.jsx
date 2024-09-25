@@ -5,9 +5,7 @@ import Calendar from "../components/calendar/Calendar";
 // import ConfirmImage from '../assets/confirm-big.png';
 import ConfirmButton from "../components/buttons/ConfirmButton";
 import ContainerButtons from "../components/container/ButtonsContainer";
-import {
-  ButtonFind,
-} from "../components/buttons/ButtonStyled";
+import { ButtonFind } from "../components/buttons/ButtonStyled";
 import TitleMobile from "../components/title/Title";
 import {
   DivReserve,
@@ -59,7 +57,7 @@ const ReserveOffice = () => {
       <DivReserve>
         <TitleMobile title="Fer reserva de despatx" />
         <PlacesButton text="Taules individuals" link="/reserve_table_page" />
-        <PlacesButton text="Despatxos privats" focus={true} /> 
+        <PlacesButton text="Despatxos privats" focus={true} />
         <PlacesButton
           text="Sala de reunions"
           link="/reserve_meeting_room_page"
