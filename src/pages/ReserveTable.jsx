@@ -1,67 +1,72 @@
-// import { useState } from "react";
-// import Calendar from "../components/calendar/Calendar";
-// import PopUpConfirmReserve from "../components/popup/reserve/PopUpReserve";
-// import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
-// import ConfirmImage from "../assets/confirm-big.png";
-// import ConfirmButton from "../components/buttons/ConfirmButton";
-// import ContainerButtons from "../components/container/ButtonsContainer";
-// import { ButtonFind } from "../components/buttons/ButtonStyled";
-// import TitleMobile from "../components/title/Title";
-// import {
-//   DivReserve,
-//   Hr2,
-//   TitleSelectDate,
-// } from "../components/calendar/CalendarStyled";
-// import RadioInput from "../components/inputs/RadioInput";
-// import Map from "../components/map/Map";
-// import PlacesButton from "../components/buttons/PlacesButton";
-
-import { DivReserve } from "../components/calendar/CalendarStyled";
+import { useState } from "react";
+import PlacesButton from "../components/buttons/PlacesButton";
+import Calendar from "../components/calendar/Calendar";
+import {
+  DivReserve,
+  Hr2,
+  TitleSelectDate,
+} from "../components/calendar/CalendarStyled";
+import ContainerButtons from "../components/container/ButtonsContainer";
 import TitleMobile from "../components/title/Title";
+import { ButtonFind } from "../components/buttons/ButtonStyled";
+import RadioInput from "../components/inputs/RadioInput";
+import ConfirmButton from "../components/buttons/ConfirmButton";
+import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve";
+import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
+import Map from "../components/map/Map";
 
 const ReserveTable = () => {
-  // const [popupOpen, setPopupOpen] = useState(false);
-  // const [successPopupOpen, setSuccessPopupOpen] = useState(false);
-  // const [selectedTable, setSelectedTable] = useState("");
-  // const [selectedDate, setSelectedDate] = useState(null);
-  // const [error, setError] = useState("");
+  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const [selectedTable, setSelectedTable] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [error, setError] = useState("");
 
-  // const handleConfirmReserve = () => {
-  //   setPopupOpen(false);
-  //   setSuccessPopupOpen(true);
-  // };
+  const handleOpenSuccess = () => {
+    setSuccessPopupOpen(true);
+  };
 
-  // const handleCancelReserve = () => {
-  //   setPopupOpen(false);
-  // };
+  const handleCloseSuccess = () => {
+    setSuccessPopupOpen(false);
+  };
 
-  // const handleClose = () => {
-  //   setSuccessPopupOpen(false);
-  // };
+  const handleOpenConfirm = () => {
+    setConfirmPopupOpen(true);
+  };
 
-  // const handleTableChange = (event) => {
-  //   setSelectedTable(event.target.value);
-  // };
+  const handleCloseConfirm = () => {
+    setConfirmPopupOpen(false);
+  };
 
-  // const handleFindResults = () => {
-  //   if (!selectedDate) {
-  //     setError("Por favor, selecciona una fecha.");
-  //     return;
-  //   }
-  //   setError("");
-  //   console.log("Fecha seleccionada:", selectedDate);
-  // };
+  const handleAcceptConfirm = () => {
+    handleCloseConfirm();
+    handleOpenSuccess();
+  };
+
+  const handleTableChange = (event) => {
+    setSelectedTable(event.target.value);
+  };
+
+  const handleFindResults = () => {
+    if (!selectedDate) {
+      setError("Si us plau, selecciona un dia.");
+      return;
+    }
+    setError("");
+    console.log("Fecha seleccionada:", selectedDate);
+    handleOpenConfirm();
+  };
+
   return (
     <>
       <DivReserve>
-      <TitleMobile title="Fer reserva de taula individual" />
-{/*
+        <TitleMobile title="Fer reserva de taula individual" />
         <ContainerButtons>
           <PlacesButton text="Taules individuals" focus={true} />
           <PlacesButton
             text="Despatxos privats"
-            link="/reserve_office_page"
             focus={false}
+            link="/reserve_office_page"
           />
           <PlacesButton
             text="Sala de reunions"
@@ -79,8 +84,8 @@ const ReserveTable = () => {
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <Hr2 />
-
-        <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
+        
+        <TitleSelectDate>Selecciona la franja horaria</TitleSelectDate>
         <RadioInput
           label="Matí"
           value="Matí"
@@ -96,41 +101,23 @@ const ReserveTable = () => {
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
         </ContainerButtons>
-
         <Hr2 />
-
         <Map />
 
         <ContainerButtons>
-          <ConfirmButton onClick={() => setPopupOpen(true)}>
-            Acceptar
-          </ConfirmButton>
+          <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
         </ContainerButtons>
 
         <PopUpConfirmReserve
-          open={popupOpen}
-          onConfirm={handleConfirmReserve}
-          onCancel={handleCancelReserve}
-          title="Confirmar reserva"
-          subtitle="Setembre 26"
-          timeSlot={selectedTable}
-          spaceType="Espai reservat: Taula individual"
-          table="12"
-          confirmText="Acceptar"
-          cancelText="Cancel·lar"
+          open={confirmPopupOpen}
+          onClose={handleCloseConfirm}
+          pageType="table"
+          onAccept={handleAcceptConfirm}
         />
 
-        <PopUpSuccess
-          open={successPopupOpen}
-          onClose={handleClose}
-          title="Reserva confirmada"
-          imageSrc={ConfirmImage}
-          buttonText="Acceptar"
-        />
-        */}
+        <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
-      
-    </> 
+    </>
   );
 };
 

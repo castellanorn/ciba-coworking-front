@@ -1,34 +1,50 @@
-import { useState } from 'react';
-import Calendar from '../components/calendar/Calendar';
-import PopUpSuccess from '../components/popup/reserve/PopUpSuccess';
-import ConfirmImage from '../assets/confirm-big.png';
-import ConfirmButton from '../components/buttons/ConfirmButton';
-import ContainerButtons from '../components/container/ButtonsContainer';
-import { ButtonFind, ButtonPlaces, ButtonPlacesFocus } from '../components/buttons/ButtonStyled';
-import TitleMobile from '../components/title/Title';
-import { DivReserve, Hr2, TitleSelectDate } from '../components/calendar/CalendarStyled';
-import HourSelect from '../components/inputs/HourSelect';
+import PlacesButton from "../components/buttons/PlacesButton";
+import Calendar from "../components/calendar/Calendar";
+import { DivReserve, Hr2 } from "../components/calendar/CalendarStyled";
+import ContainerButtons from "../components/container/ButtonsContainer";
+import TitleMobile from "../components/title/Title";
+import { ButtonFind } from "../components/buttons/ButtonStyled";
+import ConfirmButton from "../components/buttons/ConfirmButton";
+import { useState } from "react";
+import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
+import HourSelect from "../components/inputs/HourSelect";
+import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve";
 
 const ReserveMeetingRoom = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  const handleReserveClick = () => {
+  const handleOpenSuccess = () => {
     setSuccessPopupOpen(true);
   };
 
-  const handleClose = () => {
+  const handleCloseSuccess = () => {
     setSuccessPopupOpen(false);
+  };
+
+  const handleOpenConfirm = () => {
+    setConfirmPopupOpen(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setConfirmPopupOpen(false);
+  };
+
+  const handleAcceptConfirm = () => {
+    handleCloseConfirm();
+    handleOpenSuccess();
   };
 
   const handleFindResults = () => {
     if (!selectedDate) {
-      setError('Por favor, selecciona una fecha.');
+      setError("Si us plau, selecciona un dia.");
       return;
     }
-    setError('');
-    console.log('Fecha seleccionada:', selectedDate);
+    setError("");
+    console.log("Fecha seleccionada:", selectedDate);
+    handleOpenConfirm();
   };
 
   return (
@@ -36,29 +52,44 @@ const ReserveMeetingRoom = () => {
       <DivReserve>
         <TitleMobile title="Fer reserva de sala de reunions" />
         <ContainerButtons>
-          <ButtonPlaces text="Taules individuals" link="/reserve_table_page" />
-          <ButtonPlacesFocus text="Despatxos privats" focus />
-          <ButtonPlaces text="Sala de reunions" link="/reserve_meeting_room_page" />
+          <PlacesButton
+            text="Taules individuals"
+            focus={false}
+            link="/reserve_table_page"
+          />
+          <PlacesButton
+            text="Despatxos privats"
+            link="/reserve_office_page"
+            focus={false}
+          />
+          <PlacesButton text="Sala de reunions" focus={true} />
         </ContainerButtons>
-        <Calendar onChange={setSelectedDate} value={selectedDate} setError={setError} />
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+
+        <Calendar
+          onChange={setSelectedDate}
+          value={selectedDate}
+          setError={setError}
+        />
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
         </ContainerButtons>
         <Hr2 />
-        <TitleSelectDate>Selecciona la hora</TitleSelectDate>
         <HourSelect />
         <Hr2 />
         <ContainerButtons>
-          <ConfirmButton onClick={handleReserveClick}>Acceptar</ConfirmButton>
+          <ConfirmButton onClick={handleOpenSuccess}>Acceptar</ConfirmButton>
         </ContainerButtons>
-        <PopUpSuccess
-          open={successPopupOpen}
-          onClose={handleClose}
-          title="Reserva confirmada"
-          imageSrc={ConfirmImage}
-          buttonText="Acceptar"
+        <PopUpConfirmReserve
+          open={confirmPopupOpen}
+          onClose={handleCloseConfirm}
+          pageType="meetingroom"
+          onAccept={handleAcceptConfirm}
         />
+
+        <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
     </>
   );

@@ -10,7 +10,7 @@ export const ButtonConfirm = styled.button`
     font-weight:bold;
     font-size:18px;
     cursor:pointer;
-    margin-bottom:50px;
+    margin-bottom:60px;
     background-color:white;
         &:active{
                 background-color: #532D6D;
