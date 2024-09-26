@@ -1,19 +1,19 @@
 import { Outlet } from "react-router-dom";
-import HeaderMobile from "../components/header/Header";
-import FooterMobile from "../components/footer/Footer";
+import Footer from "../components/footer/Footer";
+import Header from "../components/header/Header";
 
 
 const Layout = () => {
   return (
     <div>
       <nav>
-        <HeaderMobile/>
+        <Header/>
       </nav>
       <main>
         <Outlet />
       </main>
       <nav>
-        <FooterMobile/>
+        <Footer/>
       </nav>
     </div>
   );
