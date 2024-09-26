@@ -11,11 +11,11 @@ import TitleMobile from "../components/title/Title";
 import { ButtonFind } from "../components/buttons/ButtonStyled";
 import RadioInput from "../components/inputs/RadioInput";
 import ConfirmButton from "../components/buttons/ConfirmButton";
-import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve";
 import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
-import Map from "../components/map/Map";
+import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve"; // Importamos el nuevo popup dinámico
+import HourSelect from "../components/inputs/HourSelect";
 
-const ReserveTable = () => {
+const ReserveOffice = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
@@ -60,17 +60,17 @@ const ReserveTable = () => {
   return (
     <>
       <DivReserve>
-        <TitleMobile title="Fer reserva de taula individual" />
+        <TitleMobile title="Fer reserva de despatx" />
         <ContainerButtons>
-          <PlacesButton text="Taules individuals" focus={true} />
           <PlacesButton
-            text="Despatxos privats"
+            text="Taules individuals"
             focus={false}
-            link="/reserve_office_page"
+            link="/reservar-taula"
           />
+          <PlacesButton text="Despatxos privats" focus={true} />
           <PlacesButton
             text="Sala de reunions"
-            link="/reserve_meeting_room_page"
+            link="/reservar-reunio"
             focus={false}
           />
         </ContainerButtons>
@@ -83,42 +83,43 @@ const ReserveTable = () => {
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <Hr2 />
-        
-        <TitleSelectDate>Selecciona la franja horaria</TitleSelectDate>
-        <RadioInput
-          label="Matí"
-          value="Matí"
-          selectedOption={selectedTable}
-          onChange={handleTableChange}
-        />
-        <RadioInput
-          label="Tarda"
-          value="Tarda"
-          selectedOption={selectedTable}
-          onChange={handleTableChange}
-        />
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
         </ContainerButtons>
         <Hr2 />
-        <Map />
+        <HourSelect />
+        <Hr2 />
+        <TitleSelectDate>Selecciona el despatx</TitleSelectDate>
+        <RadioInput
+          label="Despatx 1"
+          value="Despatx 1"
+          selectedOption={selectedTable}
+          onChange={handleTableChange}
+        />
+        <RadioInput
+          label="Despatx 2"
+          value="Despatx 2"
+          selectedOption={selectedTable}
+          onChange={handleTableChange}
+        />
 
         <ContainerButtons>
           <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
         </ContainerButtons>
 
+        {/* PopUpConfirmReserve con lógica condicional */}
         <PopUpConfirmReserve
           open={confirmPopupOpen}
           onClose={handleCloseConfirm}
-          pageType="table"
+          pageType="office" // Le decimos que esta es la página de oficinas
           onAccept={handleAcceptConfirm}
         />
 
+        {/* PopUpSuccess */}
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
     </>
   );
 };
 
-export default ReserveTable;
+export default ReserveOffice;
