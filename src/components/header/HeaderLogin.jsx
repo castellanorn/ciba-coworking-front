@@ -1,18 +1,18 @@
 import logo from '../../assets/logo-coworking.png'
-import { BiUser } from "react-icons/bi";
-import { IconsContainer, LogoContainer, Navbar } from './HeaderStyled'
+import { BiLogOutCircle } from "react-icons/bi";
+import { IconsContainer, LogoContainer, Navbar } from "./HeaderStyled";
 
-const Header = () => {
-  return (
+const HeaderLogin = () => {
+return (
     <Navbar>
         <LogoContainer>
             <img src={logo} alt="Logo" />
         </LogoContainer>
         <IconsContainer>
-            <BiUser/>
+            <BiLogOutCircle />
         </IconsContainer>
     </Navbar>
-  )
+)
 }
 
-export default Header;
+export default HeaderLogin;

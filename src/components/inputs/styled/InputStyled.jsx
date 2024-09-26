@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Select = styled.select`
-    margin-bottom:20px;
+    margin:30px;
     cursor:pointer;
     border: 2px solid #532D6D;
     border-radius:4px;
@@ -16,11 +16,10 @@ export const LabelOption = styled.label`
     font-size:16px;
 `;
 export const RadioGroup = styled.div`
-display: flex;
-flex-direction: column;
-margin-left:20px;
+    display: flex;
+    flex-direction: column;
+    margin-left:20px;
 `;
-
 export const RadioLabel = styled.label`
     display: flex;
     align-items: center;

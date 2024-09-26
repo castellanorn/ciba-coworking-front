@@ -17,7 +17,6 @@ export const Div = styled.div`
 
 
 export const Hr2 = styled.hr`
-    margin-top: 20px;
     width:270px;
 `;
 

@@ -1,6 +1,6 @@
 import { ButtonCancel } from "./ButtonStyled";
 
-const CancelButton = (children) => {
+const CancelButton = ({children}) => {
   return (
     <div>
       <ButtonCancel>{children}</ButtonCancel>
