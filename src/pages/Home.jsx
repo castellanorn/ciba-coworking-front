@@ -1,9 +1,10 @@
+import HomeIcon from "../components/icons/HomeIcon"
 
 
 const Home = () => {
   return (
     <>
-    Home
+    <HomeIcon/>
     </>
   )
 }

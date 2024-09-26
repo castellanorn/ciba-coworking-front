@@ -7,15 +7,15 @@ export const TitlePage = styled.h2`
     justify-content:center;
 `;
 export const Line = styled.hr`
-    color: #532D6D;
-    border-top: 2px solid #532D6D;
+    color: var(--violet);
+    border-top: 2px solid var(--violet);
     width:270px;
 
 `;
 
 export const TitleMessage = styled.span`
     font-family: "Marianina FY Black";
-    color:#FF7962;
+    color:var(--salmon);
     font-size:36px;
     display: flex;
     justify-content: center;
@@ -28,7 +28,7 @@ export const TitleMessageConfirm = styled.span`
 
 export const SubTitleMessage = styled.span`
     font-family: "Marianina FY Bold";
-    color:#532D6D;
+    color:var(--violet);
     font-size:25px;
     display: flex;
     justify-content: center;
@@ -37,7 +37,7 @@ export const SubTitleMessage = styled.span`
 
 export const LineSpan = styled.span`
     font-family: "Marianina FY Bold";
-    color:#FF7962;
+    color:var(--salmon);
     font-size:25px;
     margin-left:10px;
     margin-right:10px;

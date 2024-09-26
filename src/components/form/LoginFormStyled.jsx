@@ -5,10 +5,10 @@ export const Form = styled.form`
   justify-content: center;
   flex-direction: column;
 `;
-export const Input = styled.input`
+export const StyledInput = styled.input`
   margin: 8px 25px 30px 25px;
   cursor: pointer;
-  border: 2px solid #532d6d;
+  border: 2px solid var(--violet);
   border-radius: 4px;
   padding: 15px;
   font-family: "Marianina XWd FY W03 Medium";
@@ -17,7 +17,7 @@ export const Input = styled.input`
 export const LoginInput = styled.input`
   margin: 8px 24px 30px 24px;
   cursor: pointer;
-  border: 2px solid #532d6d;
+  border: 2px solid var(--violet);
   border-radius: 4px;
   padding: 15px;
   font-family: "Marianina XWd FY W03 Medium";
@@ -38,7 +38,7 @@ export const Span = styled.span`
 export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 15px;
   margin-top: 20px;
   margin-bottom: 20px;
 `;
@@ -55,5 +55,5 @@ export const EyeIcon = styled.span`
   transform: translateY(-73%);
   cursor: pointer;
   font-size: 24px;
-  color: #532D6D;
+  color: var(--violet);
 `;

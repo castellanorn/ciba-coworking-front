@@ -1,10 +1,10 @@
 import { IconsContainer } from "../header/HeaderStyled";
 import { BiCalendar, BiCalendarPlus } from "react-icons/bi";
 import { BiPhoneCall } from "react-icons/bi";
-import { NavbarFooter } from "./FooterStyled";
+import { IconsContainerFocusContact, NavbarFooter } from "./FooterStyled";
 import { Link } from "react-router-dom";
 
-const Footer = () => {
+const FooterContact = () => {
   return (
     <NavbarFooter>
       <IconsContainer>
@@ -19,11 +19,13 @@ const Footer = () => {
       </IconsContainer>
       <IconsContainer>
         <Link to="/contacte">
-          <BiPhoneCall />
+          <IconsContainerFocusContact>
+            <BiPhoneCall />
+          </IconsContainerFocusContact>
         </Link>
       </IconsContainer>
     </NavbarFooter>
   );
 };
 
-export default Footer;
+export default FooterContact;

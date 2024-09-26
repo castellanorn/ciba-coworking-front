@@ -13,4 +13,31 @@ export const NavbarFooter = styled.nav`
     background-color: #fff;
 
 `;
+export const IconsContainer = styled.div`
+    display:flex;
+    padding:10px;
+`;
+export const IconsContainerFocus = styled.div`
+    margin-top:3px;
+    padding:8px;
+    background-color:var(--violet);
+    border-radius:50%;
+    width:45px;
+        svg {
+        color: white; 
+        font-size: 40px;
+        
+    }
+`;
+
+export const IconsContainerFocusContact = styled.div`
+    margin-top:3px;
+    padding:5px;
+    background-color:var(--violet);
+    border-radius:50%;
+        svg {
+        color: white; 
+        font-size: 30px;
+    }
+`;
 

@@ -1,10 +1,10 @@
 import { IconsContainer } from "../header/HeaderStyled";
 import { BiCalendar, BiCalendarPlus } from "react-icons/bi";
 import { BiPhoneCall } from "react-icons/bi";
-import { NavbarFooter } from "./FooterStyled";
+import {  IconsContainerFocus, NavbarFooter } from "./FooterStyled";
 import { Link } from "react-router-dom";
 
-const Footer = () => {
+const FooterEdit = () => {
   return (
     <NavbarFooter>
       <IconsContainer>
@@ -12,18 +12,19 @@ const Footer = () => {
           <BiCalendarPlus />
         </Link>
       </IconsContainer>
-      <IconsContainer>
         <Link to="/panell-usuari">
+      <IconsContainerFocus>
           <BiCalendar />
+      </IconsContainerFocus>
         </Link>
-      </IconsContainer>
       <IconsContainer>
         <Link to="/contacte">
-          <BiPhoneCall />
+            
+                <BiPhoneCall />
         </Link>
       </IconsContainer>
     </NavbarFooter>
   );
 };
 
-export default Footer;
+export default FooterEdit;

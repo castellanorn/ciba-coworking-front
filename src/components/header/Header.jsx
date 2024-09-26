@@ -1,16 +1,12 @@
-import logo from '../../assets/logo-coworking.png'
-import { BiUser } from "react-icons/bi";
-import { IconsContainer, LogoContainer, Navbar } from './HeaderStyled'
+import {  Navbar } from './HeaderStyled'
+import Logo from "../icons/Logo";
+import User from '../icons/User';
 
 const Header = () => {
   return (
     <Navbar>
-        <LogoContainer>
-            <img src={logo} alt="Logo" />
-        </LogoContainer>
-        <IconsContainer>
-            <BiUser/>
-        </IconsContainer>
+        <Logo/>
+        <User/>
     </Navbar>
   )
 }
