@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
 import Layout from "../layout/Layout";
 import OfficeBooking from "../pages/OfficeBooking";
 import MeetingRoomBooking from "../pages/MeetingRoomBooking";
@@ -15,6 +14,7 @@ import UserDashboard from "../pages/user/UserDashboard";
 import EditIndividualTable from "../pages/user/EditIndividualTable";
 import EditOffice from "../pages/user/EditOffice";
 import EditMeetingRoom from "../pages/user/EditMeetingRoom";
+import Login from "../pages/Login"
 
 const router = createBrowserRouter([
   {
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       },
       {
         path: "inici-sessio",
-        element: <Login />,
+        element: <Login/>,
       },
       {
         path: "contacte",

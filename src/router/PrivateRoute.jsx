@@ -6,7 +6,7 @@ const PrivateRoute = ({ children, requiredRole }) => {
   const { authToken, userRole } = useContext(AuthContext);
 
   if (!authToken) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/inici-sessio" />;
   }
 
   if (requiredRole && userRole !== requiredRole) {
