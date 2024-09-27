@@ -6,9 +6,11 @@
   --white: #FFFFFF;
   --darkgray: #1D1D1D;
   --ligthgray: #464652;
+  --grey: #656565;
   --yellow: #CFDE00;
   --salmon: #FF7962;
   --blue: #17C7D2;
+  --black: #000000;
 }
 
 body {

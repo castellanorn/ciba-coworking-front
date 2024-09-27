@@ -1,10 +1,5 @@
-
 const UserDashboard = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <div></div>;
+};
 
-export default UserDashboard
+export default UserDashboard;
