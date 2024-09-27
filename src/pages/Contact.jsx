@@ -1,4 +1,4 @@
-import TitleMobile from "../components/title/Title";
+ import TitleMobile from "../components/title/Title"; 
 // import Title from "../components/title/Title"
 const Contact = () => {
     return (

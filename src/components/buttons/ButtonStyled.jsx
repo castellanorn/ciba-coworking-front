@@ -10,7 +10,7 @@ export const ButtonConfirm = styled.button`
     font-weight:bold;
     font-size:18px;
     cursor:pointer;
-    margin-bottom:50px;
+    margin-bottom:60px;
     background-color:white;
         &:active{
                 background-color: #532D6D;
@@ -68,4 +68,36 @@ export const ButtonFind = styled.button`
     padding: 8px;
     width:100px;
     cursor:pointer;
+`;
+
+export const CircleButton = styled.button`
+  background-color: ${({ color }) => color};
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+  
+    svg{
+        color:white;
+        font-size: 40px;
+        padding: 3px;
+        display: flex;
+        &:hover {
+            color:${({ color }) => color};
+        }
+    }
+  &:hover {
+    background-color: ${({ color }) => `${color}cc`};
+  }
+
+  &:active {
+    background-color: ${({ color }) => `${color}99`};
+  }
 `;
