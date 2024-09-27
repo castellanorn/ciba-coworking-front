@@ -1,4 +1,5 @@
-import { RadioGroup, RadioLabel } from '../inputs/styled/InputStyled';
+import { RadioGroup, RadioLabel } from "./InputStyled";
+
 
 function RadioInput({ label, name, selectedOption, onChange }) {
   const isSelected = selectedOption === label;

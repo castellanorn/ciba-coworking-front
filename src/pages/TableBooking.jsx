@@ -14,6 +14,7 @@ import ConfirmButton from "../components/buttons/ConfirmButton";
 import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve";
 import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
 import Map from "../components/map/Map";
+import { Space } from "../components/styledComponentsPages/Contact";
 
 const ReserveTable = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -117,6 +118,7 @@ const ReserveTable = () => {
 
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
+      <Space></Space>
     </>
   );
 };

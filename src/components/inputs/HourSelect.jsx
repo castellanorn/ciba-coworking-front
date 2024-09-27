@@ -1,5 +1,5 @@
 import { TitleSelectDate } from "../calendar/CalendarStyled";
-import { Option, Select } from "../inputs/styled/InputStyled";
+import { Option, Select } from "./InputStyled";
 
 function HourSelect() {
     const hours = [];

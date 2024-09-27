@@ -12,8 +12,9 @@ import { ButtonFind } from "../components/buttons/ButtonStyled";
 import RadioInput from "../components/inputs/RadioInput";
 import ConfirmButton from "../components/buttons/ConfirmButton";
 import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
-import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve"; // Importamos el nuevo popup dinámico
+import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve";
 import HourSelect from "../components/inputs/HourSelect";
+import { Space } from "../components/styledComponentsPages/Contact";
 
 const ReserveOffice = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -107,17 +108,15 @@ const ReserveOffice = () => {
           <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
         </ContainerButtons>
 
-        {/* PopUpConfirmReserve con lógica condicional */}
         <PopUpConfirmReserve
           open={confirmPopupOpen}
           onClose={handleCloseConfirm}
-          pageType="office" // Le decimos que esta es la página de oficinas
+          pageType="office"
           onAccept={handleAcceptConfirm}
         />
-
-        {/* PopUpSuccess */}
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
+      <Space></Space>
     </>
   );
 };

@@ -9,6 +9,7 @@ import { useState } from "react";
 import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
 import HourSelect from "../components/inputs/HourSelect";
 import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve";
+import { Space } from "../components/styledComponentsPages/Contact";
 
 const ReserveMeetingRoom = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -91,6 +92,7 @@ const ReserveMeetingRoom = () => {
 
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
+      <Space></Space>
     </>
   );
 };

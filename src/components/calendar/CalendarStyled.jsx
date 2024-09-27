@@ -5,7 +5,6 @@ export const TitleSelectDate = styled.h3`
     font-size:25px;
     margin-left:20px;
 `;
-
 export const DivReserve = styled.div` 
     display:flex;
     justify-content:center;
@@ -14,7 +13,6 @@ export const DivReserve = styled.div`
 export const Div = styled.div`
     display:flex;
 `;
-
 
 export const Hr2 = styled.hr`
     width:270px;
