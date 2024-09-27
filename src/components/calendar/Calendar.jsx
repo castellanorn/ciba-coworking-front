@@ -83,7 +83,7 @@ export default function Calendar({setError}) {
 
   return (
     <>
-      <TitleSelectDate>Selecciona un dia</TitleSelectDate>
+      <TitleSelectDate>Selecciona el dia</TitleSelectDate>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ca">
         <DateCalendar
           value={selectedDate}

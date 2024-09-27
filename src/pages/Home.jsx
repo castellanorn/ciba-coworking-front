@@ -1,10 +1,12 @@
-import HomeIcon from "../components/icons/HomeIcon"
+import TitleMobile from "../components/title/Title"
 
 
 const Home = () => {
   return (
     <>
-    <HomeIcon/>
+    <TitleMobile
+      title="Home"    
+    />
     </>
   )
 }

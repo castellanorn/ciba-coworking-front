@@ -14,8 +14,8 @@ export const LogoContainer = styled.div`
 export const IconsContainer = styled.div`
     display:flex;
     padding:10px;
-    margin-left:40px;
-    margin-right:40px;
+    padding-left:40px;
+    padding-right:30px;
 
 `;
 export const ContainerUser = styled.div`

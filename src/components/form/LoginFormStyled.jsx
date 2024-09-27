@@ -54,6 +54,6 @@ export const EyeIcon = styled.span`
   top: 50%;
   transform: translateY(-73%);
   cursor: pointer;
-  font-size: 24px;
+  font-size: 15px;
   color: var(--violet);
 `;

@@ -66,7 +66,7 @@ const ReserveTable = () => {
           <PlacesButton
             text="Despatxos privats"
             focus={false}
-            link="/reservar-taula"
+            link="/reservar-despatx"
           />
           <PlacesButton
             text="Sala de reunions"

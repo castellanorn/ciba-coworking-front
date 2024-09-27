@@ -12,9 +12,9 @@ function HourSelect() {
 
     return (
         <>
-        <TitleSelectDate>Selecciona la hora</TitleSelectDate>
+        <TitleSelectDate>Selecciona l' hora</TitleSelectDate>
         <Select>
-            <Option value="" disabled selected>Selecciona la hora</Option>
+            <Option value="" disabled selected>Selecciona l' hora</Option>
             {hours}
         </Select>
         </>
