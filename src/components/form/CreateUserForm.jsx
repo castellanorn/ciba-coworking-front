@@ -3,12 +3,12 @@ import TitleMobile from "../title/Title";
 import Field from "../inputs/Field";
 import ContainerButtons from "../container/ButtonsContainer";
 import ConfirmButton from "../buttons/ConfirmButton";
-import { FormContainer } from "./CreateUserFormStyled";
+import { FormContainer, Form } from "./CreateUserFormStyled";
 import CancelButton from "../buttons/CancelButton";
 import PasswordGenerator from "../inputs/PasswordGenerator";
 
 
-const CreateUserForm = () => {
+const CreateUserForm = ({onCancel}) => {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -22,7 +22,10 @@ const CreateUserForm = () => {
     email: "",
     phone: "",
     projectName: "",
+    password: "",
   });
+
+  const [canSubmit, setCanSubmit] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,12 +85,19 @@ const CreateUserForm = () => {
       valid = false;
     }
 
+     if (!form.password.trim()) {
+      errorsCopy.password = "Contrasenya obligatori";
+      valid = false;
+    } else {
+      errorsCopy.password = "";
+    }
+
     setErrors(errorsCopy);
     return valid;
   };
 
   return (
-    <>
+    <Form>
       <TitleMobile title="Afegir un usuari" />
       <FormContainer>
       <Field
@@ -129,11 +139,11 @@ const CreateUserForm = () => {
       <PasswordGenerator onPasswordGenerated={handlePasswordGenerated}/>
       <ContainerButtons>
         <ConfirmButton onClick={handleSubmit}>Acceptar</ConfirmButton>
-        <CancelButton>Cancel·lar</CancelButton>
+        <CancelButton onClick={onCancel}>Cancel·lar</CancelButton>
 
       </ContainerButtons>
     </FormContainer>
-    </>
+    </Form>
   );
 };
 

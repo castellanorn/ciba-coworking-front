@@ -1,10 +1,9 @@
- import CreateUserForm from "../components/form/CreateUserForm";
+ import AddUser from "../components/buttons/AddUser";
 // import Title from "../components/title/Title"
 const Contact = () => {
     return (
         <div>
-            <CreateUserForm/>
-
+            <AddUser/>
         </div>
     )
 }

@@ -4,7 +4,7 @@ export const PasswordContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-bottom: 20px;
-  padding-left: 35px;
+  padding-left: 10px;
 `;
 
 export const PasswordRow = styled.div`

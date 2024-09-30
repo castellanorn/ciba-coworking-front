@@ -56,8 +56,8 @@ export const RadioLabel = styled.label`
 export const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-bottom: 20px;
-    padding-left: 35px
+  padding-bottom: 15px;
+  padding-left: 10px
 `;
 
 export const FieldLabel = styled.label`
