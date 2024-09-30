@@ -3,6 +3,7 @@
   width: auto;
   height: 100vh;
   --violet: #532D6D;
+  --ligthViolet:  #945BBB;
   --white: #FFFFFF;
   --darkgray: #1D1D1D;
   --ligthgray: #464652;
@@ -11,6 +12,7 @@
   --salmon: #FF7962;
   --blue: #17C7D2;
   --black: #000000;
+  --red: #FF0000;
 }
 
 body {

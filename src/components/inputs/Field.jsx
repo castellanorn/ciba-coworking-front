@@ -1,7 +1,7 @@
 
 import { FieldContainer, FieldLabel, FieldInput, FieldInvalidInput } from "./styled/InputStyled";
 
-const Field = ({  field, name, placeholder, value, type, onchange, error }) => {
+const Field = ({ field, name, placeholder, value, type, onChange, error }) => {
   return (
     <FieldContainer>
       <FieldLabel htmlFor={name}>{field}</FieldLabel>
@@ -10,7 +10,7 @@ const Field = ({  field, name, placeholder, value, type, onchange, error }) => {
         name={name}
         placeholder={placeholder}
         value={value}
-        onChange={onchange}
+        onChange={onChange}
       />
       {error && <FieldInvalidInput>{error}</FieldInvalidInput>}
     </FieldContainer>

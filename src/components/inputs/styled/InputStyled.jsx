@@ -65,6 +65,7 @@ export const FieldLabel = styled.label`
   font-family: "Marianina XWd FY W03 Medium";
   font-weight: regular;
   font-size: 20px;
+    padding-bottom: 5px;
 `;
 
 export const FieldInput = styled.input`
@@ -90,7 +91,10 @@ export const FieldInput = styled.input`
 `;
 
 export const FieldInvalidInput = styled.p`
-  font-weight: 600;
+font-family: "Marianina FY Italic";
+  font-weight: medium;
   font-size: 20px;
-  color: var(--salmon);
+  color: var(--red);
+  margin-bottom: 0px;
+  margin-top: 8px;
 `;
