@@ -13,7 +13,7 @@ import RadioInput from "../components/inputs/RadioInput";
 import ConfirmButton from "../components/buttons/ConfirmButton";
 import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve";
 import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
-import Map from "../components/map/Map";
+import Map from "../components/map/Map"; 
 import { Space } from "../components/styledComponentsPages/Contact";
 
 const ReserveTable = () => {
@@ -21,6 +21,7 @@ const ReserveTable = () => {
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedSpace, setSelectedSpace] = useState(""); 
   const [error, setError] = useState("");
 
   const handleOpenSuccess = () => {
@@ -44,8 +45,12 @@ const ReserveTable = () => {
     handleOpenSuccess();
   };
 
-  const handleTableChange = (event) => {
-    setSelectedTable(event.target.value);
+  const handleTableSelection = (table) => {
+    setSelectedTable(table); 
+  };
+
+  const handleSpaceChange = (event) => {
+    setSelectedSpace(event.target.value);
   };
 
   const handleFindResults = () => {
@@ -53,8 +58,18 @@ const ReserveTable = () => {
       setError("Si us plau, selecciona un dia.");
       return;
     }
+    if (!selectedTable) {
+      setError("Si us plau, selecciona una taula.");
+      return;
+    }
+    if (!selectedSpace) {
+      setError("Si us plau, selecciona una franja horària.");
+      return;
+    }
     setError("");
     console.log("Fecha seleccionada:", selectedDate);
+    console.log("Taula seleccionada:", selectedTable);
+    console.log("Franja horària seleccionada:", selectedSpace);
     handleOpenConfirm();
   };
 
@@ -63,14 +78,14 @@ const ReserveTable = () => {
       <DivReserve>
         <TitleMobile title="Fer reserva de taula individual" />
         <ContainerButtons>
-          <PlacesButton text="Taules individuals" focus={true} />
+          <PlacesButton text="taules individuals" focus={true} />
           <PlacesButton
-            text="Despatxos privats"
+            text="oficines privades"
             focus={false}
             link="/reservar-despatx"
           />
           <PlacesButton
-            text="Sala de reunions"
+            text="sala de reunions"
             link="/reservar-reunio"
             focus={false}
           />
@@ -85,25 +100,26 @@ const ReserveTable = () => {
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <Hr2 />
-        
-        <TitleSelectDate>Selecciona la franja horaria</TitleSelectDate>
+        <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
         <RadioInput
           label="Matí"
           value="Matí"
-          selectedOption={selectedTable}
-          onChange={handleTableChange}
+          selectedOption={selectedSpace}
+          onChange={handleSpaceChange}
         />
         <RadioInput
           label="Tarda"
           value="Tarda"
-          selectedOption={selectedTable}
-          onChange={handleTableChange}
+          selectedOption={selectedSpace}
+          onChange={handleSpaceChange}
         />
+
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
         </ContainerButtons>
         <Hr2 />
-        <Map />
+
+        <Map onTableSelect={handleTableSelection} />
 
         <ContainerButtons>
           <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
@@ -111,9 +127,19 @@ const ReserveTable = () => {
 
         <PopUpConfirmReserve
           open={confirmPopupOpen}
-          onClose={handleCloseConfirm}
+          onCancel={handleCloseConfirm}
+          table={selectedTable}
           pageType="table"
-          onAccept={handleAcceptConfirm}
+          onConfirm={handleAcceptConfirm}
+          slot='slot'
+          month='month'
+          day='day'
+          button={{
+            confirmText: "Confirmar", 
+            cancelText: "Cancelar"    
+          }}
+        
+
         />
 
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />

@@ -61,16 +61,16 @@ const ReserveOffice = () => {
   return (
     <>
       <DivReserve>
-        <TitleMobile title="Fer reserva de despatx" />
+        <TitleMobile title="Fer reserva d' oficina" />
         <ContainerButtons>
           <PlacesButton
-            text="Taules individuals"
+            text="taules individuals"
             focus={false}
             link="/reservar-taula"
           />
-          <PlacesButton text="Despatxos privats" focus={true} />
+          <PlacesButton text="oficines privades" focus={true} />
           <PlacesButton
-            text="Sala de reunions"
+            text="sala de reunions"
             link="/reservar-reunio"
             focus={false}
           />
@@ -90,16 +90,16 @@ const ReserveOffice = () => {
         <Hr2 />
         <HourSelect />
         <Hr2 />
-        <TitleSelectDate>Selecciona el despatx</TitleSelectDate>
+        <TitleSelectDate>Selecciona l'oficina</TitleSelectDate>
         <RadioInput
-          label="Despatx 1"
-          value="Despatx 1"
+          label="Oficina 1"
+          value="Oficina 1"
           selectedOption={selectedTable}
           onChange={handleTableChange}
         />
         <RadioInput
-          label="Despatx 2"
-          value="Despatx 2"
+          label="Oficina 2"
+          value="Oficina 2"
           selectedOption={selectedTable}
           onChange={handleTableChange}
         />
@@ -110,9 +110,17 @@ const ReserveOffice = () => {
 
         <PopUpConfirmReserve
           open={confirmPopupOpen}
-          onClose={handleCloseConfirm}
+          onCancel={handleCloseConfirm}
+          table={selectedTable}
           pageType="office"
-          onAccept={handleAcceptConfirm}
+          onConfirm={handleAcceptConfirm}
+          slot='slot'
+          month='month'
+          day='day'
+          button={{
+            confirmText: "Confirmar", 
+            cancelText: "Cancelar"    
+          }}
         />
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>

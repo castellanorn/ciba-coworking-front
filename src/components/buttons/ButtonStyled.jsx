@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ButtonConfirm = styled.button`
     color:var(--violet);
-    padding:7px 23px 7px 23px;
+    padding:8px 23px 8px 23px;
     border-radius:3px;
     border: 3px solid var(--violet);
     font-family: "Marianina XWd FY W03 Medium";
@@ -24,9 +24,9 @@ export const ButtonCancel = styled.button`
     font-family: "Marianina XWd FY W03 Medium";
     font-weight:bold;
     border:none;
-    font-size:20px;
+    font-size:19px;
     cursor:pointer;
-    margin-bottom:50px;
+    margin-bottom:60px;
         &:active{
             background-color: white;
             color:#F8A99C;

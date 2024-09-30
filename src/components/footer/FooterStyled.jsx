@@ -10,16 +10,15 @@ export const NavbarFooter = styled.nav`
     flex-direction:row;
     justify-content: space-between;
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.2); 
-    background-color: #fff;
+    background-color: var(--white);
 
 `;
 export const IconsContainer = styled.div`
     display:flex;
-    padding:10px;
+    padding:5px 25px 5px 25px;
 `;
 export const IconsContainerFocus = styled.div`
-    margin-top:3px;
-    padding:8px;
+    padding:7px;
     background-color:var(--violet);
     border-radius:50%;
     width:45px;
@@ -29,14 +28,13 @@ export const IconsContainerFocus = styled.div`
         
     }
 `;
-
 export const IconsContainerFocusContact = styled.div`
     margin-top:3px;
     padding:5px;
     background-color:var(--violet);
     border-radius:50%;
         svg {
-        color: white; 
+        color: var(--white); 
         font-size: 30px;
     }
 `;

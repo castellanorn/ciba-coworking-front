@@ -24,7 +24,6 @@ export const LoginInput = styled.input`
   width: 100%;
   box-sizing: border-box;
   font-size: 18px;
-
 `;
 export const Label = styled.label`
   margin-left: 25px;
@@ -38,9 +37,10 @@ export const Span = styled.span`
 export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 30px;
   margin-top: 20px;
   margin-bottom: 20px;
+  margin: 25px 0px;
 `;
 export const InputWrapper = styled.div`
   position: relative;
