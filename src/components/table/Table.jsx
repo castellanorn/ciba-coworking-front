@@ -1,4 +1,3 @@
-import React from 'react'
 import {TableWrapper,StyledTable, Tdstyled} from './TableStyled'
 import DeleteButton from '../buttons/DeleteButton';
 import EditButton from '../buttons/EditButton';

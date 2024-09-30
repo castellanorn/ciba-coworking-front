@@ -1,6 +1,6 @@
 import { useState } from "react";
 import HeaderMobile from "./src/components/header/Header";
-import HeaderLogin from "./src/components/header/HeaderLogin";
+import HeaderLogout from "./src/components/header/HeaderLogout";
 
 const App = () => {
     // cambio de icono login a logout
@@ -15,7 +15,7 @@ const App = () => {
       };
   return (
     <div>
-       {isLoggedIn ? <HeaderLogin /> : <HeaderMobile />}
+       {isLoggedIn ? <HeaderLogout /> : <HeaderMobile />}
 
       {isLoggedIn ? (
         <button onClick={handleLogout}>Cerrar sesión</button>

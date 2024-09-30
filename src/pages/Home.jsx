@@ -1,10 +1,13 @@
+import TitleMobile from "../components/title/Title"
+
 
 const Home = () => {
   return (
-    <div>
-        <h1>Home</h1>
-     
-    </div>
+    <>
+    <TitleMobile
+      title="Home"    
+    />
+    </>
   )
 }
 
