@@ -11,7 +11,7 @@ const TableMobile = ({ data, type, actions }) => {
 
   const renderRowContent = (row) => {
     switch (type) {
-      case 'reserves':
+      case 'reserveUser'://user reserves
         return (
           <>
             <Field><span>Espai reservat:</span> {row.espai}</Field>
@@ -19,21 +19,21 @@ const TableMobile = ({ data, type, actions }) => {
             <Field>{row.franja}, {row.data}</Field>
           </>
         );
-      case 'usuaris':
+      case 'adminUsers': //admin user
         return (
           <>
-            <Field>{row.nom} {row.cognom}</Field>
+            <Field>{row.nomAmbCognom}</Field>
             <Field>{row.projecte}</Field>
             <Field>{row.correu}</Field>
             <Field>{row.mobil}</Field>
           </>
         );
-      case 'reserva':
+      case 'adminReserves'://admin reserves for users
         return (
           <>
             <Field><span>Franja:</span> {row.franja}</Field>
             <Field><span>Data:</span> {row.data}</Field>
-            <Field><span>Nom i cognoms:</span> {row.nom} {row.cognom}</Field>
+            <Field><span>Nom i cognoms:</span> {row.nomAmbCognom}</Field>
           </>
         );
       default:
@@ -44,7 +44,9 @@ const TableMobile = ({ data, type, actions }) => {
     <MobileTableWrapper>
       <TableRow columns={columnsCount}>
         {hasIdColumn && <TableHeader>ID</TableHeader>}
-        <TableHeader>{type === 'reserves' ? 'Reserves' : 'Usuaris'}</TableHeader>
+        <TableHeader>
+          {type === 'reserves' ? 'Reserves' : type === 'usuaris' ? 'Usuaris' : 'Reserva'}
+        </TableHeader>
         {hasActions && <TableHeader>Acció</TableHeader>}
       </TableRow>
 
