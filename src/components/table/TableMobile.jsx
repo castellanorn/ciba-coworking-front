@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import DeleteButton from '../buttons/DeleteButton';
 import EditButton from '../buttons/EditButton';
 import { MobileTableWrapper, TableRow, TableHeader, TableData, Field, Actions } from './TableStyled';
@@ -45,7 +44,7 @@ const TableMobile = ({ data, type, actions }) => {
       <TableRow columns={columnsCount}>
         {hasIdColumn && <TableHeader>ID</TableHeader>}
         <TableHeader>
-          {type === 'reserves' ? 'Reserves' : type === 'usuaris' ? 'Usuaris' : 'Reserva'}
+          {type === 'reserveUser' ? 'Reserves' : type === 'adminUsers' ? 'Usuaris' : type === 'adminReserves' ? 'Reserva' : ''}
         </TableHeader>
         {hasActions && <TableHeader>Acció</TableHeader>}
       </TableRow>
