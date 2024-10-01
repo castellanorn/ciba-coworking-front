@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PasswordContainer, PasswordRow, ButtonPassword, PasswordDisplay , LabelPassword} from "./styled/PasswordGeneratorStyled";
 
 
@@ -14,6 +14,13 @@ const generatePassword = () => {
 
 const PasswordGenerator = ({ onPasswordGenerated }) => {
   const [password, setPassword] = useState("");
+
+
+  useEffect(() => {
+    const newPassword = generatePassword();
+    setPassword(newPassword);
+    onPasswordGenerated(newPassword);//actualiza el estado del formulario
+  }, [])
 
   const handleGeneratePassword = () => {
     const newPassword = generatePassword();

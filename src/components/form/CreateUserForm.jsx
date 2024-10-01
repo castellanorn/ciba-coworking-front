@@ -9,7 +9,7 @@ import PasswordGenerator from "../inputs/PasswordGenerator";
 
 
 const CreateUserForm = ({onCancel}) => {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState({ //form guarda los campos y setform actualiza los valores. useState crea el esatdo del formulario
     name: "",
     email: "",
     phone: "",
@@ -17,15 +17,13 @@ const CreateUserForm = ({onCancel}) => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState({//UseState maneja el error y errors contiene el mensaje
     name: "",
     email: "",
     phone: "",
     projectName: "",
     password: "",
   });
-
-  const [canSubmit, setCanSubmit] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,14 +40,7 @@ const CreateUserForm = ({onCancel}) => {
     });
   };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      if (validateForm()) {
-        console.log("Formulario válido. Procesando...", form);
-      }
-    };
-
-
+ 
   const handleOpenConfirm = () => {};
 
 
@@ -57,36 +48,36 @@ const CreateUserForm = ({onCancel}) => {
     let valid = true;
     const errorsCopy = { ...errors };
 
-    if (form.name.trim()) {
-      errorsCopy.name = "";
-    } else {
+    if (!form.name.trim()) {
       errorsCopy.name = "Nom i cognom obligatoris";
       valid = false;
+    } else {
+      errorsCopy.name = "";
     }
 
-    if (form.email.trim()) {
-      errorsCopy.email = "";
-    } else {
+    if (!form.email.trim()) {
       errorsCopy.email = "Email obligatori";
       valid = false;
+    } else {
+      errorsCopy.email = "";
     }
 
-    if (form.phone.trim()) {
-      errorsCopy.phone = "";
-    } else {
+    if (!form.phone.trim()) {
       errorsCopy.phone = "Telèfon obligatori";
       valid = false;
+    } else {
+      errorsCopy.phone = "";
     }
 
-    if (form.projectName.trim()) {
-      errorsCopy.projectName = "";
-    } else {
+    if (!form.projectName.trim()) {
       errorsCopy.projectName = "Nom del projecte obligatori";
       valid = false;
+    } else {
+      errorsCopy.projectName = "";
     }
 
-     if (!form.password.trim()) {
-      errorsCopy.password = "Contrasenya obligatori";
+    if (!form.password.trim()) {
+      errorsCopy.password = "Contrasenya obligatoria";
       valid = false;
     } else {
       errorsCopy.password = "";
@@ -95,6 +86,14 @@ const CreateUserForm = ({onCancel}) => {
     setErrors(errorsCopy);
     return valid;
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      console.log("Formulario válido. Procesando...", form);
+    }
+  };
+
 
   return (
     <Form>
