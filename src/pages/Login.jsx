@@ -15,9 +15,8 @@ const Login = () => {
       labelEmail="Email"
       labelPassword="Contrasenya"
       />
-
       <ButtonsContainer>
-        <ConfirmButton>Iniciar sessió</ConfirmButton>
+        <ConfirmButton>Acceptar</ConfirmButton>
         <CancelButton>Cancel·lar</CancelButton>
       </ButtonsContainer>
     </DivReserve>

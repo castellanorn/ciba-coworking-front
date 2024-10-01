@@ -1,8 +1,9 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
 
 import ImageSrc from '../../../assets/confirm-big.png';
-import { ContainerTitleMessage, TitleMessageConfirm } from '../../title/TitleStyled';
 import { ButtonConfirm } from '../../buttons/ButtonStyled';
+import { ContainerTitleMessage } from '../../title/TitleStyled';
+import { TitleMessageConfirm } from '../PopUpStyled';
 
 const PopUpSuccess = ({ open, onClose}) => {
   return (

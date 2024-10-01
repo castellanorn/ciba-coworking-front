@@ -1,28 +1,31 @@
-import { IconsContainer } from "../header/HeaderStyled";
-import { BiCalendarPlus } from "react-icons/bi";
-import { BiCalendarEdit } from "react-icons/bi";
-import { BiPhoneCall } from "react-icons/bi";
 import { NavbarFooter } from "./FooterStyled";
-import { Link } from "react-router-dom";
+import IconFooter from "../icons/IconFooter";
+import { useState } from "react";
 
 const Footer = () => {
+  const [activeIcon, setActiveIcon] = useState(""); 
+  
+
   return (
     <NavbarFooter>
-      <IconsContainer>
-        <Link to="/reservar-taula">
-          <BiCalendarPlus />
-        </Link>
-      </IconsContainer>
-      <IconsContainer>
-        <Link to="/panell-usuari">
-          <BiCalendarEdit />
-        </Link>
-      </IconsContainer>
-      <IconsContainer>
-        <Link to="/contacte">
-          <BiPhoneCall />
-        </Link>
-      </IconsContainer>
+      <IconFooter
+        link='/reservar-taula'
+        icon="addreserve"
+        activeIcon={activeIcon}
+        setActiveIcon={setActiveIcon}
+      />
+      <IconFooter
+        link='/panell-usuari'
+        icon="editreserve"
+        activeIcon={activeIcon}
+        setActiveIcon={setActiveIcon}
+      />
+      <IconFooter
+        link='/contacte'
+        icon="contact"
+        activeIcon={activeIcon}
+        setActiveIcon={setActiveIcon}
+      />
     </NavbarFooter>
   );
 };

@@ -1,4 +1,5 @@
-import { CloseButton, ModalBackground, ModalContainer } from "./reserve/ModalStyled";
+import { CloseButton, ModalBackground, ModalContainer } from "./ModalStyled";
+
 
 const Modal = ({ open, onClose, children }) => {
     if (!open) return null;

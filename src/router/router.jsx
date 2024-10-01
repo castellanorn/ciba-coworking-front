@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
-import Home from "../pages/Home";
 import Layout from "../layout/Layout";
 import OfficeBooking from "../pages/OfficeBooking";
 import MeetingRoomBooking from "../pages/MeetingRoomBooking";
@@ -23,7 +22,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <Login />,
       },
       {
         path: "inici-sessio",
@@ -56,7 +55,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "gestio-de-taulas",
+        path: "gestio-de-taules",
         element: (
           <PrivateRoute requiredRole="admin">
             <ManageIndividual />

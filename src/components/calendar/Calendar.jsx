@@ -77,13 +77,13 @@ export default function Calendar({setError}) {
         setError('');
       }
     } else {
-      setError('Selecciona un día.');
+      setError('Selecciona la data');
     }
   };
 
   return (
     <>
-      <TitleSelectDate>Selecciona un dia</TitleSelectDate>
+      <TitleSelectDate>Selecciona la data</TitleSelectDate>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ca">
         <DateCalendar
           value={selectedDate}

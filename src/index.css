@@ -35,7 +35,8 @@ span{
 }
 svg{
   color:var(--violet);
-  font-size: 40px;
+  height: 45px;
+  width: 45px;
   display: flex;
 }
 :root{
@@ -49,17 +50,12 @@ svg{
 .css-1c32n2y-MuiBadge-root{
   color: var(--violet) !important;
 }
-.css-1lzspe0-MuiSvgIcon-root{
-  color: var(--violet) !important;
-}
 .css-dplwbx-MuiPickersCalendarHeader-label{
   font-family: "Marianina XWd FY W03 Medium" !important;
   font-size: 16px !important;
   color:var(--violet);
 }
-.css-1eeiwjo-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon{
-  color:var(--violet);
-}
+
 /*calendar*/
 .css-1rtg91x-MuiDateCalendar-root{
   margin-top: 20px !important;

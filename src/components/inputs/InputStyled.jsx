@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 export const Select = styled.select`
-  margin: 30px;
-  cursor: pointer;
-  border: 2px solid #532d6d;
-  border-radius: 4px;
-  padding: 9px;
-  font-family: "Marianina XWd FY W03 Medium";
+
+    margin:30px;
+    cursor:pointer;
+    border: 2px solid var(--violet);
+    border-radius:4px;
+    padding: 9px;
+    font-family: "Marianina XWd FY W03 Medium"
 `;
 export const Option = styled.option`
   cursor: pointer;
@@ -97,4 +98,13 @@ font-family: "Marianina FY Italic";
   color: var(--red);
   margin-bottom: 0px;
   margin-top: 8px;
+`;
+export const Label = styled.div`
+    margin: 8px 25px 30px 25px;
+    cursor: pointer;
+    border: 2px solid var(--violet);
+    border-radius: 4px;
+    padding: 15px;
+    font-family: "Marianina XWd FY W03 Medium";
+    font-size: 18px;
 `;
