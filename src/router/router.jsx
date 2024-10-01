@@ -48,11 +48,12 @@ const router = createBrowserRouter([
       // Rutas admin
       {
         path: "panell-administrador",
-        element: (
+        element:<AdminDashboard />
+         /* (
           <PrivateRoute requiredRole="admin">
             <AdminDashboard />
           </PrivateRoute>
-        ),
+        ), */
       },
       {
         path: "gestio-de-taules",

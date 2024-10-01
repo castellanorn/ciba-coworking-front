@@ -1,13 +1,3 @@
-/*  import AddUser from "../components/buttons/AddUser";
-// import Title from "../components/title/Title"
-const Contact = () => {
-    return (
-        <div>
-            <AddUser/>
-        </div>
-    )
-} */
-
 import { BiPhoneCall } from "react-icons/bi";
 import TitleMobile from "../components/title/Title";
 import { DivLogo, ImgLogo, InfoContainer, Space } from "../components/styledComponentsPages/Contact";

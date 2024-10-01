@@ -80,6 +80,7 @@ export const CircleButton = styled.button`
   cursor: pointer;
   font-size: 18px;
   transition: background-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent; 
   
     svg{
         color:white;
@@ -96,5 +97,55 @@ export const CircleButton = styled.button`
 
   &:active {
     background-color: ${({ color }) => `${color}99`};
+  }
+`;
+
+export const ModalStyles = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+export const ModalContentStyles = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+`;
+
+export const BiSolidPlusCircle = styled.div`
+  cursor: pointer;
+`;
+
+export const AddUserButton = styled.button`
+background-color: var(--violet);
+color: white;
+border: none;
+border-radius: 50%;
+width: 40px;
+height: 40px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+font-size: 18px; 
+ -webkit-tap-highlight-color: transparent; 
+    svg{
+        color:white;
+        font-size: 40px;
+        display: flex;
+    }
+  &:hover {
+    background-color: var(--violet)};
+  }
+  &:focus {
+    outline: none;
   }
 `;

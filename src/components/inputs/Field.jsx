@@ -1,5 +1,5 @@
 
-import { FieldContainer, FieldLabel, FieldInput, FieldInvalidInput } from "./styled/InputStyled";
+import { FieldContainer, FieldLabel, FieldInput, FieldInvalidInput } from "./InputStyled";
 
 const Field = ({ field, name, placeholder, value, type, onChange, error }) => {
   return (

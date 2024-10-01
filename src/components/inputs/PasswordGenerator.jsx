@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { PasswordContainer, PasswordRow, ButtonPassword, PasswordDisplay , LabelPassword} from "./styled/PasswordGeneratorStyled";
+import { PasswordContainer, PasswordRow, ButtonPassword, PasswordDisplay , LabelPassword} from "./PasswordGeneratorStyled"
 
 
 const generatePassword = () => {
-  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*";
   let password = "";
   for (let i = 0; i < 8; i++) {
     const randomIndex = Math.floor(Math.random() * chars.length);

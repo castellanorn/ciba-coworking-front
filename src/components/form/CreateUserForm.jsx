@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TitleMobile from "../title/Title";
 import Field from "../inputs/Field";
 import ContainerButtons from "../container/ButtonsContainer";
@@ -7,9 +7,9 @@ import { FormContainer, Form } from "./CreateUserFormStyled";
 import CancelButton from "../buttons/CancelButton";
 import PasswordGenerator from "../inputs/PasswordGenerator";
 
-
-const CreateUserForm = ({onCancel}) => {
-  const [form, setForm] = useState({ //form guarda los campos y setform actualiza los valores. useState crea el esatdo del formulario
+const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
+  const [form, setForm] = useState({
+    //form guarda los campos y setform actualiza los valores. useState crea el esatdo del formulario
     name: "",
     email: "",
     phone: "",
@@ -17,13 +17,27 @@ const CreateUserForm = ({onCancel}) => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({//UseState maneja el error y errors contiene el mensaje
+  const [errors, setErrors] = useState({
+    //UseState maneja el error y errors contiene el mensaje
     name: "",
     email: "",
     phone: "",
     projectName: "",
     password: "",
   });
+
+  // Cargar datos iniciales si estás editando
+  useEffect(() => {
+    if (initialData) {
+      setForm({
+        name: initialData.name || "",
+        email: initialData.email || "",
+        phone: initialData.phone || "",
+        projectName: initialData.projectName || "",
+        password: initialData.password || "",
+      });
+    }
+  }, [initialData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,10 +53,6 @@ const CreateUserForm = ({onCancel}) => {
       password: generatedPassword,
     });
   };
-
- 
-  const handleOpenConfirm = () => {};
-
 
   const validateForm = () => {
     let valid = true;
@@ -91,57 +101,57 @@ const CreateUserForm = ({onCancel}) => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Formulario válido. Procesando...", form);
+      onSubmit(form);
     }
   };
 
 
   return (
     <Form>
-      <TitleMobile title="Afegir un usuari" />
+      <TitleMobile title={initialData ? "Editar usuari" : "Afegir un usuari"} />
       <FormContainer>
-      <Field
-        field="Nom i cognoms*"
-        type="text"
-        placeholder={"Escriu el nom i cognoms..."}
-        name="name"
-        value={form.name}
-        onChange={handleChange}
-        error={errors.name}
-      />
-      <Field
-        field="Email*"
-        type="text"
-        placeholder={"Escriu el email..."}
-        name="email"
-        value={form.email}
-        onChange={handleChange}
-        error={errors.email}
-      />
-      <Field
-        field="Telèfon*"
-        type="text"
-        placeholder={"Escriu el telèfon..."}
-        name="phone"
-        value={form.phone}
-        onChange={handleChange}
-        error={errors.phone}
-      />
-      <Field
-        field="Nom del projecte*"
-        type="text"
-        placeholder={"Escriu el nom del projecte..."}
-        name="projectName"
-        value={form.projectName}
-        onChange={handleChange}
-        error={errors.projectName}
-      />
-      <PasswordGenerator onPasswordGenerated={handlePasswordGenerated}/>
-      <ContainerButtons>
-        <ConfirmButton onClick={handleSubmit}>Acceptar</ConfirmButton>
-        <CancelButton onClick={onCancel}>Cancel·lar</CancelButton>
-
-      </ContainerButtons>
-    </FormContainer>
+        <Field
+          field="Nom i cognoms*"
+          type="text"
+          placeholder={"Escriu el nom i cognoms..."}
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          error={errors.name}
+        />
+        <Field
+          field="Email*"
+          type="text"
+          placeholder={"Escriu el email..."}
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          error={errors.email}
+        />
+        <Field
+          field="Telèfon*"
+          type="text"
+          placeholder={"Escriu el telèfon..."}
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+          error={errors.phone}
+        />
+        <Field
+          field="Nom del projecte*"
+          type="text"
+          placeholder={"Escriu el nom del projecte..."}
+          name="projectName"
+          value={form.projectName}
+          onChange={handleChange}
+          error={errors.projectName}
+        />
+        <PasswordGenerator onPasswordGenerated={handlePasswordGenerated} />
+        <ContainerButtons>
+          <ConfirmButton onClick={handleSubmit}>Aceptar</ConfirmButton>
+          <CancelButton onClick={onCancel}>Cancel·lar</CancelButton>
+        </ContainerButtons>
+      </FormContainer>
     </Form>
   );
 };

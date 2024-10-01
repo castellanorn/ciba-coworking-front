@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { BiSolidPlusCircle } from "react-icons/bi";
+import { BiUserPlus  } from "react-icons/bi";
 import CreateUserForm from "../form/CreateUserForm";
+import { ModalStyles, ModalContentStyles, AddUserButton} from "../buttons/ButtonStyled";
 
 const AddUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,40 +16,18 @@ const AddUser = () => {
 
   return (
     <div>
-      <BiSolidPlusCircle onClick={openModal} style={{ cursor: "pointer" }} />
-
+      <AddUserButton>
+      <BiUserPlus  onClick={openModal} />
+      </AddUserButton>
       {isModalOpen && (
-        <div style={modalStyles}>
-          <div style={modalContentStyles}>
+        <ModalStyles >
+          <ModalContentStyles>
             <CreateUserForm onCancel={closeModal}/>
-
-          </div>
-        </div>
+          </ModalContentStyles>
+        </ModalStyles>
       )}
     </div>
   );
 };
-
-
-const modalStyles = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 1000,
-};
-
-const modalContentStyles = {
-  backgroundColor: "white",
-  padding: "20px",
-  borderRadius: "8px",
-  position: "relative",
-};
-
 
 export default AddUser;
