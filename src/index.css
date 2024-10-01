@@ -39,6 +39,9 @@ svg{
   width: 45px;
   display: flex;
 }
+main{
+  margin-bottom: 120px;
+}
 :root{
   margin: 0;
   padding: 0;
