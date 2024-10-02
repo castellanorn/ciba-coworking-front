@@ -1,10 +1,10 @@
 import { BiPhoneCall } from "react-icons/bi";
-import TitleMobile from "../components/title/Title";
-import { DivLogo, ImgLogo, InfoContainer, Space } from "../components/styledComponentsPages/Contact";
 import { TbWorldWww } from "react-icons/tb";
 import { ImLocation } from "react-icons/im";
 import { TfiEmail } from "react-icons/tfi";
-import cibaPhoto from '../assets/ciba-photo.png';
+import cibaPhoto from '../../assets/ciba-photo.png';
+import TitleMobile from "../../components/title/Title";
+import { DivLogo, ImgLogo, InfoContainer, Space } from "./ContactStyled";
 
 const Contact = () => {
   return (

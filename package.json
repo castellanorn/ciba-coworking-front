@@ -22,6 +22,7 @@
     "ciba-coworking-front": "file:",
     "date-fns": "^3.2.0",
     "dayjs": "^1.11.13",
+    "litepicker": "^2.0.12",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-calendar": "^5.0.0",

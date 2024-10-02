@@ -3,6 +3,7 @@
   width: auto;
   height: 100vh;
   --violet: #532D6D;
+  --lightviolet: #945BBB;
   --white: #FFFFFF;
   --darkgray: #1D1D1D;
   --ligthgray: #464652;
@@ -97,4 +98,14 @@ svg{
 
 .hUoTwd{
   margin-bottom: 10px;
+}
+.css-1914m0h-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--lightviolet) !important;
+}
+.css-1qruvc6-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--salmon) !important;
+
+}
+.css-g31t2f-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--lightviolet) !important;
 }

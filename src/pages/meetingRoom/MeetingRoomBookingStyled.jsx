@@ -5,3 +5,6 @@ export const DivReserve = styled.div`
     justify-content:center;
     flex-direction:column;
 `
+export const Space = styled.div`
+    margin:80px;
+`
