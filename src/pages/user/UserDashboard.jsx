@@ -21,7 +21,7 @@ const UserDashboard = () => {
       <TableSection>
         <Subtitle>RESERVES PENDENTS</Subtitle>
         <Table columns={columns} data={data}  actions={['edit', 'delete']} />
-        <TableMobile data={reservasFuturasData} type="reserveUser" actions={['delete']} />
+        <TableMobile data={reservasFuturasData} type="reserveUser" actions={['edit','delete']} />
         <Subtitle>RESERVES COMPLETADES</Subtitle>
         <Table columns={columns} data={reservasFuturasData} />
         <TableMobile data={reservasFuturasData} type="reserveUser" />
