@@ -3,12 +3,16 @@
   width: auto;
   height: 100vh;
   --violet: #532D6D;
+  --lightviolet: #945BBB;
   --white: #FFFFFF;
   --darkgray: #1D1D1D;
   --ligthgray: #464652;
+  --grey: #656565;
   --yellow: #CFDE00;
   --salmon: #FF7962;
   --blue: #17C7D2;
+  --black: #000000;
+  --red: #FF0000;
 }
 
 body {
@@ -31,8 +35,12 @@ span{
 }
 svg{
   color:var(--violet);
-  font-size: 40px;
+  height: 45px;
+  width: 45px;
   display: flex;
+}
+main{
+  margin-bottom: 120px;
 }
 :root{
   margin: 0;
@@ -45,17 +53,12 @@ svg{
 .css-1c32n2y-MuiBadge-root{
   color: var(--violet) !important;
 }
-.css-1lzspe0-MuiSvgIcon-root{
-  color: var(--violet) !important;
-}
 .css-dplwbx-MuiPickersCalendarHeader-label{
   font-family: "Marianina XWd FY W03 Medium" !important;
   font-size: 16px !important;
   color:var(--violet);
 }
-.css-1eeiwjo-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon{
-  color:var(--violet);
-}
+
 /*calendar*/
 .css-1rtg91x-MuiDateCalendar-root{
   margin-top: 20px !important;
@@ -101,4 +104,14 @@ svg{
 
 .hUoTwd{
   margin-bottom: 10px;
+}
+.css-1914m0h-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--lightviolet) !important;
+}
+.css-1qruvc6-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--salmon) !important;
+
+}
+.css-g31t2f-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--lightviolet) !important;
 }

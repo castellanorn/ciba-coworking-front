@@ -1,14 +1,16 @@
-import PlacesButton from "../components/buttons/PlacesButton";
-import Calendar from "../components/calendar/Calendar";
-import { DivReserve, Hr2 } from "../components/calendar/CalendarStyled";
-import ContainerButtons from "../components/container/ButtonsContainer";
-import TitleMobile from "../components/title/Title";
-import { ButtonFind } from "../components/buttons/ButtonStyled";
-import ConfirmButton from "../components/buttons/ConfirmButton";
+import { ButtonFind } from "../../components/buttons/ButtonStyled";
+import ConfirmButton from "../../components/buttons/ConfirmButton";
 import { useState } from "react";
-import PopUpSuccess from "../components/popup/reserve/PopUpSuccess";
-import HourSelect from "../components/inputs/HourSelect";
-import PopUpConfirmReserve from "../components/popup/reserve/PopUpConfirmReserve";
+import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
+import HourSelect from "../../components/inputs/HourSelect";
+import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
+import { Space } from "../../pages/meetingRoom/MeetingRoomBookingStyled";
+import { DivReserve } from "./MeetingRoomBookingStyled";
+import PlacesButton from "../../components/buttons/PlacesButton";
+import Calendar from "../../components/calendar/Calendar";
+import { Hr2 } from "../../components/calendar/CalendarStyled";
+import ContainerButtons from "../../components/container/ButtonsContainer";
+import TitleMobile from "../../components/title/Title";
 
 const ReserveMeetingRoom = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -53,16 +55,16 @@ const ReserveMeetingRoom = () => {
         <TitleMobile title="Fer reserva de sala de reunions" />
         <ContainerButtons>
           <PlacesButton
-            text="Taules individuals"
+            text="taules individuals"
             focus={false}
             link="/reservar-taula"
           />
           <PlacesButton
-            text="Despatxos privats"
+            text="oficines privades"
             link="/reservar-despatx"
             focus={false}
           />
-          <PlacesButton text="Sala de reunions" focus={true} />
+          <PlacesButton text="sala de reunions" focus={true} />
         </ContainerButtons>
 
         <Calendar
@@ -79,18 +81,29 @@ const ReserveMeetingRoom = () => {
         <Hr2 />
         <HourSelect />
         <Hr2 />
+
         <ContainerButtons>
-          <ConfirmButton onClick={handleOpenSuccess}>Acceptar</ConfirmButton>
+          <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
         </ContainerButtons>
+
+
         <PopUpConfirmReserve
           open={confirmPopupOpen}
-          onClose={handleCloseConfirm}
-          pageType="meetingroom"
-          onAccept={handleAcceptConfirm}
+          onCancel={handleCloseConfirm}
+          pageType="meetingRoom" 
+          onConfirm={handleAcceptConfirm}
+          slot='slot'
+          month='month'
+          day='day'
+          button={{
+            confirmText: "Confirmar", 
+            cancelText: "Cancelar"    
+          }}
         />
 
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
+      <Space></Space>
     </>
   );
 };

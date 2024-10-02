@@ -1,5 +1,5 @@
 import { TitleSelectDate } from "../calendar/CalendarStyled";
-import { Option, Select } from "../inputs/styled/InputStyled";
+import { Option, Select } from "./InputStyled";
 
 function HourSelect() {
     const hours = [];
@@ -12,9 +12,9 @@ function HourSelect() {
 
     return (
         <>
-        <TitleSelectDate>Selecciona la hora</TitleSelectDate>
+        <TitleSelectDate>Selecciona l' hora</TitleSelectDate>
         <Select>
-            <Option value="" disabled selected>Selecciona la hora</Option>
+            <Option value="" disabled selected>Selecciona l' hora</Option>
             {hours}
         </Select>
         </>
