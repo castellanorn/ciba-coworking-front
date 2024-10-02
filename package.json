@@ -18,11 +18,8 @@
     "@mui/material": "^6.1.1",
     "@mui/styled-engine-sc": "^6.1.1",
     "@mui/x-date-pickers": "^7.17.0",
-<<<<<<< HEAD
     "@svgr/webpack": "^8.1.0",
-=======
     "axios": "^1.7.7",
->>>>>>> d47a4931798b818b7881fd6a051524b6c357ad64
     "calendare": "file:",
     "ciba-coworking-front": "file:",
     "date-fns": "^3.2.0",
