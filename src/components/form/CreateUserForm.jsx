@@ -10,30 +10,30 @@ import PasswordGenerator from "../inputs/PasswordGenerator";
 const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
   const [form, setForm] = useState({
     //form guarda los campos y setform actualiza los valores. useState crea el esatdo del formulario
-    name: "",
-    email: "",
-    phone: "",
-    projectName: "",
+    nomAmbCognom: "",
+    correu: "",
+    mobil: "",
+    projecte: "",
     password: "",
   });
 
   const [errors, setErrors] = useState({
     //UseState maneja el error y errors contiene el mensaje
-    name: "",
-    email: "",
-    phone: "",
-    projectName: "",
+    nomAmbCognom: "",
+    correu: "",
+    mobil: "",
+    projecte: "",
     password: "",
   });
 
-  // Cargar datos iniciales si estás editando
+  // Cargar información del usuario para editar
   useEffect(() => {
     if (initialData) {
       setForm({
-        name: initialData.name || "",
-        email: initialData.email || "",
-        phone: initialData.phone || "",
-        projectName: initialData.projectName || "",
+        nomAmbCognom: initialData.nomAmbCognom || "",
+        correu: initialData.correu || "",
+        mobil: initialData.mobil || "",
+        projecte: initialData.projecte || "",
         password: initialData.password || "",
       });
     }
@@ -58,32 +58,32 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
     let valid = true;
     const errorsCopy = { ...errors };
 
-    if (!form.name.trim()) {
-      errorsCopy.name = "Nom i cognom obligatoris";
+    if (!form.nomAmbCognom.trim()) {
+      errorsCopy.nomAmbCognom = "Nom i cognom obligatoris";
       valid = false;
     } else {
-      errorsCopy.name = "";
+      errorsCopy.nomAmbCognom = "";
     }
 
-    if (!form.email.trim()) {
-      errorsCopy.email = "Email obligatori";
+    if (!form.correu.trim()) {
+      errorsCopy.correu = "Email obligatori";
       valid = false;
     } else {
-      errorsCopy.email = "";
+      errorsCopy.correu = "";
     }
 
-    if (!form.phone.trim()) {
-      errorsCopy.phone = "Telèfon obligatori";
+    if (!form.mobil.trim()) {
+      errorsCopy.mobil = "Telèfon obligatori";
       valid = false;
     } else {
-      errorsCopy.phone = "";
+      errorsCopy.mobil = "";
     }
 
-    if (!form.projectName.trim()) {
-      errorsCopy.projectName = "Nom del projecte obligatori";
+    if (!form.projecte.trim()) {
+      errorsCopy.projecte = "Nom del projecte obligatori";
       valid = false;
     } else {
-      errorsCopy.projectName = "";
+      errorsCopy.projecte = "";
     }
 
     if (!form.password.trim()) {
@@ -100,7 +100,6 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Formulario válido. Procesando...", form);
       onSubmit(form);
     }
   };
@@ -114,37 +113,37 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
           field="Nom i cognoms*"
           type="text"
           placeholder={"Escriu el nom i cognoms..."}
-          name="name"
-          value={form.name}
+          name="nomAmbCognom"
+          value={form.nomAmbCognom}
           onChange={handleChange}
-          error={errors.name}
+          error={errors.nomAmbCognom}
         />
         <Field
           field="Email*"
           type="text"
           placeholder={"Escriu el email..."}
-          name="email"
-          value={form.email}
+          name="correu"
+          value={form.correu}
           onChange={handleChange}
-          error={errors.email}
+          error={errors.correu}
         />
         <Field
           field="Telèfon*"
           type="text"
           placeholder={"Escriu el telèfon..."}
-          name="phone"
-          value={form.phone}
+          name="mobil"
+          value={form.mobil}
           onChange={handleChange}
-          error={errors.phone}
+          error={errors.mobil}
         />
         <Field
           field="Nom del projecte*"
           type="text"
           placeholder={"Escriu el nom del projecte..."}
-          name="projectName"
-          value={form.projectName}
+          name="projecte"
+          value={form.projecte}
           onChange={handleChange}
-          error={errors.projectName}
+          error={errors.projecte}
         />
         <PasswordGenerator onPasswordGenerated={handlePasswordGenerated} />
         <ContainerButtons>
