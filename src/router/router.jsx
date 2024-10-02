@@ -35,15 +35,15 @@ const router = createBrowserRouter([
       },
       // Rutas compartidas entre admin y usuario
       {
-        path: "reservar-taula",
+        path: "reserva-taula",
         element: <ReserveTable />,
       },
       {
-        path: "reservar-despatx",
+        path: "reserva-oficina",
         element: <ReserveOffice />,
       },
       {
-        path: "reservar-reunio",
+        path: "reserva-reunio",
         element: <ReserveMeetingRoom />,
       },
       // Rutas admin
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "gestio-despatx",
+        path: "gestio-oficina",
         element: (
           <PrivateRoute requiredRole="admin">
             <ManageOffice />
@@ -89,7 +89,7 @@ const router = createBrowserRouter([
         ) */,
       },
       {
-        path: "edit-reserve-taula",
+        path: "edicio-reserva-taula",
         element: (
           <PrivateRoute requiredRole="user">
             <EditIndividualTable />
@@ -97,7 +97,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "edit-reserve-despatx",
+        path: "edicio-reserva-oficina",
         element: (
           <PrivateRoute requiredRole="user">
             <EditOffice />
@@ -105,7 +105,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "edit-reserva-sala-reunions",
+        path: "edicio-reserva-sala-reunions",
         element: (
           <PrivateRoute requiredRole="user">
             <EditMeetingRoom />
