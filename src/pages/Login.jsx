@@ -3,7 +3,9 @@ import ConfirmButton from "../components/buttons/ConfirmButton"
 import { DivReserve } from "../components/calendar/CalendarStyled"
 import LoginForm from "../components/form/LoginForm"
 import { ButtonsContainer, Span } from "../components/form/LoginFormStyled"
+
 import TitleMobile from "../components/title/Title"
+
 
 const Login = () => {
   
@@ -20,6 +22,7 @@ const Login = () => {
         <CancelButton>Cancel·lar</CancelButton>
       </ButtonsContainer>
     </DivReserve>
+    
   )
 }
 
