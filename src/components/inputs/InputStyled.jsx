@@ -7,7 +7,7 @@ export const Select = styled.select`
     border: 2px solid var(--violet);
     border-radius:4px;
     padding: 9px;
-    font-family: "Marianina XWd FY W03 Medium"
+    font-family: "Marianina XWd FY W03 Medium";
 `;
 export const Option = styled.option`
   cursor: pointer;
@@ -27,31 +27,26 @@ export const RadioLabel = styled.label`
   cursor: pointer;
   margin: 5px 0;
 
-  input {
-    display: none;
-  }
-
-  .custom-radio {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #532d6d;
-    border-radius: 50%;
-    margin-right: 10px;
-    position: relative;
-
-    &:after {
-      content: "";
-      display: ${(props) => (props.selected ? "block" : "none")};
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background-color: #532d6d;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    input {
+        display: none;
     }
-  }
+    .custom-radio {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--violet);
+        border-radius: 50%;
+        margin-right: 10px;
+        position: relative;
+
+    }
+    .custom-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--violet);
+        margin-right: 10px;
+        position: relative;
+
+    }
 `;
 
 export const FieldContainer = styled.div`
