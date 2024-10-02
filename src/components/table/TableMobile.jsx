@@ -13,18 +13,18 @@ const TableMobile = ({ data, type, actions }) => {
       case 'reserveUser'://user reserves
         return (
           <>
-            <Field><span>Espai reservat:</span> {row.espai}</Field>
-            <Field><span>Taula:</span> {row.idEspai}</Field>
-            <Field>{row.franja}, {row.data}</Field>
+            <Field><span>Espai reservat:</span> {row.spaceDTO.spaceType}</Field>
+            <Field><span>Taula:</span> {row.spaceDTO.name}</Field>
+            <Field>{row.startTime} - {row.endTime}, {row.startDate} - {row.endDate}</Field>
           </>
         );
       case 'adminUsers': //admin user
         return (
           <>
-            <Field>{row.nomAmbCognom}</Field>
-            <Field>{row.projecte}</Field>
-            <Field>{row.correu}</Field>
-            <Field>{row.mobil}</Field>
+            <Field>{row.name}</Field>
+            <Field>{row.projectName}</Field>
+            <Field>{row.email}</Field>
+            <Field>{row.phone}</Field>
           </>
         );
       case 'adminReserves'://admin reserves for users
