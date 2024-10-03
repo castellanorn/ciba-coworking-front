@@ -29,12 +29,13 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
   // Cargar información del usuario para editar
   useEffect(() => {
     if (initialData) {
+      console.log("ID del usuario a editar:", initialData.id);
       setForm({
         name: initialData.name || "",
         email: initialData.email || "",
         phone: initialData.phone || "",
-        project_name: initialData.project_name || "",
-        password: initialData.password || "", // Solo el admin verá la contraseña
+        project_name: initialData.projectName  || "",
+        password: initialData.password || "",
       });
     }
   }, [initialData]);
@@ -100,13 +101,19 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      onSubmit(form);
+      console.log("Datos del formulario antes de enviar:", form);
+      console.log("Llamando a onSubmit con los datos:", { ...form, projectName: form.project_name, id: initialData.id });
+      onSubmit({
+        ...form,
+        projectName: form.project_name,
+        id: initialData.id
+      });
     }
   };
 
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <TitleMobile title={initialData ? "Editar usuari" : "Afegir un usuari"} />
       <FormContainer>
         <Field
@@ -147,7 +154,7 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
         />
         <PasswordGenerator onPasswordGenerated={handlePasswordGenerated} />
         <ContainerButtons>
-          <ConfirmButton onClick={handleSubmit}>Aceptar</ConfirmButton>
+          <ConfirmButton type="submit">Aceptar</ConfirmButton>
           <CancelButton onClick={onCancel}>Cancel·lar</CancelButton>
         </ContainerButtons>
       </FormContainer>
