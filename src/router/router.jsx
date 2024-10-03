@@ -1,10 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import Layout from "../layout/Layout";
-import OfficeBooking from "../pages/OfficeBooking";
-import MeetingRoomBooking from "../pages/MeetingRoomBooking";
-import TableBooking from "../pages/TableBooking";
-import Contact from "../pages/Contact";
+
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import ManageIndividual from "../pages/admin/ManageIndividual";
 import ManageOffice from "../pages/admin/ManageOffice";
@@ -14,6 +11,10 @@ import EditIndividualTable from "../pages/user/EditIndividualTable";
 import EditOffice from "../pages/user/EditOffice";
 import EditMeetingRoom from "../pages/user/EditMeetingRoom";
 import Login from "../pages/Login"
+import ReserveTable from "../pages/table/TableBooking";
+import ReserveOffice from "../pages/office/OfficeBooking";
+import ReserveMeetingRoom from "../pages/meetingRoom/MeetingRoomBooking";
+import Contact from "../pages/contact/Contact";
 
 const router = createBrowserRouter([
   {
@@ -34,16 +35,16 @@ const router = createBrowserRouter([
       },
       // Rutas compartidas entre admin y usuario
       {
-        path: "reservar-taula",
-        element: <TableBooking />,
+        path: "reserva-taula",
+        element: <ReserveTable />,
       },
       {
-        path: "reservar-despatx",
-        element: <OfficeBooking />,
+        path: "reserva-oficina",
+        element: <ReserveOffice />,
       },
       {
-        path: "reservar-reunio",
-        element: <MeetingRoomBooking />,
+        path: "reserva-reunio",
+        element: <ReserveMeetingRoom />,
       },
       // Rutas admin
       {
@@ -63,7 +64,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "gestio-despatx",
+        path: "gestio-oficina",
         element: (
           <PrivateRoute requiredRole="admin">
             <ManageOffice />
@@ -88,7 +89,7 @@ const router = createBrowserRouter([
         ) */,
       },
       {
-        path: "edit-reserve-taula",
+        path: "edicio-reserva-taula",
         element: (
           <PrivateRoute requiredRole="user">
             <EditIndividualTable />
@@ -96,7 +97,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "edit-reserve-despatx",
+        path: "edicio-reserva-oficina",
         element: (
           <PrivateRoute requiredRole="user">
             <EditOffice />
@@ -104,7 +105,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "edit-reserva-sala-reunions",
+        path: "edicio-reserva-sala-reunions",
         element: (
           <PrivateRoute requiredRole="user">
             <EditMeetingRoom />

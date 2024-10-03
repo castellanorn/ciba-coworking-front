@@ -51,7 +51,7 @@ const UserDashboard = () => {
       <TableSection>
         <Subtitle>RESERVES PENDENTS</Subtitle>
         <Table columns={columnsReserves} data={reserves} columnMapping={columnMappingReserves} actions={['edit', 'delete']} />
-        <TableMobile data={reserves} type="reserveUser" actions={['delete']} />
+        <TableMobile data={reserves} type="reserveUser" actions={['edit','delete']} />
         
         <Subtitle>RESERVES COMPLETADES</Subtitle>
         <Table columns={columnsReserves} data={reserves} columnMapping={columnMappingReserves}/>
