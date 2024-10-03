@@ -31,11 +31,11 @@ export const StyledTable = styled.table`
     font-family: 'Marianina FY Black';
     th:first-child {
       border-top-left-radius: 10px; 
-      border: none;
+      
     }
     th:last-child {
       border-top-right-radius: 10px; 
-      border: none; 
+     
     }
   }
   tbody {
