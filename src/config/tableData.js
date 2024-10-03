@@ -1,8 +1,8 @@
 //Column customization for admin dashboard - view all users
-export const columnsUsers = ['Id','Nom amb Cognom', 'Proyecte', 'Correu', 'Mobil'];
+export const columnsUsers = ['Id','Nom i Cognom', 'Proyecte', 'Correu', 'Mobil'];
 export const columnMappingUsers = {
   'Id': 'id',
-  'Nom amb Cognom': 'name',
+  'Nom i Cognom': 'name',
   'Proyecte': 'projectName',
   'Correu': 'email',
   'Mobil': 'phone'

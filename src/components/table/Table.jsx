@@ -11,7 +11,7 @@ function Table ({ columns, data, columnMapping, actions })  {
             {columns.map((column, index) => (
               <th key={index}>{column}</th>
             ))}
-            {actions && <th>Acciones</th>}
+            {actions && <th>Acció</th>}
           </tr>
         </thead>
         <tbody>
