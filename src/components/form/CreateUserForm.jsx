@@ -5,7 +5,7 @@ import ContainerButtons from "../container/ButtonsContainer";
 import ConfirmButton from "../buttons/ConfirmButton";
 import { FormContainer, Form } from "./CreateUserFormStyled";
 import CancelButton from "../buttons/CancelButton";
-import PasswordGenerator from "../inputs/PasswordGenerator";
+import PasswordGenerator from "../../components/inputs/PasswordGenerator";
 
 const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
   const [form, setForm] = useState({

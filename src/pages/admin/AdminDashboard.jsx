@@ -8,6 +8,7 @@ import CreateUserForm from "../../components/form/CreateUserForm";
 import { ModalStyles, ModalContentStyles } from "../../components/buttons/ButtonStyled";
 
 
+
 const columns = ['Id','Nom amb Cognom', 'Proyecte', 'Correu', 'Mobil'];
 
 
