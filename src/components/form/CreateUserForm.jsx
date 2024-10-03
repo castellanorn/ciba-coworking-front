@@ -8,8 +8,8 @@ import CancelButton from "../buttons/CancelButton";
 import PasswordGenerator from "../../components/inputs/PasswordGenerator";
 
 const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
+
   const [form, setForm] = useState({
-    //form guarda los campos y setform actualiza los valores. useState crea el esatdo del formulario
     name: "",
     email: "",
     phone: "",
@@ -18,7 +18,6 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
   });
 
   const [errors, setErrors] = useState({
-    //UseState maneja el error y errors contiene el mensaje
     name: "",
     email: "",
     phone: "",
@@ -35,7 +34,6 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
         email: initialData.email || "",
         phone: initialData.phone || "",
         project_name: initialData.projectName  || "",
-        password: initialData.password || "",
       });
     }
   }, [initialData]);
@@ -58,60 +56,63 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
   const validateForm = () => {
     let valid = true;
     const errorsCopy = { ...errors };
-
-    if (!form.name.trim()) {
+  
+    if (!form.name || !form.name.trim()) {
       errorsCopy.name = "Nom i cognom obligatoris";
       valid = false;
     } else {
       errorsCopy.name = "";
     }
-
-    if (!form.email.trim()) {
+  
+    if (!form.email || !form.email.trim()) {
       errorsCopy.email = "Email obligatori";
       valid = false;
     } else {
       errorsCopy.email = "";
     }
-
-    if (!form.phone.trim()) {
+  
+    if (!form.phone || !form.phone.trim()) {
       errorsCopy.phone = "Telèfon obligatori";
       valid = false;
     } else {
       errorsCopy.phone = "";
     }
-
-    if (!form.project_name.trim()) {
+  
+    if (!form.project_name || !form.project_name.trim()) {
       errorsCopy.project_name = "Nom del projecte obligatori";
       valid = false;
     } else {
       errorsCopy.project_name = "";
     }
 
-    if (!form.password.trim()) {
-      errorsCopy.password = "Contrasenya obligatoria";
+    if (!initialData && (!form.password || !form.password.trim())) {
+      errorsCopy.password = "Contrasenya obligatoria per crear un usuari nou";
       valid = false;
     } else {
       errorsCopy.password = "";
     }
-
+  
     setErrors(errorsCopy);
     return valid;
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Datos del formulario antes de enviar:", form);
-      console.log("Llamando a onSubmit con los datos:", { ...form, projectName: form.project_name, id: initialData.id });
-      onSubmit({
+  
+    const isFormValid = validateForm();
+  
+    if (isFormValid) {
+  
+      const userData = {
         ...form,
         projectName: form.project_name,
-        id: initialData.id
-      });
+        ...(initialData ? { id: initialData.id } : {})
+      };
+  
+      onSubmit(userData);
     }
   };
-
-
+  
   return (
     <Form onSubmit={handleSubmit}>
       <TitleMobile title={initialData ? "Editar usuari" : "Afegir un usuari"} />
@@ -154,7 +155,7 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
         />
         <PasswordGenerator onPasswordGenerated={handlePasswordGenerated} />
         <ContainerButtons>
-          <ConfirmButton type="submit">Aceptar</ConfirmButton>
+        <ConfirmButton type="submit">Aceptar</ConfirmButton>
           <CancelButton onClick={onCancel}>Cancel·lar</CancelButton>
         </ContainerButtons>
       </FormContainer>

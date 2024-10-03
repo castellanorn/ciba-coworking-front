@@ -4,7 +4,6 @@ import TableMobile from "../../components/table/TableMobile";
 import TitleMobile from "../../components/title/Title";
 import { Subtitle, TableSection } from "../user/UserPagesStyled";
 import AddUser from "../../components/buttons/AddUser";
-import EditButton from "../../components/buttons/EditButton";
 import { apiRequest } from "../../services/apiRequest";
 import { API_GET_ALL_USERS, API_UPDATE_USER } from "../../config/apiEndpoints";
 import { columnsUsers, columnMappingUsers } from "../../config/tableData";
@@ -37,7 +36,6 @@ const AdminDashboard = () => {
     fetchUsers();
   }, [fetchUsers]);
 
-  // Función para abrir el modal y seleccionar un usuario
   const handleEditClick = useCallback((user) => {
 
     setModalState({
@@ -47,22 +45,19 @@ const AdminDashboard = () => {
   }, []);
 
   const handleCloseEditModal = useCallback(() => {
-
+    
     setModalState({
       isOpen: false,
       selectedUser: null,
     })
   }, []);
 
-  // Función para manejar la actualización del usuario
-  const handleSubmit = useCallback(async (updatedUser) => {
-    console.log("handleSubmit en AdminDashboard ha sido llamado con:", updatedUser); // Este debería aparecer si el evento está fluyendo correctamente
-    try {
-      console.log("Datos que se envían al backend:", updatedUser);
-      await apiRequest(API_UPDATE_USER(updatedUser.id), "PUT", updatedUser);
 
+  const handleSubmit = useCallback(async (updatedUser) => {
+    try {
+      await apiRequest(API_UPDATE_USER(updatedUser.id), "PUT", updatedUser);
       handleCloseEditModal();
-      fetchUsers(); // Actualizar la lista de usuarios después de la edición
+      fetchUsers(); 
     } catch (error) {
       console.error("Error en actualitzar l'usuari o enviar el correu:", error);
     }
@@ -75,13 +70,13 @@ const AdminDashboard = () => {
   if (error) {
     return <p>Error: {error}</p>;
   }
-
+  
   return (
     <div>
       <TitleMobile title="Panell d’administrador" />
       <TableSection>
         <Subtitle>USUARIS</Subtitle>
-        <AddUser />
+        <AddUser fetchUsers={fetchUsers} />
         <TableMobile
           data={users}
           type="adminUsers"
@@ -100,6 +95,7 @@ const AdminDashboard = () => {
       {modalState.isOpen && (
         <ModalStyles>
           <ModalContentStyles>
+  
             <CreateUserForm
               initialData={modalState.selectedUser}
               onCancel={handleCloseEditModal}
