@@ -15,7 +15,7 @@ import TitleMobile from "../../components/title/Title";
 const ReserveMeetingRoom = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDates, setSelectedDates] = useState([]);
   const [error, setError] = useState("");
 
   const handleOpenSuccess = () => {
@@ -40,15 +40,24 @@ const ReserveMeetingRoom = () => {
   };
 
   const handleFindResults = () => {
-    if (!selectedDate) {
-      setError("Si us plau, selecciona un dia.");
+    if (selectedDates.length === 0) {
+      setError("Si us plau, selecciona un o més dies.");
       return;
     }
-    setError("");
-    console.log("Fecha seleccionada:", selectedDate);
-    handleOpenConfirm();
-  };
 
+    setError("");
+
+    console.log("Datos enviados al backend:");
+    console.log({
+      dates: selectedDates.map(date => date.format("YYYY-MM-DD")),
+  
+  
+    });
+
+    setTimeout(() => {
+      setSelectedDates([]);
+    }, 2000);
+  };
   return (
     <>
       <DivReserve>
@@ -57,19 +66,19 @@ const ReserveMeetingRoom = () => {
           <PlacesButton
             text="taules individuals"
             focus={false}
-            link="/reservar-taula"
+            link="/reserva-taula"
           />
           <PlacesButton
             text="oficines privades"
-            link="/reservar-despatx"
+            link="/reserva-oficina"
             focus={false}
           />
           <PlacesButton text="sala de reunions" focus={true} />
         </ContainerButtons>
 
         <Calendar
-          onChange={setSelectedDate}
-          value={selectedDate}
+          onChange={setSelectedDates}
+          value={selectedDates}
           setError={setError}
         />
 

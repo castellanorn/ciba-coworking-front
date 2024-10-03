@@ -6,12 +6,13 @@ import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
-import Map from "../../components/map/Map"; 
+import Map from "../../components/map/Map";
 import { Space } from "../../pages/office/OfficeBookingStyled";
 import PlacesButton from "../../components/buttons/PlacesButton";
 import { DivReserve } from "./TableBookingStyled";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
-import {RoleInput} from "../../components/inputs/RoleInput";
+import { RoleInput } from "../../components/inputs/RoleInput";
+import { API_GET_RESERVATION } from "../../config/url";
 
 const ReserveTable = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -19,10 +20,8 @@ const ReserveTable = () => {
   const [selectedTable, setSelectedTable] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState({
-    morning: false,
-    afternoon: false,
-  });
+  const [reservationData, setReservationData] = useState(null); // Estado para almacenar los datos de la reserva
+
   const [error, setError] = useState("");
 
   const handleOpenSuccess = () => {
@@ -45,36 +44,38 @@ const ReserveTable = () => {
     handleCloseConfirm();
     handleOpenSuccess();
   };
-  const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-    setSelectedCheckboxes((prev) => ({ ...prev, [name]: checked }));
+
+  const handleRadioChange = (event) => {
+    setSelectedTimeSlot(event.target.value);
+  };
+  const fetchReservationData = async () => {
+    try {
+      const response = await fetch(API_GET_RESERVATION);
+      if (!response.ok) {
+        throw new Error("Error al obtener los datos de la reserva");
+      }
+      const data = await response.json();
+      setReservationData(data);
+      console.log("Datos obtenidos del backend:", data);
+    } catch (error) {
+      console.error("Error al obtener los datos de la reserva:", error);
+      setError("No se pudieron obtener los datos de la reserva.");
+    }
   };
 
-  const handleFindResults = () => {
+  const handleFindResults = async () => {
     if (selectedDates.length === 0) {
       setError("Si us plau, selecciona un o més dies.");
       return;
     }
-    const timeSlot = selectedCheckboxes.morning ? 'Matí' : selectedCheckboxes.afternoon ? 'Tarda' : '';
 
-    if (!timeSlot) {
+    if (!selectedTimeSlot) {
       setError("Si us plau, selecciona una franja horària.");
       return;
     }
-  
+
     setError("");
-  
-    console.log("Datos enviados al backend:");
-    console.log({
-      dates: selectedDates.map(date => date.format("YYYY-MM-DD")), 
-      timeSlot: selectedTimeSlot, 
-      table: selectedTable, 
-    });
-  
-    setTimeout(() => {
-      setSelectedDates([]);
-      // setSelectedTimeSlot("");
-    }, 2000);
+    await fetchReservationData();
   };
 
   const handleTableSelection = (table) => {
@@ -89,12 +90,12 @@ const ReserveTable = () => {
           <PlacesButton text="taules individuals" focus={true} />
           <PlacesButton
             text="oficines privades"
-            link="/reservar-despatx"
+            link="/reserva-oficina"
             focus={false}
           />
           <PlacesButton
             text="sala de reunions"
-            link="/reservar-reunio"
+            link="/reserva-reunio"
             focus={false}
           />
         </ContainerButtons>
@@ -108,21 +109,19 @@ const ReserveTable = () => {
 
         <Hr2 />
         <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
-        
+
         <RoleInput
           label="Matí"
           name="morning"
           selectedOption={selectedTimeSlot}
-          checked={selectedCheckboxes.morning}
-          onChange={handleCheckboxChange}
+          onChange={handleRadioChange}
           userRole={"USER"}
         />
         <RoleInput
           label="Tarda"
           name="afternoon"
           selectedOption={selectedTimeSlot}
-          checked={selectedCheckboxes.afternoon}
-          onChange={handleCheckboxChange}
+          onChange={handleRadioChange}
           userRole={"USER"}
         />
 
@@ -143,18 +142,18 @@ const ReserveTable = () => {
           table={selectedTable}
           pageType="table"
           onConfirm={handleAcceptConfirm}
-          slot='slot'
-          month='month'
-          day='day'
+          slot="slot"
+          month="month"
+          day="day"
           button={{
-            confirmText: "Confirmar", 
-            cancelText: "Cancelar"    
+            confirmText: "Confirmar",
+            cancelText: "Cancelar",
           }}
         />
 
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
-      <Space/>
+      <Space />
     </>
   );
 };

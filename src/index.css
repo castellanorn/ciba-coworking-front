@@ -115,3 +115,6 @@ main{
 .css-g31t2f-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
   background-color: var(--lightviolet) !important;
 }
+.hSUaVN >:last-child{
+  border-radius: 20px 20px 0 0 !important;
+}

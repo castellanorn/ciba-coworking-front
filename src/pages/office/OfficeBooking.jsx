@@ -17,7 +17,8 @@ import { RoleInput } from "../../components/inputs/RoleInput";
 const ReserveOffice = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
-  const [selectedOffice, setselectedOffice] = useState("");  
+  const [selectedOffice, setSelectedOffice] = useState("");
+  const [selectedHour, setSelectedHour] = useState("")
   const [selectedDates, setSelectedDates] = useState([]);
   const [error, setError] = useState("");
 
@@ -41,26 +42,33 @@ const ReserveOffice = () => {
     handleCloseConfirm();
     handleOpenSuccess();
   };
-  const handleOfficeChange = (event) => {
+  
+  const handleRadioChange = (event) => {
     setSelectedOffice(event.target.value);
-
   };
+  // const handleOfficeChange = (event) => {
+  //   setSelectedOffice(event.target.value);
+
+  // };
+  const handleHourChange = (event) => {
+    setSelectedHour(event.target.value); 
+};
   const handleFindResults = () => {
     if (selectedDates.length === 0) {
       setError("Si us plau, selecciona un o més dies.");
       return;
     }
+
     setError("");
 
     console.log("Datos enviados al backend:");
     console.log({
-      dates: selectedDates.map((date) => date.format("YYYY-MM-DD")),
-      Office: selectedOffice,
+      dates: selectedDates.map(date => date.format("YYYY-MM-DD")),
     });
 
     setTimeout(() => {
-      setSelectedDates[''];
-      setselectedOffice("");
+      setSelectedDates([]);
+      setSelectedOffice(""); 
     }, 2000);
   };
 
@@ -72,12 +80,12 @@ const ReserveOffice = () => {
           <PlacesButton
             text="taules individuals"
             focus={false}
-            link="/reservar-taula"
+            link="/reserva-taula"
           />
           <PlacesButton text="oficines privades" focus={true} />
           <PlacesButton
             text="sala de reunions"
-            link="/reservar-reunio"
+            link="/reserva-reunio"
             focus={false}
           />
         </ContainerButtons>
@@ -93,22 +101,25 @@ const ReserveOffice = () => {
           <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
         </ContainerButtons>
         <Hr2 />
-        <HourSelect />
+        <HourSelect 
+          selectedHour={selectedHour}
+          onChange={handleHourChange}
+        />
         <Hr2 />
         <TitleSelectDate>Selecciona l'oficina</TitleSelectDate>
         <RoleInput
           label="Oficina 1"
-          value="office 1"
+          name="office 1"
           selectedOption={selectedOffice}
-          onChange={handleOfficeChange}
-          userRole="USER"
+          onChange={handleRadioChange}
+          userRole={"USER"}
         />
         <RoleInput
           label="Oficina 2"
-          value="office 2"
+          name="office 2"
           selectedOption={selectedOffice}
-          onChange={handleOfficeChange}
-          userRole="USER"
+          onChange={handleRadioChange}
+          userRole={"USER"}
         />
 
         <ContainerButtons>
@@ -118,7 +129,7 @@ const ReserveOffice = () => {
         <PopUpConfirmReserve
           open={confirmPopupOpen}
           onCancel={handleCloseConfirm}
-          pageType="office" 
+          pageType="office"
           onConfirm={handleAcceptConfirm}
           slot='slot'
           month="month"

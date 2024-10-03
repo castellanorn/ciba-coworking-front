@@ -27,26 +27,50 @@ export const RadioLabel = styled.label`
   cursor: pointer;
   margin: 5px 0;
 
-    input {
-        display: none;
-    }
-    .custom-radio {
-        width: 20px;
-        height: 20px;
-        border: 2px solid var(--violet);
-        border-radius: 50%;
-        margin-right: 10px;
-        position: relative;
+  input {
+    display: none; 
+  }
 
-    }
-    .custom-checkbox {
-        width: 20px;
-        height: 20px;
-        border: 2px solid var(--violet);
-        margin-right: 10px;
-        position: relative;
+  .custom-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--violet);
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    transition: background-color 0.3s ease;
 
+    
+    &::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      background-color: var(--violet);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0; 
+      transition: opacity 0.3s ease;
     }
+  }
+  input:checked + .custom-radio::after {
+    opacity: 1; 
+  }
+    .custom-checkbox{
+      width: 20px;
+      height: 20px;
+      background-color: var(--violet);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0; 
+      transition: opacity 0.3s ease;
+    }
+    input:checked + .custom-checkbox::after {
+        opacity: 1;
 `;
 
 export const FieldContainer = styled.div`

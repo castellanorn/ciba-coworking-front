@@ -90,27 +90,27 @@ const router = createBrowserRouter([
       },
       {
         path: "edicio-reserva-taula",
-        element: (
+        element: <EditIndividualTable/>/*(
           <PrivateRoute requiredRole="user">
             <EditIndividualTable />
           </PrivateRoute>
-        ),
+        )*/,
       },
       {
         path: "edicio-reserva-oficina",
-        element: (
+        element: <EditOffice/>/*(
           <PrivateRoute requiredRole="user">
             <EditOffice />
           </PrivateRoute>
-        ),
+        )*/,
       },
       {
         path: "edicio-reserva-sala-reunions",
-        element: (
+        element: <EditMeetingRoom />/*(
           <PrivateRoute requiredRole="user">
             <EditMeetingRoom />
           </PrivateRoute>
-        ),
+        )*/,
       },
     ],
   },
