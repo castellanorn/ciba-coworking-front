@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 const MapSVG = styled.svg`
   width: 290px;
+  height: auto;
   color: var(--ligthgray);
 `;
 

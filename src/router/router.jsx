@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import Layout from "../layout/Layout";
-
+import Home from "../pages/Home";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import ManageIndividual from "../pages/admin/ManageIndividual";
 import ManageOffice from "../pages/admin/ManageOffice";
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Login />,
+        element: <Home />,
       },
       {
         path: "inici-sessio",

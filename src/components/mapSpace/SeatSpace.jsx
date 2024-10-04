@@ -11,12 +11,6 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const Title = styled.h3`
-  font-family: "Marianina FY Black";
-  font-size: 25px;
-  margin-left: 20px;
-`;
-
 const config = {
   legend: true,
   style: {
@@ -25,7 +19,7 @@ const config = {
       color: "#ffffff", // Color del asiento
       selected: 'var(--violet)', // Color del asiento seleccionado
       check_icon_color: '#fff', // Color del icono de verificación
-      not_salable: "var(--softgray)", // Color del asiento no disponible para la venta
+      not_salable: "var(--gray)", // Color del asiento no disponible para la venta
       focus: '#13f5f2', // Color del asiento enfocado
     },
     legend: {
@@ -339,7 +333,6 @@ const SeatSpace = () => {
 
   return (
     <Container>
-      <Title>Selecciona tu Asiento</Title>
       <SvgComponent blocks={blocks} onSeatClick={handleSeatClick} config={config} /> {/* Renderiza el SVG con los bloques */}
       <Seatmap
         ref={seatmapRef}
