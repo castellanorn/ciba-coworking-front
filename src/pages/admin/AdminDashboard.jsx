@@ -26,7 +26,6 @@ const AdminDashboard = () => {
   const fetchUsers =  useCallback(async () => {
     try {
       const response = await apiRequest(API_GET_ALL_USERS(), "GET");
-      console.log(response);
       setUsers(response.slice(1));
     } catch (error) {
       setError(error.message);

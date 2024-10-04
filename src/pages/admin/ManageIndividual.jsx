@@ -77,7 +77,7 @@ const ManageIndividual = () => {
             actions={['delete']} />
           <TableMobile 
             data={availableReservations} 
-            type='adminReserves' 
+            type='reserveUser' 
             actions={['delete']} />
         </TableSection>
         
