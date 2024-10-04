@@ -1,11 +1,12 @@
-import { ButtonConfirm } from "./ButtonStyled"
+ import { ButtonConfirm } from "./ButtonStyled"
 
-const ConfirmButton = ({children,onClick}) => {
+const ConfirmButton = ({children, onClick, type = "button"}) => {
   return (
     <div>
-      <ButtonConfirm onClick={onClick}>{children}</ButtonConfirm>
+      <ButtonConfirm onClick={onClick}  type={type}>{children}</ButtonConfirm>
     </div>
   )
 }
 
 export default ConfirmButton;
+ 
