@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <NavbarFooter>
       <IconFooter
-        link='/reservar-taula'
+        link='/reserva-taula'
         icon="addreserve"
         activeIcon={activeIcon}
         setActiveIcon={setActiveIcon}

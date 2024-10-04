@@ -15,6 +15,7 @@ import ReserveTable from "../pages/table/TableBooking";
 import ReserveOffice from "../pages/office/OfficeBooking";
 import ReserveMeetingRoom from "../pages/meetingRoom/MeetingRoomBooking";
 import Contact from "../pages/contact/Contact";
+import ManageReserves from "../pages/admin/ManageReserves";
 
 const router = createBrowserRouter([
   {
@@ -56,28 +57,36 @@ const router = createBrowserRouter([
         ) */,
       },
       {
+        path: "gestio-reserves",
+        element:<ManageReserves /> /* (
+          <PrivateRoute requiredRole="user">
+            <ManageReserves />
+          </PrivateRoute>
+        ) */,
+      },
+      {
         path: "gestio-de-taules",
-        element: (
+        element: <ManageIndividual /> /* (
           <PrivateRoute requiredRole="admin">
             <ManageIndividual />
           </PrivateRoute>
-        ),
+        ) */,
       },
       {
         path: "gestio-oficina",
-        element: (
+        element: <ManageOffice />/* (
           <PrivateRoute requiredRole="admin">
             <ManageOffice />
           </PrivateRoute>
-        ),
+        ) */,
       },
       {
         path: "gestio-reunio",
-        element: (
+        element: <ManageMeetingRoom />/* (
           <PrivateRoute requiredRole="admin">
             <ManageMeetingRoom />
           </PrivateRoute>
-        ),
+        ) */,
       },
       // Rutas user
       {

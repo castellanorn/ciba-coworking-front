@@ -89,12 +89,12 @@ const ReserveTable = () => {
           <PlacesButton text="taules individuals" focus={true} />
           <PlacesButton
             text="oficines privades"
-            link="/reservar-despatx"
+            link="/reserva-oficina"
             focus={false}
           />
           <PlacesButton
             text="sala de reunions"
-            link="/reservar-reunio"
+            link="/reserva-reunio"
             focus={false}
           />
         </ContainerButtons>
