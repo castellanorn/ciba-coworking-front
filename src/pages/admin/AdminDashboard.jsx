@@ -2,13 +2,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import Table from "../../components/table/Table";
 import TableMobile from "../../components/table/TableMobile";
 import TitleMobile from "../../components/title/Title";
-import { Subtitle, TableSection } from "../user/UserPagesStyled";
-import AddUser from "../../components/buttons/AddUser";
-import { apiRequest } from "../../services/apiRequest";
-import { API_GET_ALL_USERS, API_UPDATE_USER } from "../../config/apiEndpoints";
-import { columnsUsers, columnMappingUsers } from "../../config/tableData";
-import CreateUserForm from "../../components/form/CreateUserForm";
+import { SectionBtn, Subtitle, TableSection } from "../user/UserPagesStyled";
+import AddUser from "../../components/buttons/AddUser"
+import EditButton from "../../components/buttons/EditButton";
+import {apiRequest} from "../../services/apiRequest"
+import {API_GET_ALL_USERS, API_UPDATE_USER } from "../../config/apiEndpoints"
+import { columnsUsers,columnMappingUsers } from '../../config/tableData';
+import ContainerButtons from '../../components/container/ButtonsContainer'
+import PlacesButton from "../../components/buttons/PlacesButton";
 import { ModalStyles, ModalContentStyles } from "../../components/buttons/ButtonStyled";
+import CreateUserForm from "../../components/form/CreateUserForm";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -73,26 +76,26 @@ const AdminDashboard = () => {
   
   return (
     <div>
-      <TitleMobile title="Panell d’administrador" />
-      <TableSection>
-        <Subtitle>USUARIS</Subtitle>
-        <AddUser fetchUsers={fetchUsers} />
-        <TableMobile
-          data={users}
-          type="adminUsers"
-          actions={["edit", "delete"]}
-          onEdit={handleEditClick}
-        />
-        <Table
-          columns={columnsUsers}
-          data={users}
-          columnMapping={columnMappingUsers}
-          actions={["edit", "delete"]}
-          onEdit={handleEditClick}
-        />
-      </TableSection>
+    <TitleMobile title="Panell d’administrador" />
+    <ContainerButtons>
+        <PlacesButton
+            text="Gestiona usuaris"
+            focus={true}
+          />
+          <PlacesButton
+            text="Gestiona reserves"
+            link="/gestio-reserves"
+            focus={false}
+          />
+        </ContainerButtons>
+    <TableSection>
+      <Subtitle>USUARIS</Subtitle>
+       <SectionBtn><AddUser fetchUsers={fetchUsers}/></SectionBtn>
+      <TableMobile data={users} type='adminUsers' actions={['edit','delete']} onEdit={handleEditClick} /> 
+      <Table columns={columnsUsers} data={users} columnMapping={columnMappingUsers} actions={['edit','delete']} onEdit={handleEditClick} />
+    </TableSection>
 
-      {modalState.isOpen && (
+    {modalState.isOpen && (
         <ModalStyles>
           <ModalContentStyles>
   

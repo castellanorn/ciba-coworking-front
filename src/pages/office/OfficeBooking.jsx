@@ -72,12 +72,12 @@ const ReserveOffice = () => {
           <PlacesButton
             text="taules individuals"
             focus={false}
-            link="/reservar-taula"
+            link="/reserva-taula"
           />
           <PlacesButton text="oficines privades" focus={true} />
           <PlacesButton
             text="sala de reunions"
-            link="/reservar-reunio"
+            link="/reserva-reunio"
             focus={false}
           />
         </ContainerButtons>
