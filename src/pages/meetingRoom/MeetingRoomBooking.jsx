@@ -57,11 +57,11 @@ const ReserveMeetingRoom = () => {
           <PlacesButton
             text="taules individuals"
             focus={false}
-            link="/reservar-taula"
+            link="/reserva-taula"
           />
           <PlacesButton
             text="oficines privades"
-            link="/reservar-despatx"
+            link="/reserva-oficina"
             focus={false}
           />
           <PlacesButton text="sala de reunions" focus={true} />

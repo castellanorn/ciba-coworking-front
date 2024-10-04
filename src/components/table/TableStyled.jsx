@@ -44,7 +44,7 @@ export const StyledTable = styled.table`
   }
   th, td {
     border-bottom: 1px solid var(--ligthgray);
-    padding: 10px;
+    padding: 15px;
     text-align: center;
   }
 
