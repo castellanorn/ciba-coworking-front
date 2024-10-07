@@ -46,10 +46,7 @@ const ReserveOffice = () => {
   const handleRadioChange = (event) => {
     setSelectedOffice(event.target.value);
   };
-  // const handleOfficeChange = (event) => {
-  //   setSelectedOffice(event.target.value);
-
-  // };
+  
   const handleHourChange = (event) => {
     setSelectedHour(event.target.value); 
 };

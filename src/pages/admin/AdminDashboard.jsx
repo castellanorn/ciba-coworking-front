@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Table from "../../components/table/Table"
 import TableMobile from "../../components/table/TableMobile"
 import TitleMobile from "../../components/title/Title";

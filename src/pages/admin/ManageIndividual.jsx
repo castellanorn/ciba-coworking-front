@@ -1,3 +1,6 @@
+import { Table } from "@mui/material"
+import TableMobile from "../../components/table/TableMobile"
+
 const reserva=[{id: '01', franja: '09:00 - 10:00', data: '2023-09-10', nomAmbCognom:'Juan Perez'}]
 const ManageIndividual = () => {
   return (

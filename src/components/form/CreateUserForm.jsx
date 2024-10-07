@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TitleMobile from "../title/Title";
 import Field from "../inputs/Field";
 import ContainerButtons from "../container/ButtonsContainer";

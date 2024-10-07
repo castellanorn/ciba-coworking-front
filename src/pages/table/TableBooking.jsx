@@ -12,7 +12,8 @@ import PlacesButton from "../../components/buttons/PlacesButton";
 import { DivReserve } from "./TableBookingStyled";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
 import { RoleInput } from "../../components/inputs/RoleInput";
-import { API_GET_RESERVATION } from "../../config/url";
+import { API_GET_SPACES_TABLES } from "../../config/apiEndpoints";
+import {apiRequest} from "../../services/apiRequest"
 
 const ReserveTable = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -20,8 +21,7 @@ const ReserveTable = () => {
   const [selectedTable, setSelectedTable] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [reservationData, setReservationData] = useState(null); // Estado para almacenar los datos de la reserva
-
+  const [reservationData, setReservationData] = useState(null); //reservation data lo usaremos para mapear las mesas
   const [error, setError] = useState("");
 
   const handleOpenSuccess = () => {
@@ -48,18 +48,21 @@ const ReserveTable = () => {
   const handleRadioChange = (event) => {
     setSelectedTimeSlot(event.target.value);
   };
-  const fetchReservationData = async () => {
+  const fetchReservationData = async (startDate, endDate, startTime, endTime) => {
     try {
-      const response = await fetch(API_GET_RESERVATION);
-      if (!response.ok) {
-        throw new Error("Error al obtener los datos de la reserva");
-      }
-      const data = await response.json();
-      setReservationData(data);
-      console.log("Datos obtenidos del backend:", data);
+      const queryParams = new URLSearchParams({
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+      }).toString();
+      const urlWithParams = `${API_GET_SPACES_TABLES()}?${queryParams}`;
+      const response = await apiRequest(urlWithParams,"GET");
+      
+      setReservationData(response);
+      
     } catch (error) {
-      console.error("Error al obtener los datos de la reserva:", error);
-      setError("No se pudieron obtener los datos de la reserva.");
+      setError(error.response?.data.message || error.message);
     }
   };
 
@@ -75,9 +78,25 @@ const ReserveTable = () => {
     }
 
     setError("");
-    await fetchReservationData();
+    const startDate = selectedDates[0].toISOString().split('T')[0];
+    const endDate = selectedDates[selectedDates.length - 1].toISOString().split('T')[0]; 
+    let startTime;
+    let endTime;
+    if (selectedTimeSlot === "Matí") {
+      startTime = "08:00:00";  
+      endTime = "13:59:59";    
+    } else if (selectedTimeSlot === "Tarda") {
+      startTime = "14:00:00";  
+      endTime = "20:00:00";    
+    }
+  
+    console.log("Fechas seleccionadas:", startDate, endDate);
+    console.log("Franja horaria seleccionada:", selectedTimeSlot);
+    console.log("Horas de inicio:", startTime, "Horas de fin:", endTime);
+  
+    await fetchReservationData(startDate, endDate, startTime, endTime); 
   };
-
+  
   const handleTableSelection = (table) => {
     setSelectedTable(table);
   };

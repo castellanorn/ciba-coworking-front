@@ -6,6 +6,8 @@ export const API_GET_ALL_USERS = () => `${API_BASE_URL}admin/users`;
 export const API_GET_USER_BY_ID = (id) => `${API_BASE_URL}reservations/user/${id}`;
 
 export const API_GET_RESERVATIONS_BY_USER = (id) => `${API_BASE_URL}reservations/user/${id}`;
+
+export const API_GET_SPACES_TABLES = () =>`${API_BASE_URL}spaces/tables/date-range`;
 /* export const API_GET_USER_BY_ID = API_BASE_URL + ""; */
 /* 
 export const API_GET_USER_BY_ID = API_BASE_URL + "";
