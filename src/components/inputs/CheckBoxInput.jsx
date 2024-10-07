@@ -5,12 +5,12 @@ export function CheckBoxInput({ label, name, checked, onChange }) {
     <RadioGroup>
       <RadioLabel>
         <input
-          type="checkbox" 
+          type="checkbox"
           name={name}
-          checked={checked} 
+          checked={checked}
           onChange={onChange}
         />
-        <span className="custom-checkbox" /> 
+        <span className="custom-radio" />
         {label}
       </RadioLabel>
     </RadioGroup>

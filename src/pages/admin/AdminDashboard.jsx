@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
-import Table from "../../components/table/Table";
-import TableMobile from "../../components/table/TableMobile";
+import { useState, useEffect } from 'react';
+import Table from "../../components/table/Table"
+import TableMobile from "../../components/table/TableMobile"
 import TitleMobile from "../../components/title/Title";
 import { SectionBtn, Subtitle, TableSection } from "../user/UserPagesStyled";
 import AddUser from "../../components/buttons/AddUser"
