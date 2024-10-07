@@ -1,5 +1,5 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
-import { ContainerDialog, H6, LineSpan, SubTitleMessage, TitleMessage } from "../PopUpStyled";
+import { ContainerDialog, H6, LineSpan, SubTitleMessage, TitleMessage } from "./PopUpStyled";
 import { ButtonCancel, ButtonConfirm } from "../../buttons/ButtonStyled";
 
 const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot, month, day, button, actionType }) => {
