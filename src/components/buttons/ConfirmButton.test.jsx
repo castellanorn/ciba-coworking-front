@@ -22,4 +22,10 @@ describe('ConfirmButton Component', () => {
     const button = screen.getByText('Confirm');
     expect(button).toHaveAttribute('type', 'submit'); // Verifica que el tipo del botón sea 'submit'
   });
+  it('should not throw an error if onClick is not provided', () => {
+    render(<ConfirmButton>Confirm</ConfirmButton>);
+    const button = screen.getByText('Confirm');
+    expect(button).toBeInTheDocument(); // Solo asegura que no falle al renderizar
+  });
+  
 });
