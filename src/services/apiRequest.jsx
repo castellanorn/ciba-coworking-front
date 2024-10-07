@@ -5,8 +5,15 @@ export const apiRequest = async (endpoint, method = "GET", data = null, headers 
         const response = await axios({
             url: endpoint,   
             method,          
-            data,            
-            headers,         
+            data,  /*           
+            headers: {
+                'Access-Control-Allow-Origin': 'http://localhost:5173',
+                'origin':'x-requested-with',
+                'Access-Control-Allow-Headers': 'POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin',
+                'Content-Type': 'application/json',
+                ...headers,
+            },
+            withCredentials: true,   */       
         });
         
         return response.data;
@@ -14,11 +21,9 @@ export const apiRequest = async (endpoint, method = "GET", data = null, headers 
         console.error("API request error:", error);
 
         if (error.response) {
-            // Error response from the server
             const { status, data } = error.response;
             let errorMessage = data.message || "Something went wrong";
             
-            // Handle different status codes
             if (status === 400) {
                 errorMessage = "Bad Request: " + errorMessage;
             } else if (status === 401) {

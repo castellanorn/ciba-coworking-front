@@ -34,5 +34,11 @@ export default [
         { allowConstantExport: true },
       ],
     },
+    
   },
+  {
+    "env": {
+      "jest": true
+    }
+  }
 ]
