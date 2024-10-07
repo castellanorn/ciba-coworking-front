@@ -15,12 +15,12 @@ export const PasswordRow = styled.div`
 `;
 
 export const ButtonPassword = styled.button`
-  border: 3px solid var(--ligthViolet);
+  border: 3px solid var(--lightviolet);
   border-radius: 5px;
   background-color: white;
   height: 39px;
   font-size: 15px;
-  color: var(--ligthViolet);
+  color: var(--lightviolet);
   opacity: 1;
   font-family: "Marianina XWd FY W03 Medium";
   font-weight: bold;
@@ -29,7 +29,7 @@ export const ButtonPassword = styled.button`
   padding-right: 8px;
 
   &:focus {
-    border-color: var(--ligthViolet);
+    border-color: var(--lightviolet);
     outline: none;
   }
 `;

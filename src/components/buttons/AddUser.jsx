@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { BiUserPlus  } from "react-icons/bi";
 import CreateUserForm from "../form/CreateUserForm";
 import { ModalStyles, ModalContentStyles, AddUserButton} from "../buttons/ButtonStyled";
+import { API_CREATE_USER } from "../../config/apiEndpoints";
+import { apiRequest } from "../../services/apiRequest";
 
-const AddUser = () => {
+
+const AddUser = ({ fetchUsers }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -12,7 +15,26 @@ const AddUser = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    fetchUsers();
   };
+  
+
+  const handleSubmit = useCallback(async (newUserData) => {
+    try {
+      console.log("Datos que se envían al backend para crear un nuevo usuario:", newUserData);
+      
+      await apiRequest(API_CREATE_USER(), "POST", newUserData, {
+        "Content-Type": "application/json",
+      });
+
+      fetchUsers();
+
+      closeModal();
+    } catch (error) {
+      console.error("Error al crear un nuevo usuario:", error);
+    }
+  }, [fetchUsers]);
+
 
   return (
     <div>
@@ -22,7 +44,7 @@ const AddUser = () => {
       {isModalOpen && (
         <ModalStyles >
           <ModalContentStyles>
-            <CreateUserForm onCancel={closeModal}/>
+          <CreateUserForm onCancel={closeModal} onSubmit={handleSubmit} />
           </ModalContentStyles>
         </ModalStyles>
       )}
