@@ -69,11 +69,15 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
                             className='cls-3'
                             d={block.path}
                             fill={
-                                block.reserved
-                                    ? config.style.seat.selected
-                                    : block.available
-                                    ? config.style.seat.color
-                                    : config.style.seat.not_salable
+                              block.available === false
+                              ? config.style.seat.not_salable
+                              : block.available === true 
+                              ? config.style.seat.selected
+                              : config.style.seat.color
+                            
+                            
+                            
+                            
                             }
                         />
                     )}

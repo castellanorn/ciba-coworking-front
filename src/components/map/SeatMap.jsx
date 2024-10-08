@@ -1,5 +1,6 @@
 import { MapContainer, TitleSelectTable } from "./MapStyled"
-import { SeatSpace } from "../mapSpace/SeatSpace"
+/* import { SeatSpace } from "../mapSpace/SeatSpace" */
+import { Coworking } from "../mapSpace/Coworking"
 import styled from "styled-components";
 
 const MapSpace = styled.div`
@@ -14,7 +15,8 @@ return (
     <MapSpace>
         <TitleSelectTable>Selecciona taula:</TitleSelectTable>
         <MapContainer>
-            <SeatSpace />
+          {/*   <SeatSpace /> */}
+            <Coworking />
         </MapContainer>
         
     </MapSpace>
