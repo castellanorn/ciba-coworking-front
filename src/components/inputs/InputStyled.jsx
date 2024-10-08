@@ -89,11 +89,14 @@ export const FieldLabel = styled.label`
 `;
 
 export const FieldInput = styled.input`
+  box-sizing: border-box;
   border: 2px solid var(--violet);
   border-radius: 5px;
   background-color: white;
-  width: 295px;
-  height: 50px;
+  width: 18.5rem;
+  height: 3.125rem;
+  font-size: 1.125rem;
+  padding: 0.5rem;
 
 
   &::placeholder {
