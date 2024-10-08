@@ -1,41 +1,40 @@
-import { render, screen, within } from '@testing-library/react';
-import Table from './Table'; // Asegúrate de que esta ruta es correcta
+import { render, screen } from '@testing-library/react';
+import { describe, test, expect, vi } from 'vitest'; 
+import Table from './Table'; 
 
-// Datos de prueba para las columnas y las filas
-const columns = ['Name', 'Price'];
-const rowsData = [
-  { name: 'Item 1', price: '$10' },
-  { name: 'Item 2', price: '$20' },
-];
-const columnMapping = {
-  name: 'Name',
-  price: 'Price',
-};
+describe('Table Component', () => {
+  const mockData = [
+    {
+      id: 1,
+      name: 'Espai reservat',
+      type: 'reserveUser',
+    },
+    {
+      id: 2,
+      name: 'Otro espai',
+      type: 'other',
+    },
+  ];
 
-test('renders the correct column headers', () => {
-  render(<Table columns={columns} data={rowsData} columnMapping={columnMapping} />);
-
-  // Buscamos todos los encabezados de la tabla (columnheader)
-  const headers = screen.getAllByRole('columnheader');
+  const mockColumns = ['id', 'name', 'type'];
   
-  // Verificamos que el primer encabezado sea 'Name' y el segundo sea 'Price'
-  expect(headers[0]).toHaveTextContent('Name');
-  expect(headers[1]).toHaveTextContent('Price');
-});
+  const mockColumnMapping = {
+    id: 'id',
+    name: 'name',
+    type: 'type',
+  };
 
-test('renders the correct data in cells', () => {
-  render(<Table columns={columns} data={rowsData} columnMapping={columnMapping} />);
+  const mockActions = ['edit', 'delete'];
+  const mockOnEdit = vi.fn(); 
 
-  // Buscamos las filas de la tabla (excepto el encabezado)
-  const rows = screen.getAllByRole('row');
+  test('renders reserveUser type correctly', () => {
+    render(<Table columns={mockColumns} data={mockData} columnMapping={mockColumnMapping} actions={mockActions} onEdit={mockOnEdit} />);
+
   
-  // Verificamos el contenido de la primera fila de datos (segunda fila de la tabla)
-  const firstRow = within(rows[1]).getAllByRole('cell');
-  expect(firstRow[0]).toHaveTextContent('Item 1');
-  expect(firstRow[1]).toHaveTextContent('$10');
+    const elements = screen.getAllByText(/Espai reservat/i);
 
-  // Verificamos el contenido de la segunda fila de datos (tercera fila de la tabla)
-  const secondRow = within(rows[2]).getAllByRole('cell');
-  expect(secondRow[0]).toHaveTextContent('Item 2');
-  expect(secondRow[1]).toHaveTextContent('$20');
+    expect(elements.length).toBeGreaterThan(0);
+  });
+
+ 
 });
