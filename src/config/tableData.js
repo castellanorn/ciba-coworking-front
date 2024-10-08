@@ -3,7 +3,7 @@ export const columnsUsers = ['Id','Nom i Cognom', 'Proyecte', 'Correu', 'Mobil']
 export const columnMappingUsers = {
   'Id': 'id',
   'Nom i Cognom': 'name',
-  'Projecte': 'projectName',
+  'Proyecte': 'projectName',
   'Correu': 'email',
   'Mobil': 'phone'
 };
