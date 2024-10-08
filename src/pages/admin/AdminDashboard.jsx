@@ -61,7 +61,7 @@ const AdminDashboard = () => {
     try {
       if (deleteModalState.selectedUser) {
         await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE");
-        fetchUsers();  // Recarga los usuarios después de la eliminación
+        fetchUsers();  
       }
     } catch (error) {
       console.error("Error eliminando el usuario:", error);
@@ -148,7 +148,6 @@ const AdminDashboard = () => {
           <button onClick={handleConfirmDelete}>Aceptar</button>
           <button onClick={handleCancelDelete}>Cancelar</button>
           </ModalContentStyles>
-          
         </ModalStyles>
       )}
     </div>
