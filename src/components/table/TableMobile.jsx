@@ -2,7 +2,7 @@ import DeleteButton from '../buttons/DeleteButton';
 import EditButton from '../buttons/EditButton';
 import { MobileTableWrapper, TableRow, TableHeader, TableData, Field, Actions } from './TableStyled';
 
-const TableMobile = ({ data, type, actions, onEdit }) => {
+const TableMobile = ({ data, type, actions, onEdit, onDelete }) => {
   
   const hasIdColumn = data.some(row => row.id); 
   const hasActions = actions && actions.length > 0; 
@@ -56,7 +56,7 @@ const TableMobile = ({ data, type, actions, onEdit }) => {
         {hasActions && (
           <Actions>
             {actions.includes('edit') && <EditButton onClick={() => onEdit(row)} />}
-            {actions.includes('delete') && <DeleteButton />}
+            {actions.includes('delete') && <DeleteButton onClick={() => onDelete(row)}  />}
           </Actions>
         )}
       </TableRow>

@@ -9,17 +9,23 @@ import { Line } from '../../components/title/TitleStyled'
 import { columnsReserves,columnMappingReserves } from '../../config/tableData';
 import {apiRequest} from "../../services/apiRequest"
 import {API_GET_RESERVATIONS_BY_USER} from "../../config/apiEndpoints"
+import { splitReservations } from '../../config/reservationHelpers';
 
 function ManageReserves() {
-  const [reservas, setReservas] = useState([]); 
+  const [futureReservations, setFutureReservations] = useState([]);
+  const [pastReservations, setPastReservations] = useState([]);
   const [loading, setLoading] = useState(true);  
   const [error, setError] = useState(null); 
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchReservations = async () => {
       try {
         const response = await apiRequest(API_GET_RESERVATIONS_BY_USER(1), "GET");
-        setReservas(response);
+        
+        const { futureReservations, pastReservations } = splitReservations(response);
+
+        setFutureReservations(futureReservations);
+        setPastReservations(pastReservations);
       } catch (error) {
         setError(error.message);  
       } finally {
@@ -27,17 +33,18 @@ function ManageReserves() {
       }
     };
 
-    fetchUsers();  
+    fetchReservations();  
   }, []);
 
   if (loading) {
-    return <p>Cargando usuarios...</p>; 
+    return <p>Cargando reserves...</p>; 
   }
 
   if (error) {
     return <p>Error: {error}</p>; 
   }
-  console.log(reservas)
+  console.log(futureReservations)
+  console.log(pastReservations)
   return (
     <div>
         <TitleMobile title="Panell d’administrador" />
@@ -74,12 +81,12 @@ function ManageReserves() {
         <Line />
         <TableSection>
             <Subtitle>RESERVES PENDENTS ADMIN</Subtitle>
-            <Table columns={columnsReserves} data={reservas} columnMapping={columnMappingReserves} actions={['delete']} />
-            <TableMobile data={reservas} type='reserveUser' actions={['delete']} />
+            <Table columns={columnsReserves} data={futureReservations} columnMapping={columnMappingReserves} actions={['delete']} />
+            <TableMobile data={futureReservations} type='reserveUser' actions={['delete']} />
 
-            {/* <Subtitle>RESERVES COMPLETADES</Subtitle>
-            <Table columns={columnsReserves} data={reservas} columnMapping={columnMappingReserves} />
-            <TableMobile data={reservas} type='adminReserves' /> */}
+            <Subtitle>RESERVES COMPLETADES</Subtitle>
+            <Table columns={columnsReserves} data={pastReservations} columnMapping={columnMappingReserves} />
+            <TableMobile data={pastReservations} type='reserveUser' />
         </TableSection>
     </div>
     

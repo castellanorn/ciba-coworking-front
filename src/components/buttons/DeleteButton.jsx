@@ -1,12 +1,11 @@
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CircleButton } from "./ButtonStyled";
 
-function DeleteButton() {
+function DeleteButton({ onClick }) {
   return (
     <CircleButton color="var(--salmon)">
-      <FaRegTrashAlt />
+      <FaRegTrashAlt onClick={onClick} />
     </CircleButton>
   )
 }
-
-export default DeleteButton
+export default DeleteButton;
