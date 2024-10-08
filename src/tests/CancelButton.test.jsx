@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import CancelButton from './CancelButton';
+import CancelButton from '../components/buttons/CancelButton';
 import { describe, it, expect, vi } from 'vitest';
 
 describe('CancelButton Component', () => {

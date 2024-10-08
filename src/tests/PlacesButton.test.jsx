@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom'; // Importa MemoryRouter para manejar rutas
-import PlacesButton from './PlacesButton'; // Ajusta la ruta según sea necesario
+import PlacesButton from '../components/buttons/PlacesButton'; // Ajusta la ruta según sea necesario
 import { describe, it, expect } from 'vitest';
 
 describe('PlacesButton Component', () => {

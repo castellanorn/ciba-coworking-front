@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import EditButton from './EditButton'; // Ajusta la ruta según sea necesario
+import EditButton from '../components/buttons/EditButton'; // Ajusta la ruta según sea necesario
 import { describe, it, expect, vi } from 'vitest';
 
 describe('EditButton Component', () => {
