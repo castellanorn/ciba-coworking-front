@@ -15,3 +15,7 @@ export const API_DELETE_USER = (id) => `${API_BASE_URL}admin/delete/user/${id}`;
 
 //ADMIN URL - RESERVATIONS
 export const API_GET_RESERVATIONS_BY_DATE=`${API_BASE_URL}admin/spaces/tables/reservations/date-range`;
+
+export const API_DELETE_RESERVATION= (id) => `${API_BASE_URL}reservations/delete/${id}`;
+
+export const API_GET_RESERVATIONS_BY_ID= (id) => `${API_BASE_URL}spaces/${id}/date-range`;
