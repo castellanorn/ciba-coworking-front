@@ -31,8 +31,9 @@ const ManageIndividual = () => {
         startDate: startDate,
         endDate: endDate,
       };
-      const reservations = await apiRequest(API_GET_RESERVATIONS_BY_DATE+'?startDate='+startDate+'&endDate='+endDate, "GET");
-      /* const reservations = await apiRequest(API_GET_RESERVATIONS_BY_DATE, "GET", body); */
+      /* const reservations = await apiRequest(API_GET_RESERVATIONS_BY_DATE+'?startDate='+startDate+'&endDate='+endDate, "GET"); */
+      console.log(body)
+      const reservations = await apiRequest(API_GET_RESERVATIONS_BY_DATE, "POST", body);
       setAvailableReservations(reservations);
     }catch (error) {
       setError(error.message); 
