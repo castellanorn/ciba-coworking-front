@@ -7,7 +7,7 @@ export const Subtitle=styled.h4`
     text-align:center;
     margin-bottom:1px;
 `;
-export const TableSection=styled.h4`
+export const TableSection=styled.section`
     padding:0 15px;
 `;
 

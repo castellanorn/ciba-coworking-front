@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
 import { ButtonPlacesFocus, ButtonPlaces } from "./ButtonStyled";
 
-const PlacesButton = ({ text, link, focus }) => {
+const PlacesButton = ({ text, onClick, focus }) => {
     return focus ? (
-      <ButtonPlacesFocus >{text}</ButtonPlacesFocus>
+      <ButtonPlacesFocus onClick = {onClick}>{text}</ButtonPlacesFocus>
     ) : (
-      <Link to={link}>
-        <ButtonPlaces >{text}</ButtonPlaces>
-      </Link>
+        <ButtonPlaces onClick = {onClick}>{text}</ButtonPlaces>
     );
   };
 

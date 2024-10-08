@@ -10,7 +10,7 @@ import UserDashboard from "../pages/user/UserDashboard";
 import EditIndividualTable from "../pages/user/EditIndividualTable";
 import EditOffice from "../pages/user/EditOffice";
 import EditMeetingRoom from "../pages/user/EditMeetingRoom";
-import Login from "../pages/Login"
+import Login from "../pages/Login";
 import ReserveTable from "../pages/table/TableBooking";
 import ReserveOffice from "../pages/office/OfficeBooking";
 import ReserveMeetingRoom from "../pages/meetingRoom/MeetingRoomBooking";
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: "inici-sessio",
-        element: <Login/>,
+        element: <Login />,
       },
       {
         path: "contacte",
@@ -50,76 +50,76 @@ const router = createBrowserRouter([
       // Rutas admin
       {
         path: "panell-administrador",
-        element: <AdminDashboard />/* (
+        element: (
           <PrivateRoute requiredRole="admin">
             <AdminDashboard />
           </PrivateRoute>
-        ) */,
+        ),
       },
       {
         path: "gestio-reserves",
-        element:<ManageReserves /> /* (
-          <PrivateRoute requiredRole="user">
+        element: (
+          <PrivateRoute requiredRole="admin">
             <ManageReserves />
           </PrivateRoute>
-        ) */,
+        ),
       },
       {
         path: "gestio-de-taules",
-        element: <ManageIndividual /> /* (
+        element: (
           <PrivateRoute requiredRole="admin">
             <ManageIndividual />
           </PrivateRoute>
-        ) */,
+        ),
       },
       {
         path: "gestio-oficina",
-        element: <ManageOffice />/* (
+        element: (
           <PrivateRoute requiredRole="admin">
             <ManageOffice />
           </PrivateRoute>
-        ) */,
+        ),
       },
       {
         path: "gestio-reunio",
-        element: <ManageMeetingRoom />/* (
+        element: (
           <PrivateRoute requiredRole="admin">
             <ManageMeetingRoom />
           </PrivateRoute>
-        ) */,
+        ),
       },
       // Rutas user
       {
         path: "panell-usuari",
-        element: <UserDashboard />/* (
+        element: (
           <PrivateRoute requiredRole="user">
             <UserDashboard />
           </PrivateRoute>
-        ) */,
+        ),
       },
       {
         path: "edicio-reserva-taula",
-        element: <EditIndividualTable/>/*(
+        element: (
           <PrivateRoute requiredRole="user">
             <EditIndividualTable />
           </PrivateRoute>
-        )*/,
+        ),
       },
       {
         path: "edicio-reserva-oficina",
-        element: <EditOffice/>/*(
+        element: (
           <PrivateRoute requiredRole="user">
             <EditOffice />
           </PrivateRoute>
-        )*/,
+        ),
       },
       {
         path: "edicio-reserva-sala-reunions",
-        element: <EditMeetingRoom />/*(
+        element: (
           <PrivateRoute requiredRole="user">
             <EditMeetingRoom />
           </PrivateRoute>
-        )*/,
+        ),
       },
     ],
   },
