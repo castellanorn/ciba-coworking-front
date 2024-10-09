@@ -2,27 +2,39 @@ import { IconsContainer } from "../header/HeaderStyled";
 import { BiCalendar, BiCalendarPlus } from "react-icons/bi";
 import { BiPhoneCall } from "react-icons/bi";
 import { IconsContainerFocusContact, NavbarFooter } from "./FooterStyled";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components"
+
+const Icons = styled.div`
+  color: var(--violet);
+  background-color: var(--white);
+
+&:active {
+  background-color: var(--violet);
+  color: var(--white);
+  border-radius: 50%;
+}
+`;
 
 const FooterContact = () => {
   return (
     <NavbarFooter>
       <IconsContainer>
-        <Link to="/reservar-taula">
-          <BiCalendarPlus />
-        </Link>
+        <NavLink to="/reservar-taula">
+          <Icons><BiCalendarPlus /></Icons>
+        </NavLink>
       </IconsContainer>
       <IconsContainer>
-        <Link to="/panell-usuari">
-          <BiCalendar />
-        </Link>
+        <NavLink to="/panell-usuari">
+        <Icons><BiCalendar /></Icons>
+        </NavLink>
       </IconsContainer>
       <IconsContainer>
-        <Link to="/contacte">
+        <NavLink to="/contacte">
           <IconsContainerFocusContact>
-            <BiPhoneCall />
+            <Icons><BiPhoneCall /></Icons>
           </IconsContainerFocusContact>
-        </Link>
+        </NavLink>
       </IconsContainer>
     </NavbarFooter>
   );

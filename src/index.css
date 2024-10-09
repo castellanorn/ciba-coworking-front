@@ -34,7 +34,7 @@ span{
   margin-bottom: 10px;
 }
 svg{
-  color:var(--violet);
+  /* color:var(--violet); */
   height: 45px;
   width: 45px;
   display: flex;

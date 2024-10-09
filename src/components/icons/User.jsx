@@ -1,11 +1,18 @@
 import { BiUser } from 'react-icons/bi'
 import { ContainerUser } from '../header/HeaderStyled'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import styled from "styled-components"
+
+const Icons = styled.div`
+    color: var(--lightviolet);
+`;
 
 const User = () => {
   return (
     <ContainerUser>
-        <Link to="/inici-sessio"><BiUser/></Link>
+        <NavLink to="/inici-sessio">
+        <Icons><BiUser/></Icons>
+        </NavLink>
     </ContainerUser>
   )
 }

@@ -16,7 +16,6 @@ export const IconsContainer = styled.div`
     padding:10px;
     padding-left:40px;
     padding-right:30px;
-
 `;
 export const ContainerUser = styled.div`
     display:flex;
