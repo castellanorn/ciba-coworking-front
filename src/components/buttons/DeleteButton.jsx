@@ -8,5 +8,4 @@ function DeleteButton({ onClick }) {
     </CircleButton>
   )
 }
-
-export default DeleteButton
+export default DeleteButton;

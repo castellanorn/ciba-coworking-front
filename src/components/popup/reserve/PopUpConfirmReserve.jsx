@@ -2,13 +2,21 @@ import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/ma
 import { ContainerDialog, H6, LineSpan, SubTitleMessage, TitleMessage } from "./PopUpStyled";
 import { ButtonCancel, ButtonConfirm } from "../../buttons/ButtonStyled";
 
-const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot, month, day, button, actionType }) => {
+const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot, month, day, button, actionType, reservation }) => {
   let reservationType = '';
   let titleMessage = '';
+  if (!reservation) return null;
   
   const isDeleteAction = actionType === 'delete';
-
-  switch(pageType) {
+  const {
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    spaceDTO: { spaceType },
+    userDTO: { name },
+  } = reservation;
+  /* switch(pageType) {
     case 'office':
       reservationType = 'Oficina privada';
       titleMessage = isDeleteAction ? 'Eliminar reserva oficina' : 'Confirmar reserva oficina';
@@ -24,18 +32,18 @@ const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot,
     default:
       reservationType = 'Reserva';
       titleMessage = isDeleteAction ? 'Eliminar reserva' : 'Confirmar reserva';
-  }
+  } */
 
   return (
     <ContainerDialog>
       <Dialog open={open} onClose={onCancel}>
         <DialogContent>
           <DialogContentText>
-            <TitleMessage>{titleMessage}</TitleMessage>
+            <TitleMessage>{isDeleteAction ? 'Eliminar reserva' : 'Confirmar reserva'}</TitleMessage>
           </DialogContentText>
-          <SubTitleMessage>{slot}<LineSpan>|</LineSpan>{month} {day}</SubTitleMessage>
-          <H6>Espai reservat: {reservationType}</H6>
-          {table && <H6>Taula: {table}</H6>}
+          <SubTitleMessage>{startDate} - {endDate} <LineSpan>|</LineSpan> {startTime} - {endTime}</SubTitleMessage>
+          <H6>Espai reservat: {spaceType}</H6>
+          <H6>Reservat per: {name}</H6>
         </DialogContent>
         <DialogActions>
           <ButtonConfirm onClick={onConfirm}>{isDeleteAction ? button.deleteText : button.confirmText}</ButtonConfirm>
