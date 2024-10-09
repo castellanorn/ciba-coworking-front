@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from "react-router-dom";
+
+import { AuthContext } from "../../auth/AuthProvider";
 import TitleMobile from '../../components/title/Title'
 import { Subtitle, TableSection } from '../user/UserPagesStyled'
 import Table from '../../components/table/Table'
@@ -12,15 +15,21 @@ import {API_GET_RESERVATIONS_BY_USER} from "../../config/apiEndpoints"
 import { splitReservations } from '../../config/reservationHelpers';
 
 function ManageReserves() {
+  const { authToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [focus, setFocus] = useState("reservations");
   const [futureReservations, setFutureReservations] = useState([]);
   const [pastReservations, setPastReservations] = useState([]);
   const [loading, setLoading] = useState(true);  
   const [error, setError] = useState(null); 
-
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${authToken}`,
+  };
   useEffect(() => {
     const fetchReservations = async () => {
       try {
-        const response = await apiRequest(API_GET_RESERVATIONS_BY_USER(1), "GET");
+        const response = await apiRequest(API_GET_RESERVATIONS_BY_USER(1), "GET", null, headers);
         
         const { futureReservations, pastReservations } = splitReservations(response);
 
@@ -36,6 +45,34 @@ function ManageReserves() {
     fetchReservations();  
   }, []);
 
+  const handlePlacesClick = (target) => {
+    if (target === "users") {
+      setFocus("users");
+      navigate("/panell-administrador"); 
+
+    } else if (target === "reservations") {
+      setFocus("reservations");
+      navigate("/gestio-reserves"); 
+    }
+  };
+
+  const handleManageClick =(target)=>{
+    switch(target){
+      case "tables":
+        setFocus("tables");
+        navigate("/gestio-de-taules");
+        break;
+      case "offices":
+        setFocus("offices");
+        navigate("/gestio-oficina"); 
+        break;
+      case "meetings":
+        setFocus("meetings");
+        navigate("/gestio-reunio"); 
+        break;
+    }
+  }
+
   if (loading) {
     return <p>Cargando reserves...</p>; 
   }
@@ -49,33 +86,34 @@ function ManageReserves() {
     <div>
         <TitleMobile title="Panell d’administrador" />
         <ContainerButtons>
-            <PlacesButton
-                text="Gestiona usuaris"
-                link="/panell-administrador"
-                focus={false}
-            />
-            <PlacesButton
-                text="Gestiona reserves"
-                focus={true}
-            />
+        <PlacesButton
+          text="Gestiona usuaris"
+          onClick={() => handlePlacesClick("users")}
+          focus={focus === "users"} 
+        />
+        <PlacesButton
+          text="Gestiona reserves"
+          onClick={() => handlePlacesClick("reservations")}
+          focus={focus === "reservations"} 
+        />
         </ContainerButtons>
         <Line />
         <Subtitle>EDITAR RESERVES D'USUARIS</Subtitle>
         <ContainerButtons>
             <PlacesButton
                 text="Taules individuals"
-                link="/gestio-de-taules"
-                focus={false}
+                onClick={() => handleManageClick("tables")}
+                focus={focus === "tables"}
             />
             <PlacesButton
                 text="Oficines privades"
-                link="/gestio-oficina"
-                focus={false}
+                onClick={() => handleManageClick("offices")}
+                focus={focus === "offices"}
             />
             <PlacesButton
                 text="Sala de reunions"
-                link="/gestio-reunio"
-                focus={false}
+                onClick={() => handleManageClick("meetings")}
+                focus={focus === "meetings"}
             />
         </ContainerButtons>
         <Line />

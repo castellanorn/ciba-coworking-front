@@ -118,18 +118,17 @@ const AdminDashboard = () => {
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
-  const handleCreateSubmit = useCallback(
-    async (userData) => {
-      try {
-        if (!userData.id) {
-          await apiRequest(API_CREATE_USER(), "POST", userData);
-          setIsEditing(false);
-        } else {
-          await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData);
-          setIsEditing(true);
-        }
-        handleCloseEditModal();
-        setConfirmationPopupOpen(true);
+  const handleCreateSubmit = useCallback(async (userData) => {
+    try {
+      if (!userData.id) {
+        await apiRequest(API_CREATE_USER(), "POST", userData, headers);
+        setIsEditing(false);
+      } else {
+        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData, headers);
+        setIsEditing(true);
+      }
+      handleCloseEditModal();
+      setConfirmationPopupOpen(true);
 
         fetchUsers();
       } catch (error) {
