@@ -118,10 +118,10 @@ const AdminDashboard = () => {
   const handleCreateSubmit = useCallback(async (userData) => {
     try {
       if (!userData.id) {
-        await apiRequest(API_CREATE_USER(), "POST", userData);
+        await apiRequest(API_CREATE_USER(), "POST", userData, headers);
         setIsEditing(false);
       } else {
-        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData);
+        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData, headers);
         setIsEditing(true);
       }
       handleCloseEditModal();
