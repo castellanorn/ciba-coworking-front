@@ -45,6 +45,7 @@ const ManageOffice = () => {
   const handleRadioChange = (event) => {
     const officeValue = event.target.value; 
     setSelectedOffice(officeValue); 
+    setAvailableReservations([]);
     console.log('Oficina seleccionada: ' + officeValue);
   };
 
