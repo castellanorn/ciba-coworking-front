@@ -85,7 +85,7 @@ const AdminDashboard = () => {
   const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedUser) {
-        await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE");
+        await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE", null, headers);
         fetchUsers();  
       }
     } catch (error) {
