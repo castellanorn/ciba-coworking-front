@@ -8,7 +8,6 @@ const Home = () => {
     <TitleMobile
       title="Home"   
     />
-    <SeatMap />
     </>
   )
 }
