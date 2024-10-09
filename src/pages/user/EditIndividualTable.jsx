@@ -18,7 +18,7 @@ const EditIndividualTable = () => {
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedOffice, setSelectedOffice] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
   const [selectedCheckboxes, setSelectedCheckboxes] = useState({
     morning: false,
     afternoon: false,
@@ -50,7 +50,7 @@ const EditIndividualTable = () => {
     setSelectedCheckboxes((prev) => ({ ...prev, [name]: checked }));
   };
   const handleRadioChange = (event) => {
-    setSelectedOffice(event.target.value);
+    setSelectedSlot(event.target.value);
   };
 
   const handleFindResults = () => {
@@ -76,7 +76,6 @@ const EditIndividualTable = () => {
   
     setTimeout(() => {
       setSelectedDates([]);
-      // setSelectedTimeSlot("");
     }, 2000);
   };
 
@@ -103,14 +102,14 @@ const EditIndividualTable = () => {
         <RoleInput
           label="Matí"
           name="morning"
-          selectedOption={selectedOffice}
+          selectedOption={selectedSlot}
           onChange={handleRadioChange}
           userRole={"USER"}
         />
         <RoleInput
           label="Tarda"
           name="afternoon"
-          selectedOption={selectedOffice}
+          selectedOption={selectedSlot}
           onChange={handleRadioChange}
           userRole={"USER"}
         />

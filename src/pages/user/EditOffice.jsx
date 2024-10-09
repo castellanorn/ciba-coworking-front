@@ -16,7 +16,7 @@ const EditOffice = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedOffice, setselectedOffice] = useState("");  
+  const [selectedOffice, setSelectedOffice] = useState("");  
   const [selectedCheckboxes, setSelectedCheckboxes] = useState({
     office1: false,
     office2: false,
@@ -93,16 +93,17 @@ const EditOffice = () => {
         <HourSelect />
         <Hr2 />
         <TitleSelectDate>Selecciona l'oficina</TitleSelectDate>
+
         <RoleInput
-          label="Matí"
-          name="morning"
+          label="Oficina 1"
+          name="office1"
           selectedOption={selectedOffice}
           onChange={handleRadioChange}
           userRole={"USER"}
         />
         <RoleInput
-          label="Tarda"
-          name="afternoon"
+          label="Oficina 2"
+          name="office2"
           selectedOption={selectedOffice}
           onChange={handleRadioChange}
           userRole={"USER"}
