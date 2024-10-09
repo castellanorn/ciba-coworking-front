@@ -30,9 +30,9 @@ const TableMobile = ({ data, type, actions, onEdit, onDelete }) => {
       case 'adminReserves'://admin reserves for users
         return (
           <>
-            <Field><span>Franja:</span> {row.franja}</Field>
-            <Field><span>Data:</span> {row.data}</Field>
-            <Field><span>Nom i cognoms:</span> {row.nomAmbCognom}</Field>
+            <Field><span>Franja:</span> {row.startTime} - {row.endTime}</Field>
+            <Field><span>Data:</span> {row.startDate} - {row.endDate}</Field>
+            <Field><span>Nom i cognoms:</span> {row.userDTO.name}</Field>
           </>
         );
       default:

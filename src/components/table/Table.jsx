@@ -2,7 +2,7 @@ import {TableWrapper,StyledTable, Tdstyled} from './TableStyled'
 import DeleteButton from '../buttons/DeleteButton';
 import EditButton from '../buttons/EditButton';
 
-function Table ({ columns, data, columnMapping, actions, onEdit })  {
+function Table ({ columns, data, columnMapping, actions, onEdit, onDelete })  {
   return (
     <TableWrapper>
       <StyledTable>
@@ -30,7 +30,7 @@ function Table ({ columns, data, columnMapping, actions, onEdit })  {
                 <td>
                     <Tdstyled>
                     {actions.includes('edit') && <EditButton onClick={() => onEdit(row)} />}
-                    {actions.includes('delete') && <DeleteButton />}
+                    {actions.includes('delete') && <DeleteButton onClick={() => onDelete(row)}/>}
                   </Tdstyled>
                 </td>
               )}
