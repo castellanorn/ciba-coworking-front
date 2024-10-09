@@ -105,35 +105,6 @@ const AdminDashboard = () => {
     });
   }, []);
 
-  const handleDeleteClick= useCallback((user)=>{
-    setDeleteModalState({
-      isOpen: true,
-      selectedUser: user,
-    });
-  },[]);
-
-  const handleConfirmDelete = useCallback(async () => {
-    try {
-      if (deleteModalState.selectedUser) {
-        await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE");
-        fetchUsers();  
-      }
-    } catch (error) {
-      console.error("Error eliminando el usuario:", error);
-    } finally {
-      setDeleteModalState({
-        isOpen: false,
-        selectedUser: null,
-      });
-    }
-  }, [deleteModalState.selectedUser, fetchUsers]);
-
-  const handleCancelDelete = useCallback(() => {
-    setDeleteModalState({
-      isOpen: false,
-      selectedUser: null,
-    });
-  }, []);
 
   const handleCloseEditModal = useCallback(() => {
     setModalState({
