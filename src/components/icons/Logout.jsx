@@ -1,9 +1,9 @@
 import { BiLogOutCircle } from "react-icons/bi";
 import { IconsContainer } from "../header/HeaderStyled";
 
-const Logout = () => {
+const Logout = ({onClick}) => {
   return (
-    <IconsContainer>
+    <IconsContainer onClick = {onClick}>
       <BiLogOutCircle />
     </IconsContainer>
   );

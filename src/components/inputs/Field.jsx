@@ -1,7 +1,8 @@
 
+import React, { forwardRef } from "react";
 import { FieldContainer, FieldLabel, FieldInput, FieldInvalidInput } from "./InputStyled";
 
-const Field = ({ field, name, placeholder, value, type, onChange, error }) => {
+const Field = forwardRef(({ field, name, placeholder, value, type, onChange, error }, ref) =>{
   return (
     <FieldContainer>
       <FieldLabel htmlFor={name}>{field}</FieldLabel>
@@ -11,10 +12,11 @@ const Field = ({ field, name, placeholder, value, type, onChange, error }) => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        ref={ref}
       />
       {error && <FieldInvalidInput>{error}</FieldInvalidInput>}
     </FieldContainer>
   );
-};
+});
 
 export default Field;
