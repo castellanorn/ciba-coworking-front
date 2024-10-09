@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,18 +11,21 @@ import ContainerButtons from '../../components/container/ButtonsContainer';
 import PlacesButton from "../../components/buttons/PlacesButton";
 import Table from "../../components/table/Table";
 import TableMobile from "../../components/table/TableMobile";
+import { Line } from '../../components/title/TitleStyled'
+import { columnsEditReservations, columnMappingEditReservations } from '../../config/tableData';
+import { Subtitle, TableSection } from '../user/UserPagesStyled'
 import Calendar from "../../components/calendar/Calendar";
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import { RoleInput } from "../../components/inputs/RoleInput";
-import { Subtitle, TableSection } from '../user/UserPagesStyled';
 import { TitleSelectDate } from "../../components/calendar/CalendarStyled";
-import { columnsEditReservations, columnMappingEditReservations } from '../../config/tableData';
+
 
 // Componente ManageOffice
 const ManageOffice = () => {
-  const { authToken } = useContext(AuthContext); // Obtener el token de autenticación
+  const { authToken } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [focus, setFocus] = useState("offices");
   const [selectedDates, setSelectedDates] = useState([]);
   const [availableReservations, setAvailableReservations] = useState([]);
   const [error, setError] = useState("");
@@ -31,16 +35,16 @@ const ManageOffice = () => {
     selectedReservation: null,
   });
 
-  // Definición de los headers
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${authToken}`,
   };
 
-  // Función para manejar el cambio de oficina seleccionada
+ 
+  
   const handleRadioChange = (event) => {
-    const officeValue = event.target.name; // Obtener el nombre del radio button seleccionado
-    setSelectedOffice(officeValue); // Establecer el valor en el estado
+    const officeValue = event.target.name; 
+    setSelectedOffice(officeValue); 
     console.log('Oficina seleccionada: ' + officeValue);
   };
 
@@ -93,8 +97,8 @@ const ManageOffice = () => {
   const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedReservation) {
-        await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE", null, headers); // Pasar headers aquí
-        handleFindResults();
+        await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE", null, headers);
+        handleFindResults(); 
       }
     } catch (error) {
       console.error("Error eliminando la reserva:", error);
@@ -112,15 +116,43 @@ const ManageOffice = () => {
       selectedReservation: null,
     });
   }, []);
-
+  const handleManageClick =(target)=>{
+    switch(target){
+      case "tables":
+        setFocus("tables");
+        navigate("/gestio-de-taules");
+        break;
+      case "offices":
+        setFocus("offices");
+        navigate("/gestio-oficina"); 
+        break;
+      case "meetings":
+        setFocus("meetings");
+        navigate("/gestio-reunio"); 
+        break;
+    }
+  }
   return (
     <div>
       <TitleMobile title="Edición de reservas" />
       <ContainerButtons>
-        <PlacesButton text="Mesas individuales" link="/gestio-de-taules" focus={false} />
-        <PlacesButton text="Oficinas privadas" focus={true} />
-        <PlacesButton text="Sala de reuniones" link="/gestio-reunio" focus={false} />
-      </ContainerButtons>        
+      <PlacesButton
+                text="Taules individuals"
+                onClick={() => handleManageClick("tables")}
+                focus={focus === "tables"}
+            />
+            <PlacesButton
+                text="Oficines privades"
+                onClick={() => handleManageClick("offices")}
+                focus={focus === "offices"}
+            />
+            <PlacesButton
+                text="Sala de reunions"
+                onClick={() => handleManageClick("meetings")}
+                focus={focus === "meetings"}
+            />
+      </ContainerButtons>
+      <Line />        
       <Calendar onChange={setSelectedDates} value={selectedDates} setError={setError} />
       <TitleSelectDate>Selecciona la oficina</TitleSelectDate>
       
@@ -139,7 +171,6 @@ const ManageOffice = () => {
         onChange={handleRadioChange}
         userRole={"USER"}
       />
-
       <ContainerButtons>
         <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
       </ContainerButtons>

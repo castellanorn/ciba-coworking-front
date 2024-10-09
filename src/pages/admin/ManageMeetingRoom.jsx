@@ -1,4 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback,useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { AuthContext } from "../../auth/AuthProvider";
 import { Line } from '../../components/title/TitleStyled'
 import ContainerButtons from '../../components/container/ButtonsContainer'
 import PlacesButton from "../../components/buttons/PlacesButton"
@@ -15,6 +18,9 @@ import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmRese
 import { formatDate } from "../../config/formatDate";
 
 const ManageMeetingRoom = () => {
+  const { authToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [focus, setFocus] = useState("meetings");
   const [selectedDates, setSelectedDates] = useState([]);
   const [availableReservations, setAvailableReservations] = useState([]);
   const [error, setError] = useState("");
@@ -22,6 +28,10 @@ const ManageMeetingRoom = () => {
     isOpen: false,
     selectedReservation: null,
   });
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${authToken}`,
+  };
   //Search reservations
   const handleFindResults = async () => {
     if (selectedDates.length !== 2) {
@@ -38,7 +48,7 @@ const ManageMeetingRoom = () => {
         endDate: endDate,
       };
       console.log(body)
-      const reservations = await apiRequest(API_GET_RESERVATIONS_BY_ID(1), "POST", body);
+      const reservations = await apiRequest(API_GET_RESERVATIONS_BY_ID(1), "POST", body, headers);
       const formattedReservations = reservations.map(reservation => ({
         ...reservation,
         startDate: formatDate(reservation.startDate),  
@@ -81,23 +91,40 @@ const ManageMeetingRoom = () => {
       selectedReservation: null,
     });
   }, []);
+  const handleManageClick =(target)=>{
+    switch(target){
+      case "tables":
+        setFocus("tables");
+        navigate("/gestio-de-taules");
+        break;
+      case "offices":
+        setFocus("offices");
+        navigate("/gestio-oficina"); 
+        break;
+      case "meetings":
+        setFocus("meetings");
+        navigate("/gestio-reunio"); 
+        break;
+    }
+  }
   return (
     <div>
       <TitleMobile title="Edició de reserves" />
       <ContainerButtons>
             <PlacesButton
                 text="Taules individuals"
-                link="/gestio-de-taules"
-                focus={false}
+                onClick={() => handleManageClick("tables")}
+                focus={focus === "tables"}
             />
             <PlacesButton
                 text="Oficines privades"
-                link="/gestio-oficina"
-                focus={false}
+                onClick={() => handleManageClick("offices")}
+                focus={focus === "offices"}
             />
             <PlacesButton
                 text="Sala de reunions"
-                focus={true}
+                onClick={() => handleManageClick("meetings")}
+                focus={focus === "meetings"}
             />
         </ContainerButtons>
         <Line />
