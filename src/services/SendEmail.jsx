@@ -8,7 +8,7 @@ export const sendEmail = ({ name, email, password }) => {
   const templateParams = {
     name: name,
     email: email,
-    message: `Tu contraseña es: ${password}`,
+    message: `La teva contrasenya és: ${password}`,
   };
 
   return emailjs.send(emailService, emailTemplate, templateParams, emailKey)
