@@ -43,7 +43,7 @@ const ManageOffice = () => {
  
   
   const handleRadioChange = (event) => {
-    const officeValue = event.target.name; 
+    const officeValue = event.target.value; 
     setSelectedOffice(officeValue); 
     console.log('Oficina seleccionada: ' + officeValue);
   };
@@ -98,7 +98,14 @@ const ManageOffice = () => {
     try {
       if (deleteModalState.selectedReservation) {
         await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE", null, headers);
-        handleFindResults(); 
+
+        setAvailableReservations((prevReservations) =>
+          prevReservations.filter(
+            (reservation) => reservation.id !== deleteModalState.selectedReservation.id
+          )
+        );
+       
+        // handleFindResults(); 
       }
     } catch (error) {
       console.error("Error eliminando la reserva:", error);
