@@ -50,9 +50,9 @@ const ServerDay = ({ day, outsideCurrentMonth, isSelected, selectedDates, ...oth
 
   let backgroundColor = "";
   if (startDate && day.isSame(startDate, "day")) {
-    backgroundColor = "slateblue"; // Color para la fecha de inicio
+    backgroundColor = "slateblue"; 
   } else if (endDate && day.isSame(endDate, "day")) {
-    backgroundColor = "lightgreen"; // Color para la fecha final
+    backgroundColor = "lightgreen"; 
   }
 
   return (
@@ -72,7 +72,7 @@ const ServerDay = ({ day, outsideCurrentMonth, isSelected, selectedDates, ...oth
 };
 
 export default function Calendar({ onChange, setError }) {
-  const [selectedDates, setSelectedDates] = useState([]); // Almacenar fechas seleccionadas
+  const [selectedDates, setSelectedDates] = useState([]); 
 
   useEffect(() => {
     onChange(selectedDates); 
@@ -86,26 +86,27 @@ export default function Calendar({ onChange, setError }) {
       return;
     }
     
+    if (selectedDates.length === 1) {
+      const firstDate = selectedDates[0];
+
+      if (newDate.isBefore(firstDate, "day")) {
+        setError("La data de final no pot ser anterior a la data de començament.");
+        return;
+      }
+
+      const availableDays = countAvailableDays(firstDate, newDate);
+
+      if (availableDays > 7) {
+        setError("No pots seleccionar un rang de dates amb més de 7 dies disponibles.");
+        return;
+      }
+    }
+
     setError("");
 
-    // Añadir o eliminar la fecha seleccionada
     if (selectedDates.some((date) => date.isSame(newDate, "day"))) {
-      // Si la fecha ya está seleccionada, eliminarla
       setSelectedDates(selectedDates.filter((date) => !date.isSame(newDate, "day")));
     } else {
-      // Si aún no está seleccionada y estamos seleccionando una segunda fecha:
-      if (selectedDates.length === 1) {
-        const firstDate = selectedDates[0];
-
-        // Calcular días disponibles entre la primera y la segunda fecha
-        const availableDays = countAvailableDays(firstDate, newDate);
-
-        if (availableDays > 7) {
-          setError("No pots seleccionar un rang de dates amb més de 7 dies disponibles.");
-          return;
-        }
-      }
-      
       if (selectedDates.length < 2) {
         setSelectedDates([...selectedDates, newDate]);
       } else {
@@ -113,7 +114,6 @@ export default function Calendar({ onChange, setError }) {
       }
     }
   };
-
   return (
     <>
       <TitleSelectDate>Selecciona la data</TitleSelectDate>
@@ -131,7 +131,7 @@ export default function Calendar({ onChange, setError }) {
               />
             ),
           }}
-          minDate={getDateRangeForYear(getCurrentYear()).minDateValue}
+          minDate={dayjs()}
           maxDate={getDateRangeForYear(getCurrentYear()).maxDateValue}
           shouldDisableDate={shouldDisableDate}
           dayOfWeekFormatter={(weekday) => `${weekday.format('dd')}.`}

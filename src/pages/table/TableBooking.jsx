@@ -6,12 +6,14 @@ import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
-import Map from "../../components/map/Map"; 
+import Map from "../../components/map/Map";
 import { Space } from "../../pages/office/OfficeBookingStyled";
 import PlacesButton from "../../components/buttons/PlacesButton";
 import { DivReserve } from "./TableBookingStyled";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
-import {RoleInput} from "../../components/inputs/RoleInput";
+import { RoleInput } from "../../components/inputs/RoleInput";
+import { API_GET_SPACES_TABLES } from "../../config/apiEndpoints";
+import {apiRequest} from "../../services/apiRequest"
 
 const ReserveTable = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -19,10 +21,7 @@ const ReserveTable = () => {
   const [selectedTable, setSelectedTable] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState({
-    morning: false,
-    afternoon: false,
-  });
+  const [reservationData, setReservationData] = useState(null); //reservation data lo usaremos para mapear las mesas
   const [error, setError] = useState("");
 
   const handleOpenSuccess = () => {
@@ -45,38 +44,59 @@ const ReserveTable = () => {
     handleCloseConfirm();
     handleOpenSuccess();
   };
-  const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-    setSelectedCheckboxes((prev) => ({ ...prev, [name]: checked }));
+
+  const handleRadioChange = (event) => {
+    setSelectedTimeSlot(event.target.value);
+  };
+  const fetchReservationData = async (startDate, endDate, startTime, endTime) => {
+    try {
+      const queryParams = new URLSearchParams({
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+      }).toString();
+      const urlWithParams = `${API_GET_SPACES_TABLES()}?${queryParams}`;
+      const response = await apiRequest(urlWithParams,"GET");
+      
+      setReservationData(response);
+      
+    } catch (error) {
+      setError(error.response?.data.message || error.message);
+    }
   };
 
-  const handleFindResults = () => {
+  const handleFindResults = async () => {
     if (selectedDates.length === 0) {
       setError("Si us plau, selecciona un o més dies.");
       return;
     }
-    const timeSlot = selectedCheckboxes.morning ? 'Matí' : selectedCheckboxes.afternoon ? 'Tarda' : '';
 
-    if (!timeSlot) {
+    if (!selectedTimeSlot) {
       setError("Si us plau, selecciona una franja horària.");
       return;
     }
-  
-    setError("");
-  
-    console.log("Datos enviados al backend:");
-    console.log({
-      dates: selectedDates.map(date => date.format("YYYY-MM-DD")), 
-      timeSlot: selectedTimeSlot, 
-      table: selectedTable, 
-    });
-  
-    setTimeout(() => {
-      setSelectedDates([]);
-      // setSelectedTimeSlot("");
-    }, 2000);
-  };
 
+    setError("");
+    const startDate = selectedDates[0].toISOString().split('T')[0];
+    const endDate = selectedDates[selectedDates.length - 1].toISOString().split('T')[0]; 
+    let startTime;
+    let endTime;
+    if (selectedTimeSlot === "Matí") {
+      startTime = "08:00:00";  
+      endTime = "13:59:59";    
+    } else if (selectedTimeSlot === "Tarda") {
+      startTime = "14:00:00";  
+      endTime = "20:00:00";    
+    }
+  
+    console.log("Fechas seleccionadas:", startDate, endDate);
+    console.log("Franja horaria seleccionada:", selectedTimeSlot);
+    console.log("Horas de inicio:", startTime, "Horas de fin:", endTime);
+  
+    await fetchReservationData(startDate, endDate, startTime, endTime); 
+  };
+  
   const handleTableSelection = (table) => {
     setSelectedTable(table);
   };
@@ -108,21 +128,19 @@ const ReserveTable = () => {
 
         <Hr2 />
         <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
-        
+
         <RoleInput
           label="Matí"
           name="morning"
           selectedOption={selectedTimeSlot}
-          checked={selectedCheckboxes.morning}
-          onChange={handleCheckboxChange}
+          onChange={handleRadioChange}
           userRole={"USER"}
         />
         <RoleInput
           label="Tarda"
           name="afternoon"
           selectedOption={selectedTimeSlot}
-          checked={selectedCheckboxes.afternoon}
-          onChange={handleCheckboxChange}
+          onChange={handleRadioChange}
           userRole={"USER"}
         />
 
@@ -143,18 +161,18 @@ const ReserveTable = () => {
           table={selectedTable}
           pageType="table"
           onConfirm={handleAcceptConfirm}
-          slot='slot'
-          month='month'
-          day='day'
+          slot="slot"
+          month="month"
+          day="day"
           button={{
-            confirmText: "Confirmar", 
-            cancelText: "Cancelar"    
+            confirmText: "Confirmar",
+            cancelText: "Cancelar",
           }}
         />
 
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
-      <Space/>
+      <Space />
     </>
   );
 };

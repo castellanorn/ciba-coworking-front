@@ -1,27 +1,29 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
-import { ContainerDialog, H6, LineSpan, SubTitleMessage, TitleMessage } from "../PopUpStyled";
+import { ContainerDialog, H6, LineSpan, SubTitleMessage, TitleMessage } from "./PopUpStyled";
 import { ButtonCancel, ButtonConfirm } from "../../buttons/ButtonStyled";
 
-const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot, month, day, button }) => {
+const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot, month, day, button, actionType }) => {
   let reservationType = '';
   let titleMessage = '';
   
+  const isDeleteAction = actionType === 'delete';
+
   switch(pageType) {
     case 'office':
       reservationType = 'Oficina privada';
-      titleMessage = 'Confirmar reserva oficina';
+      titleMessage = isDeleteAction ? 'Eliminar reserva oficina' : 'Confirmar reserva oficina';
       break;
     case 'table':
       reservationType = 'Taula individual';
-      titleMessage = 'Confirmar reserva taula';
+      titleMessage = isDeleteAction ? 'Eliminar reserva taula' : 'Confirmar reserva taula';
       break;
     case 'meetingRoom':
       reservationType = 'Sala de reunions';
-      titleMessage = 'Confirmar reserva sala';
+      titleMessage = isDeleteAction ? 'Eliminar reserva sala' : 'Confirmar reserva sala';
       break;
     default:
       reservationType = 'Reserva';
-      titleMessage = 'Confirmar reserva';
+      titleMessage = isDeleteAction ? 'Eliminar reserva' : 'Confirmar reserva';
   }
 
   return (
@@ -36,7 +38,7 @@ const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot,
           {table && <H6>Taula: {table}</H6>}
         </DialogContent>
         <DialogActions>
-          <ButtonConfirm onClick={onConfirm}>{button.confirmText}</ButtonConfirm>
+          <ButtonConfirm onClick={onConfirm}>{isDeleteAction ? button.deleteText : button.confirmText}</ButtonConfirm>
           <ButtonCancel onClick={onCancel}>{button.cancelText}</ButtonCancel>
         </DialogActions>
       </Dialog>

@@ -3,7 +3,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/ma
 import ImageSrc from '../../../assets/confirm-big.png';
 import { ButtonConfirm } from '../../buttons/ButtonStyled';
 import { ContainerTitleMessage } from '../../title/TitleStyled';
-import { TitleMessageConfirm } from '../PopUpStyled';
+import { TitleMessageConfirm } from './PopUpStyled';
 
 const PopUpSuccess = ({ open, onClose}) => {
   return (
