@@ -61,21 +61,6 @@ const AdminDashboard = () => {
     fetchUsers();
   }, []);
 
-  /* const fetchUsers =  useCallback(async () => {
-    try {
-      const response = await apiRequest(API_GET_ALL_USERS, "GET", headers);
-      setUsers(response.slice(1));
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
- */
   const handleEditClick = useCallback((user) => {
     setModalState({
       isOpen: true,

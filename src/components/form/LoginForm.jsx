@@ -83,7 +83,7 @@ const LoginForm = () => {
     } catch (error) {
       console.error("API Error:", error);
       const backendErrorMessage =
-        error.message.slice(39) || "Credencials invàlides";
+        error.message.slice(39) || "Error d'autenticació. Torna-ho a provar";
       setErrorModal({
         isOpen: true,
         message: backendErrorMessage,
