@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../auth/AuthProvider";
 import { apiRequest } from "../../services/apiRequest";
-import { API_GET_ALL_USERS, API_UPDATE_USER } from "../../config/apiEndpoints";
+import { API_DELETE_USER, API_GET_ALL_USERS, API_UPDATE_USER, API_CREATE_USER } from "../../config/apiEndpoints";
 
 import Table from "../../components/table/Table";
 import TableMobile from "../../components/table/TableMobile";
@@ -22,6 +22,7 @@ import {
 import CreateUserForm from "../../components/form/CreateUserForm";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import Paragraph from "../../components/textComponents/Paragraph";
+import ConfirmationPopup from '../../components/popup/confirmationPoput/ConfirmationPoput';
 
 const AdminDashboard = () => {
   const { authToken } = useContext(AuthContext);
@@ -31,6 +32,7 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [focus, setFocus] = useState("users");
+  const [isEditing, setIsEditing] = useState(false);
 
   const [modalState, setModalState] = useState({
     isOpen: false,
@@ -41,6 +43,11 @@ const AdminDashboard = () => {
     "Content-Type": "application/json",
     Authorization: `Bearer ${authToken}`,
   };
+
+  const [deleteModalState, setDeleteModalState] = useState({
+    isOpen: false,
+    selectedUser: null,
+  });
 
   const fetchUsers = async () => {
     try {
@@ -65,6 +72,66 @@ const AdminDashboard = () => {
     setModalState({
       isOpen: true,
       selectedUser: user,
+    })
+  }, []);
+
+  const handleDeleteClick= useCallback((user)=>{
+    setDeleteModalState({
+      isOpen: true,
+      selectedUser: user,
+    });
+  },[]);
+
+  const handleConfirmDelete = useCallback(async () => {
+    try {
+      if (deleteModalState.selectedUser) {
+        await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE");
+        fetchUsers();  
+      }
+    } catch (error) {
+      console.error("Error eliminando el usuario:", error);
+    } finally {
+      setDeleteModalState({
+        isOpen: false,
+        selectedUser: null,
+      });
+    }
+  }, [deleteModalState.selectedUser, fetchUsers]);
+
+  const handleCancelDelete = useCallback(() => {
+    setDeleteModalState({
+      isOpen: false,
+      selectedUser: null,
+    });
+  }, []);
+
+  const handleDeleteClick= useCallback((user)=>{
+    setDeleteModalState({
+      isOpen: true,
+      selectedUser: user,
+    });
+  },[]);
+
+  const handleConfirmDelete = useCallback(async () => {
+    try {
+      if (deleteModalState.selectedUser) {
+        await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE");
+        fetchUsers();  
+      }
+    } catch (error) {
+      console.error("Error eliminando el usuario:", error);
+    } finally {
+      setDeleteModalState({
+        isOpen: false,
+        selectedUser: null,
+      });
+    }
+  }, [deleteModalState.selectedUser, fetchUsers]);
+
+  const handleCancelDelete = useCallback(() => {
+    setDeleteModalState({
+      isOpen: false,
+      selectedUser: null,
     });
   }, []);
 
@@ -75,6 +142,26 @@ const AdminDashboard = () => {
     });
   }, []);
 
+  const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
+
+  const handleSubmit = useCallback(async (userData) => {
+    try {
+      if (!userData.id) {
+        await apiRequest(API_CREATE_USER(), "POST", userData);
+        setIsEditing(false);
+      } else {
+        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData);
+        setIsEditing(true);
+      }
+      handleCloseEditModal();
+      setConfirmationPopupOpen(true);
+
+      fetchUsers();
+    } catch (error) {
+      console.error("Error al crear o actualizar el usuario:", error);
+    }
+  }, [fetchUsers, handleCloseEditModal]);
+  
   const handleSubmit = useCallback(
     async (updatedUser) => {
       try {
@@ -134,21 +221,21 @@ const AdminDashboard = () => {
       <TableSection>
         <Subtitle>USUARIS</Subtitle>
         <SectionBtn>
-          <AddUser fetchUsers={fetchUsers} />
+           <AddUser onAddUser={handleSubmit}  />
         </SectionBtn>
         <TableMobile
           data={users}
           type="adminUsers"
           actions={["edit", "delete"]}
           onEdit={handleEditClick}
-        />
+        onDelete={handleDeleteClick} />
         <Table
           columns={columnsUsers}
           data={users}
           columnMapping={columnMappingUsers}
           actions={["edit", "delete"]}
           onEdit={handleEditClick}
-        />
+        onDelete={handleDeleteClick}/>
       </TableSection>
 
       {modalState.isOpen && (
@@ -162,6 +249,25 @@ const AdminDashboard = () => {
           </ModalContentStyles>
         </ModalStyles>
       )}
+
+      {deleteModalState.isOpen && (
+        <ModalStyles open={deleteModalState.isOpen} onClose={handleCancelDelete}>
+          <ModalContentStyles>
+          <h2>Confirmar eliminación</h2>
+          <p>¿Estás seguro de que deseas eliminar al usuario <strong>{deleteModalState.selectedUser.name}</strong>?</p>
+          <button onClick={handleConfirmDelete}>Aceptar</button>
+          <button onClick={handleCancelDelete}>Cancelar</button>
+          </ModalContentStyles>
+        </ModalStyles>
+      )}
+
+{confirmationPopupOpen && (
+  <ConfirmationPopup
+    open={confirmationPopupOpen}
+    onClose={() => setConfirmationPopupOpen(false)}
+    subtitleConfirm={isEditing ? "Usuari actualitzat correctament" : "Usuari creat correctament"}
+  />
+)}
 
       <ErrorModal
         isOpen={errorModal.isOpen}

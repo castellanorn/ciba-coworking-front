@@ -24,7 +24,6 @@ const AddUser = ({ fetchUsers }) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    fetchUsers();
   };
 
   const headers = {
