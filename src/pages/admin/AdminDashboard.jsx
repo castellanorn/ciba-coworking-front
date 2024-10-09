@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../auth/AuthProvider";
 import { apiRequest } from "../../services/apiRequest";
-import { API_DELETE_USER, API_GET_ALL_USERS, API_UPDATE_USER, API_CREATE_USER } from "../../config/apiEndpoints";
+import {
+  API_DELETE_USER,
+  API_GET_ALL_USERS,
+  API_UPDATE_USER,
+  API_CREATE_USER,
+} from "../../config/apiEndpoints";
 
 import Table from "../../components/table/Table";
 import TableMobile from "../../components/table/TableMobile";
@@ -15,14 +20,10 @@ import EditButton from "../../components/buttons/EditButton";
 import { columnsUsers, columnMappingUsers } from "../../config/tableData";
 import ContainerButtons from "../../components/container/ButtonsContainer";
 import PlacesButton from "../../components/buttons/PlacesButton";
-import {
-  ModalStyles,
-  ModalContentStyles,
-} from "../../components/buttons/ButtonStyled";
 import CreateUserForm from "../../components/form/CreateUserForm";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import Paragraph from "../../components/textComponents/Paragraph";
-import ConfirmationPopup from '../../components/popup/confirmationPoput/ConfirmationPoput';
+import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 
 const AdminDashboard = () => {
   const { authToken } = useContext(AuthContext);
@@ -72,21 +73,24 @@ const AdminDashboard = () => {
     setModalState({
       isOpen: true,
       selectedUser: user,
-    })
+    });
   }, []);
 
-  const handleDeleteClick= useCallback((user)=>{
+  const handleDeleteClick = useCallback((user) => {
     setDeleteModalState({
       isOpen: true,
       selectedUser: user,
     });
-  },[]);
+  }, []);
 
   const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedUser) {
-        await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE");
-        fetchUsers();  
+        await apiRequest(
+          API_DELETE_USER(deleteModalState.selectedUser.id),
+          "DELETE"
+        );
+        fetchUsers();
       }
     } catch (error) {
       console.error("Error eliminando el usuario:", error);
@@ -104,7 +108,6 @@ const AdminDashboard = () => {
       selectedUser: null,
     });
   }, []);
-
 
   const handleCloseEditModal = useCallback(() => {
     setModalState({
@@ -127,12 +130,14 @@ const AdminDashboard = () => {
       handleCloseEditModal();
       setConfirmationPopupOpen(true);
 
-      fetchUsers();
-    } catch (error) {
-      console.error("Error al crear o actualizar el usuario:", error);
-    }
-  }, [fetchUsers, handleCloseEditModal]);
-  
+        fetchUsers();
+      } catch (error) {
+        console.error("Error al crear o actualizar el usuario:", error);
+      }
+    },
+    [fetchUsers, handleCloseEditModal]
+  );
+
   const handleSubmit = useCallback(
     async (updatedUser) => {
       try {
@@ -157,14 +162,12 @@ const AdminDashboard = () => {
   const handlePlacesClick = (target) => {
     if (target === "users") {
       setFocus("users");
-      navigate("/panell-administrador"); 
-
+      navigate("/panell-administrador");
     } else if (target === "reservations") {
       setFocus("reservations");
-      navigate("/gestio-reserves"); 
+      navigate("/gestio-reserves");
     }
   };
-  
 
   if (loading) {
     return <Paragraph text="Cargando usuarios..." />;
@@ -181,32 +184,34 @@ const AdminDashboard = () => {
         <PlacesButton
           text="Gestiona usuaris"
           onClick={() => handlePlacesClick("users")}
-          focus={focus === "users"} 
+          focus={focus === "users"}
         />
         <PlacesButton
           text="Gestiona reserves"
           onClick={() => handlePlacesClick("reservations")}
-          focus={focus === "reservations"} 
+          focus={focus === "reservations"}
         />
       </ContainerButtons>
       <TableSection>
         <Subtitle>USUARIS</Subtitle>
         <SectionBtn>
-           <AddUser onAddUser={handleCreateSubmit}  />
+          <AddUser onAddUser={handleCreateSubmit} />
         </SectionBtn>
         <TableMobile
           data={users}
           type="adminUsers"
           actions={["edit", "delete"]}
           onEdit={handleEditClick}
-        onDelete={handleDeleteClick} />
+          onDelete={handleDeleteClick}
+        />
         <Table
           columns={columnsUsers}
           data={users}
           columnMapping={columnMappingUsers}
           actions={["edit", "delete"]}
           onEdit={handleEditClick}
-        onDelete={handleDeleteClick}/>
+          onDelete={handleDeleteClick}
+        />
       </TableSection>
 
       {modalState.isOpen && (
@@ -222,23 +227,33 @@ const AdminDashboard = () => {
       )}
 
       {deleteModalState.isOpen && (
-        <ModalStyles open={deleteModalState.isOpen} onClose={handleCancelDelete}>
+        <ModalStyles
+          open={deleteModalState.isOpen}
+          onClose={handleCancelDelete}
+        >
           <ModalContentStyles>
-          <h2>Confirmar eliminación</h2>
-          <p>¿Estás seguro de que deseas eliminar al usuario <strong>{deleteModalState.selectedUser.name}</strong>?</p>
-          <button onClick={handleConfirmDelete}>Aceptar</button>
-          <button onClick={handleCancelDelete}>Cancelar</button>
+            <h2>Confirmar eliminación</h2>
+            <p>
+              ¿Estás seguro de que deseas eliminar al usuario{" "}
+              <strong>{deleteModalState.selectedUser.name}</strong>?
+            </p>
+            <button onClick={handleConfirmDelete}>Aceptar</button>
+            <button onClick={handleCancelDelete}>Cancelar</button>
           </ModalContentStyles>
         </ModalStyles>
       )}
 
-{confirmationPopupOpen && (
-  <ConfirmationPopup
-    open={confirmationPopupOpen}
-    onClose={() => setConfirmationPopupOpen(false)}
-    subtitleConfirm={isEditing ? "Usuari actualitzat correctament" : "Usuari creat correctament"}
-  />
-)}
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={() => setConfirmationPopupOpen(false)}
+          subtitleConfirm={
+            isEditing
+              ? "Usuari actualitzat correctament"
+              : "Usuari creat correctament"
+          }
+        />
+      )}
 
       <ErrorModal
         isOpen={errorModal.isOpen}
