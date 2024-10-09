@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Plano = styled.img` 
+export const MapIni = styled.img` 
     width:290px;
     color:var(--ligthgray);
 

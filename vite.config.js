@@ -1,9 +1,15 @@
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), svgr()],
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
   test: {
 
     environment: 'jsdom', // Simula el DOM en el entorno de pruebas

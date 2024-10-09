@@ -1,4 +1,4 @@
-import { MapContainer, Plano, TitleSelectTable } from "./MapStyled"
+import { MapContainer, TitleSelectTable, MapIni } from "./MapStyled"
 import MapImg from '../../assets/plano.svg'
 
 
@@ -7,7 +7,7 @@ return (
     <div>
         <TitleSelectTable>Selecciona taula:</TitleSelectTable>
         <MapContainer>
-            <Plano src={MapImg} alt="map" />
+            <MapIni src={MapImg} alt="map" />
         </MapContainer>
     
     </div>
