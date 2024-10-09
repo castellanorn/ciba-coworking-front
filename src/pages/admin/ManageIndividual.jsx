@@ -16,14 +16,18 @@ import {apiRequest} from "../../services/apiRequest"
 import {API_DELETE_RESERVATION, API_GET_RESERVATIONS_BY_DATE} from "../../config/apiEndpoints"
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import { formatDate } from "../../config/formatDate";
+import ErrorModal from "../../components/popup/modals/ErrorModal";
 
 const ManageIndividual = () => {
   const { authToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const [focus, setFocus] = useState("tables");
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [selectedDates, setSelectedDates] = useState([]);
   const [availableReservations, setAvailableReservations] = useState([]);
   const [error, setError] = useState("");
+  const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
+
   const [deleteModalState, setDeleteModalState] = useState({
     isOpen: false,
     selectedReservation: null,
@@ -49,6 +53,13 @@ const ManageIndividual = () => {
       };
       console.log(body)
       const reservations = await apiRequest(API_GET_RESERVATIONS_BY_DATE, "POST", body, headers);
+      if (reservations.length === 0) {
+        setErrorModal({
+          isOpen: true,
+          message: "No hi ha reserves de taules individuals amb aquest rang de dates.",
+        });
+        return;  
+      }
       const formattedReservations = reservations.map(reservation => ({
         ...reservation,
         startDate: formatDate(reservation.startDate),  
@@ -57,9 +68,8 @@ const ManageIndividual = () => {
   
       setAvailableReservations(formattedReservations);
     }catch (error) {
-      setError(error.message); 
+      console.error("API error:", error.message)
     }
-    console.log(availableReservations)
   };
   //Delete modal y function
   const handleDeleteClick = useCallback((reservation) => {
@@ -71,12 +81,19 @@ const ManageIndividual = () => {
   const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedReservation) {
-        await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE");
+        await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE",null,headers);
         handleFindResults(); 
+        setConfirmationPopup({
+          isOpen: true,
+          message: "La reserva ha sido eliminada con éxito.",
+        });
       }
     } catch (error) {
+      setErrorModal({
+        isOpen: true,
+        message: `Error a la eliminació de reserva: ${error}`,
+      }); 
       console.error("Error eliminando la reserva:", error);
-      console.log(error)
     } finally {
       setDeleteModalState({
         isOpen: false,
@@ -162,6 +179,11 @@ const ManageIndividual = () => {
         button={{ deleteText: "Eliminar", cancelText: "Cancelar" }}
       />
       )}
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ isOpen: false, message: "" })}
+        message={errorModal.message}
+      />
     </div>
   )
 }

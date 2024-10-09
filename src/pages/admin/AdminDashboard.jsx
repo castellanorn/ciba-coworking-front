@@ -52,7 +52,7 @@ const AdminDashboard = () => {
   const fetchUsers = async () => {
     try {
       const data = await apiRequest(API_GET_ALL_USERS, "GET", null, headers);
-      setUsers(data);
+      setUsers(data.slice(1));
     } catch (error) {
       console.error("API Error:", error.message);
       setErrorModal({
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
   const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedUser) {
-        await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE");
+        await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE", null, headers);
         fetchUsers();  
       }
     } catch (error) {
@@ -115,25 +115,24 @@ const AdminDashboard = () => {
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
-  const handleCreateSubmit = useCallback(async (userData) => {
+  const handleSubmit = useCallback(async (userData) => {
     try {
       if (!userData.id) {
-        await apiRequest(API_CREATE_USER(), "POST", userData, headers);
+        await apiRequest(API_CREATE_USER(), "POST", userData,headers);
         setIsEditing(false);
       } else {
-        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData, headers);
+        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData,headers);
         setIsEditing(true);
       }
       handleCloseEditModal();
       setConfirmationPopupOpen(true);
-
       fetchUsers();
     } catch (error) {
       console.error("Error al crear o actualizar el usuario:", error);
     }
   }, [fetchUsers, handleCloseEditModal]);
   
-  const handleSubmit = useCallback(
+  /* const handleSubmit = useCallback(
     async (updatedUser) => {
       try {
         await apiRequest(
@@ -152,7 +151,7 @@ const AdminDashboard = () => {
       }
     },
     [fetchUsers, handleCloseEditModal]
-  );
+  ); */
 
   const handlePlacesClick = (target) => {
     if (target === "users") {
@@ -192,7 +191,7 @@ const AdminDashboard = () => {
       <TableSection>
         <Subtitle>USUARIS</Subtitle>
         <SectionBtn>
-           <AddUser onAddUser={handleCreateSubmit}  />
+          <AddUser onAddUser={handleSubmit} />
         </SectionBtn>
         <TableMobile
           data={users}
@@ -232,13 +231,13 @@ const AdminDashboard = () => {
         </ModalStyles>
       )}
 
-{confirmationPopupOpen && (
-  <ConfirmationPopup
-    open={confirmationPopupOpen}
-    onClose={() => setConfirmationPopupOpen(false)}
-    subtitleConfirm={isEditing ? "Usuari actualitzat correctament" : "Usuari creat correctament"}
-  />
-)}
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={() => setConfirmationPopupOpen(false)}
+          subtitleConfirm={isEditing ? "Usuari actualitzat correctament" : "Usuari creat correctament"}
+        />
+      )}
 
       <ErrorModal
         isOpen={errorModal.isOpen}
