@@ -25,7 +25,6 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
     password: "",
   });
 
-  // Cargar información del usuario para editar
   useEffect(() => {
     if (initialData) {
       console.log("ID del usuario a editar:", initialData.id);
@@ -108,7 +107,6 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
         projectName: form.project_name,
         ...(initialData ? { id: initialData.id } : {})
       };
-  
       onSubmit(userData);
     }
   };

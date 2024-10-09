@@ -5,17 +5,19 @@ import TitleMobile from "../../components/title/Title";
 import { SectionBtn, Subtitle, TableSection } from "../user/UserPagesStyled";
 import AddUser from "../../components/buttons/AddUser"
 import {apiRequest} from "../../services/apiRequest"
-import {API_DELETE_USER, API_GET_ALL_USERS, API_UPDATE_USER } from "../../config/apiEndpoints"
+import {API_DELETE_USER, API_GET_ALL_USERS, API_UPDATE_USER, API_CREATE_USER } from "../../config/apiEndpoints"
 import { columnsUsers,columnMappingUsers } from '../../config/tableData';
 import ContainerButtons from '../../components/container/ButtonsContainer'
 import PlacesButton from "../../components/buttons/PlacesButton";
 import { ModalStyles, ModalContentStyles } from "../../components/buttons/ButtonStyled";
 import CreateUserForm from "../../components/form/CreateUserForm";
+import ConfirmationPopup from '../../components/popup/confirmationPoput/ConfirmationPoput';
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [modalState, setModalState] = useState({
     isOpen: false,
@@ -88,13 +90,23 @@ const AdminDashboard = () => {
   }, []);
 
 
-  const handleSubmit = useCallback(async (updatedUser) => {
+  const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
+
+  const handleSubmit = useCallback(async (userData) => {
     try {
-      await apiRequest(API_UPDATE_USER(updatedUser.id), "PUT", updatedUser);
+      if (!userData.id) {
+        await apiRequest(API_CREATE_USER(), "POST", userData);
+        setIsEditing(false);
+      } else {
+        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData);
+        setIsEditing(true);
+      }
       handleCloseEditModal();
-      fetchUsers(); 
+      setConfirmationPopupOpen(true);
+
+      fetchUsers();
     } catch (error) {
-      console.error("Error en actualitzar l'usuari o enviar el correu:", error);
+      console.error("Error al crear o actualizar el usuario:", error);
     }
   }, [fetchUsers, handleCloseEditModal]);
 
@@ -122,7 +134,7 @@ const AdminDashboard = () => {
         </ContainerButtons>
     <TableSection>
       <Subtitle>USUARIS</Subtitle>
-       <SectionBtn><AddUser fetchUsers={fetchUsers}/></SectionBtn>
+       <SectionBtn> <AddUser onAddUser={handleSubmit} /></SectionBtn>
       <TableMobile data={users} type='adminUsers' actions={['edit','delete']} onEdit={handleEditClick} onDelete={handleDeleteClick} /> 
       <Table columns={columnsUsers} data={users} columnMapping={columnMappingUsers} actions={['edit','delete']} onEdit={handleEditClick} onDelete={handleDeleteClick}/>
     </TableSection>
@@ -150,6 +162,14 @@ const AdminDashboard = () => {
           </ModalContentStyles>
         </ModalStyles>
       )}
+
+{confirmationPopupOpen && (
+  <ConfirmationPopup
+    open={confirmationPopupOpen}
+    onClose={() => setConfirmationPopupOpen(false)}
+    subtitleConfirm={isEditing ? "Usuari actualitzat correctament" : "Usuari creat correctament"}
+  />
+)}
     </div>
   );
 };

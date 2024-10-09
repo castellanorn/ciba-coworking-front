@@ -19,7 +19,7 @@ const PasswordGenerator = ({ onPasswordGenerated }) => {
   useEffect(() => {
     const newPassword = generatePassword();
     setPassword(newPassword);
-    onPasswordGenerated(newPassword);//actualiza el estado del formulario
+    onPasswordGenerated(newPassword);
   }, [])
 
   const handleGeneratePassword = () => {
@@ -33,7 +33,7 @@ const PasswordGenerator = ({ onPasswordGenerated }) => {
     <PasswordContainer>
       <LabelPassword>Contrasenya</LabelPassword>
       <PasswordRow>
-        <ButtonPassword onClick={handleGeneratePassword}>
+        <ButtonPassword type="button" onClick={handleGeneratePassword}>
           Generar contrasenya
         </ButtonPassword>
         {password && <PasswordDisplay>{password}</PasswordDisplay>}

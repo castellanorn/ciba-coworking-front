@@ -9,7 +9,7 @@ export const API_GET_RESERVATIONS_BY_USER = (id) => `${API_BASE_URL}reservations
 
 export const API_UPDATE_USER = (id) => `${API_BASE_URL}admin/update/user/${id}`;
 export const API_GET_SPACES_TABLES = () =>`${API_BASE_URL}spaces/tables/date-range`;
-export const API_CREATE_USER = (id) => `${API_BASE_URL}admin/create/user`;
+export const API_CREATE_USER = () => `${API_BASE_URL}admin/create/user`;
 
 export const API_DELETE_USER = (id) => `${API_BASE_URL}admin/delete/user/${id}`;
 
