@@ -1,16 +1,16 @@
-import { Link } from "react-router-dom";
-import { IconsContainer, IconsContainerFocus } from "../footer/FooterStyled";
+import { NavLink } from "react-router-dom";
+import { IconsContainer, IconsContainerFocus } from "./IconFooterStyled";
 import { BiCalendar, BiCalendarPlus, BiPhoneCall } from "react-icons/bi"; 
 
-const IconFooter = ({ link, icon, activeIcon, setActiveIcon }) => {
+const IconFooter = ({ link, icon }) => {
   const renderIcon = () => {
     switch (icon) {
       case "addreserve":
-        return activeIcon === icon ? <BiCalendarPlus /> : <BiCalendarPlus />;
+        return <BiCalendarPlus />;
       case "editreserve":
-        return activeIcon === icon ? <BiCalendar /> : <BiCalendar />;
+        return <BiCalendar />;
       case "contact":
-        return activeIcon === icon ? <BiPhoneCall /> : <BiPhoneCall />;
+        return <BiPhoneCall />;
       default:
         return null;
     }
@@ -18,19 +18,21 @@ const IconFooter = ({ link, icon, activeIcon, setActiveIcon }) => {
 
   return (
     <IconsContainer>
-      <Link to={link} onClick={() => setActiveIcon(icon)}>
-        <button
-          style={{ background: "none", border: "none", cursor: "pointer" }}
-        >
-          {activeIcon === icon ? (
+      <NavLink
+        to={link}
+        style={{ background: "none", border: "none", cursor: "pointer" }}
+        className={({ isActive }) => (isActive ? "active" : "")} 
+      >
+        {({ isActive }) => (
+          isActive ? (
             <IconsContainerFocus>
               {renderIcon()}
             </IconsContainerFocus>
           ) : (
             renderIcon()
-          )}
-        </button>
-      </Link>
+          )
+        )}
+      </NavLink>
     </IconsContainer>
   );
 };
