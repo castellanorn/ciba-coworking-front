@@ -144,7 +144,7 @@ const AdminDashboard = () => {
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
-  const handleSubmit = useCallback(async (userData) => {
+  const handleCreateSubmit = useCallback(async (userData) => {
     try {
       if (!userData.id) {
         await apiRequest(API_CREATE_USER(), "POST", userData);
@@ -221,7 +221,7 @@ const AdminDashboard = () => {
       <TableSection>
         <Subtitle>USUARIS</Subtitle>
         <SectionBtn>
-           <AddUser onAddUser={handleSubmit}  />
+           <AddUser onAddUser={handleCreateSubmit}  />
         </SectionBtn>
         <TableMobile
           data={users}
