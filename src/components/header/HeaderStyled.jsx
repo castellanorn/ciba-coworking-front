@@ -22,6 +22,7 @@ export const ContainerUser = styled.div`
     display:flex;
     padding:10px;
     margin-right:15px;
+    margin-top:10px;
 
 `;
 
