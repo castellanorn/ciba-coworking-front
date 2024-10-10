@@ -18,7 +18,9 @@ import PlacesButton from "../../components/buttons/PlacesButton";
 import { DivReserve } from "./TableBookingStyled";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
 import { RoleInput } from "../../components/inputs/RoleInput";
+import Paragraph from "../../components/textComponents/Paragraph";
 
+import emptyBlocks from "../../assets/emptyBlocks.json"
 
 const ReserveTable = () => {
   const { authToken, userRole } = useContext(AuthContext); 
@@ -37,8 +39,7 @@ const ReserveTable = () => {
     "Accept": "application/json",
     Authorization: `Bearer ${authToken}`,  
   };
-
-  
+   
 
   const handleTableSelection = (table) => {
     setSelectedTable(table);
@@ -102,7 +103,27 @@ const ReserveTable = () => {
     };
 
     await fetchAvailableTables(dataRange);
+
   }
+
+  /* const createTableReserve = async (dataRange) => {
+    setLoading(true);  
+    try {
+      const response = await apiRequest(API_GET_TABLES_BY_DATE, "POST", dataRange, headers);
+      const availableTables = response.map(table => ({
+          id: table.id,
+          title: table.name,
+          available: table.spaceStatus === 'actiu' ? 'color' : 'not_salable',
+        }));
+      setAvailableTables(availableTables);
+     
+    } catch (error) {
+      console.error("Error fetching tables: ", error.message);
+      setError("No s'han pogut obtenir les taules disponibles.");
+    } finally {
+      setLoading(false); 
+    }
+  }; */
 
   const handleOpenSuccess = () => {
     setSuccessPopupOpen(true);
@@ -126,6 +147,7 @@ const ReserveTable = () => {
   };
 
   
+  
   // Función para crear una reserva de mesa utilizando Axios
  /*  const createTableReservation = async (reservationData) => {
     const url = `${API_CREATE_RESERVATION_TABLES_BY_USER}`;
@@ -138,6 +160,8 @@ const ReserveTable = () => {
       setError("No s'ha pogut crear la reserva.");
     }
   }; */
+  const initialBlocks = emptyBlocks.emptyBlocks;
+  console.log(initialBlocks)
 
   
 
@@ -165,12 +189,18 @@ const ReserveTable = () => {
         </ContainerButtons>
         <Hr2 />
 
-        <SeatSpace blocks={reservationData} onSeatSelect={handleTableSelection} />
+      {/* {availableTables.length === 0 ? (<Paragraph test = "Selecciona las fechas, la franja y pulsa Buscar"/>) 
+      : (<>
+          <SeatSpace blocks={availableTables} onSeatSelect={handleTableSelection} />
+          <ContainerButtons>
+            <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
+          </ContainerButtons>
+          
+        </>
+      )} */}
 
-        <ContainerButtons>
-          <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
-        </ContainerButtons>
-
+<SeatSpace  />
+        
         <PopUpConfirmReserve
           open={confirmPopupOpen}
           onCancel={handleCloseConfirm}

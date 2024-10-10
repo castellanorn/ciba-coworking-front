@@ -145,7 +145,7 @@ const LoginForm = () => {
 
         <ButtonsContainer>
           <ConfirmButton type="submit">Acceptar</ConfirmButton>
-          <CancelButton onClick={handleCancelButtonClick}>
+          <CancelButton type = "button" onClick={handleCancelButtonClick}>
             Cancel·lar
           </CancelButton>
         </ButtonsContainer>
