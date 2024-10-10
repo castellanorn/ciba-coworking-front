@@ -120,7 +120,7 @@ const UserDashboard = () => {
   };
   const handleCloseSuccess = () => {
     navigate('/panell-usuari', { replace: true });
-    //setSuccessPopupOpen(false);
+    setConfirmationPopupOpen(false);
   };
 
   if (loading) {
