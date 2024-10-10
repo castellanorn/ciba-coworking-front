@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { AuthContext } from "../../auth/AuthProvider";
 import { apiRequest } from "../../services/apiRequest";
 import { API_DELETE_USER, API_GET_ALL_USERS, API_UPDATE_USER, API_CREATE_USER } from "../../config/apiEndpoints";
@@ -11,7 +10,7 @@ import TitleMobile from "../../components/title/Title";
 import { SectionBtn, Subtitle, TableSection } from "../user/UserPagesStyled";
 import AddUser from "../../components/buttons/AddUser";
 import EditButton from "../../components/buttons/EditButton";
-
+import { sendEmail } from "../../services/SendEmail";
 import { columnsUsers, columnMappingUsers } from "../../config/tableData";
 import ContainerButtons from "../../components/container/ButtonsContainer";
 import PlacesButton from "../../components/buttons/PlacesButton";
@@ -22,7 +21,7 @@ import {
 import CreateUserForm from "../../components/form/CreateUserForm";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import Paragraph from "../../components/textComponents/Paragraph";
-import ConfirmationPopup from '../../components/popup/confirmationPoput/ConfirmationPoput';
+import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 
 const AdminDashboard = () => {
   const { authToken } = useContext(AuthContext);
@@ -52,7 +51,7 @@ const AdminDashboard = () => {
   const fetchUsers = async () => {
     try {
       const data = await apiRequest(API_GET_ALL_USERS, "GET", null, headers);
-      setUsers(data);
+      setUsers(data.slice(1));
     } catch (error) {
       console.error("API Error:", error.message);
       setErrorModal({
@@ -115,45 +114,62 @@ const AdminDashboard = () => {
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
-  const handleCreateSubmit = useCallback(async (userData) => {
+  const handleSubmit = useCallback(async (userData) => {
     try {
       if (!userData.id) {
-        await apiRequest(API_CREATE_USER(), "POST", userData, headers);
+        await apiRequest(API_CREATE_USER, "POST", userData,headers);
         setIsEditing(false);
+
+      await sendEmail({
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+      });
+
       } else {
-        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData, headers);
+
+        const existingUser = users.find(user => user.id === userData.id);
+        const passwordChanged = existingUser && userData.password !== existingUser.password;
+      
+        await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData,headers);
         setIsEditing(true);
+
+
+        if (passwordChanged) {
+          await sendEmail({
+            name: userData.name,
+            email: userData.email,
+            password: userData.password,
+          });
+
+        }
+      
+
       }
       handleCloseEditModal();
       setConfirmationPopupOpen(true);
-
       fetchUsers();
-    } catch (error) {
-      console.error("Error al crear o actualizar el usuario:", error);
-    }
-  }, [fetchUsers, handleCloseEditModal]);
-  
-  const handleSubmit = useCallback(
-    async (updatedUser) => {
-      try {
-        await apiRequest(
-          API_UPDATE_USER(updatedUser.id),
-          "PUT",
-          updatedUser,
-          headers
-        );
-        handleCloseEditModal();
-        fetchUsers();
-      } catch (error) {
-        setErrorModal({
-          isOpen: true,
-          message: `Error en actualitzar l'usuari o enviar el correu:: ${error}`,
-        });
-      }
-    },
-    [fetchUsers, handleCloseEditModal]
-  );
+    } /* catch (error) {
+      console.error("API Error:", error);
+      const backendErrorMessage = error.message.slice(39) || "Aquest email ja s'està utilitzant"; */
 
+      catch (error) {
+        console.error("API Error:", error);
+        
+        let backendErrorMessage = "Aquest email ja s'està utilitzant.";
+    
+        if (error.response && error.response.data && error.response.data.message) {
+          backendErrorMessage = error.response.data.message;
+        }
+
+      setErrorModal({
+        isOpen: true,
+        message: backendErrorMessage,
+      });
+
+    }
+  }, [fetchUsers, handleCloseEditModal, users]);
+  
   const handlePlacesClick = (target) => {
     if (target === "users") {
       setFocus("users");
@@ -192,7 +208,7 @@ const AdminDashboard = () => {
       <TableSection>
         <Subtitle>USUARIS</Subtitle>
         <SectionBtn>
-           <AddUser onAddUser={handleCreateSubmit}  />
+          <AddUser onAddUser={handleSubmit} />
         </SectionBtn>
         <TableMobile
           data={users}
@@ -232,13 +248,13 @@ const AdminDashboard = () => {
         </ModalStyles>
       )}
 
-{confirmationPopupOpen && (
-  <ConfirmationPopup
-    open={confirmationPopupOpen}
-    onClose={() => setConfirmationPopupOpen(false)}
-    subtitleConfirm={isEditing ? "Usuari actualitzat correctament" : "Usuari creat correctament"}
-  />
-)}
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={() => setConfirmationPopupOpen(false)}
+          subtitleConfirm={isEditing ? "Usuari actualitzat correctament" : "Usuari creat correctament"}
+        />
+      )}
 
       <ErrorModal
         isOpen={errorModal.isOpen}

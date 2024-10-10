@@ -5,7 +5,6 @@ export const columnMappingUsers = {
   'Id': 'id',
   'Nom i Cognom': 'name',
   'Proyecte': 'projectName',
-  'Proyecte': 'projectName',
   'Correu': 'email',
   'Mobil': 'phone'
 };
