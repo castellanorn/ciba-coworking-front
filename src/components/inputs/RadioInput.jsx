@@ -1,5 +1,4 @@
 import { RadioGroup, RadioLabel } from "./InputStyled";
-
 function RadioInput({ label, name, selectedOption, onChange }) {
   const isSelected = selectedOption === name;
   return (
@@ -18,5 +17,4 @@ function RadioInput({ label, name, selectedOption, onChange }) {
     </RadioGroup>
   );
 }
-
 export default RadioInput;
