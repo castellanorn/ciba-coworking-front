@@ -27,12 +27,17 @@ export const ConfirmationContainer = styled.div`
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   max-width: 300px;
-  width: 100%;
+  width: 60%;
 `;
 
 export const ConfirmSubtitle = styled.div`
-  font-size: 18px;
-  color: var(--gray-dark);
-  margin-top: 15px;
-  margin-bottom: 20px;
+  font-size: 1.8rem;
+  margin-top: 0.5rem;
+  margin-bottom: 2.5rem;
+`;
+
+export const ParrafConfirmDelete = styled.p`
+  font-size:25px;
+  padding: 0 10px;
+  text-align:center;
 `;

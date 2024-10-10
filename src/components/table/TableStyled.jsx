@@ -67,7 +67,7 @@ export const Field = styled.p`
   font-family: 'Marianina FY Regular';
   font-size: 16px;
   color: var(--darkgray);
-
+  width:100%;
   span {
     font-weight: bold;
     margin-right: 5px;

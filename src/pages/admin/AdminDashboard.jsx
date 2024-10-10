@@ -11,18 +11,24 @@ import TitleMobile from "../../components/title/Title";
 import { SectionBtn, Subtitle, TableSection } from "../user/UserPagesStyled";
 import AddUser from "../../components/buttons/AddUser";
 import EditButton from "../../components/buttons/EditButton";
-
+import { sendEmail } from "../../services/SendEmail";
 import { columnsUsers, columnMappingUsers } from "../../config/tableData";
 import ContainerButtons from "../../components/container/ButtonsContainer";
 import PlacesButton from "../../components/buttons/PlacesButton";
 import {
   ModalStyles,
   ModalContentStyles,
+  ButtonConfirm,
 } from "../../components/buttons/ButtonStyled";
 import CreateUserForm from "../../components/form/CreateUserForm";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import Paragraph from "../../components/textComponents/Paragraph";
-import ConfirmationPopup from '../../components/popup/confirmationPoput/ConfirmationPoput';
+import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
+import ConfirmButton from "../../components/buttons/ConfirmButton";
+import CancelButton from "../../components/buttons/CancelButton";
+import { ButtonsContainer } from "../../components/container/ButtonsContainerStyled";
+import { SubTitleMessage } from "../../components/popup/reserve/PopUpStyled";
+import { ParrafConfirmDelete } from "../../components/popup/confirmationPopup/ConfirmationPopupStyled";
 
 const AdminDashboard = () => {
   const { authToken } = useContext(AuthContext);
@@ -33,6 +39,7 @@ const AdminDashboard = () => {
   const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [focus, setFocus] = useState("users");
   const [isEditing, setIsEditing] = useState(false);
+  const [deleteConfirmationPopupOpen, setDeleteConfirmationPopupOpen] = useState(false);
 
   const [modalState, setModalState] = useState({
     isOpen: false,
@@ -87,6 +94,7 @@ const AdminDashboard = () => {
       if (deleteModalState.selectedUser) {
         await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE", null, headers);
         fetchUsers();  
+        setDeleteConfirmationPopupOpen(true);
       }
     } catch (error) {
       console.error("Error eliminando el usuario:", error);
@@ -118,41 +126,56 @@ const AdminDashboard = () => {
   const handleSubmit = useCallback(async (userData) => {
     try {
       if (!userData.id) {
-        await apiRequest(API_CREATE_USER(), "POST", userData,headers);
+        await apiRequest(API_CREATE_USER, "POST", userData,headers);
         setIsEditing(false);
+
+      await sendEmail({
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+      });
+
       } else {
+
+        const existingUser = users.find(user => user.id === userData.id);
+        const passwordChanged = existingUser && userData.password !== existingUser.password;
+      
         await apiRequest(API_UPDATE_USER(userData.id), "PUT", userData,headers);
         setIsEditing(true);
+
+
+        if (passwordChanged) {
+          await sendEmail({
+            name: userData.name,
+            email: userData.email,
+            password: userData.password,
+          });
+
+        }
+      
+
       }
       handleCloseEditModal();
       setConfirmationPopupOpen(true);
       fetchUsers();
-    } catch (error) {
-      console.error("Error al crear o actualizar el usuario:", error);
-    }
-  }, [fetchUsers, handleCloseEditModal]);
-  
-  /* const handleSubmit = useCallback(
-    async (updatedUser) => {
-      try {
-        await apiRequest(
-          API_UPDATE_USER(updatedUser.id),
-          "PUT",
-          updatedUser,
-          headers
-        );
-        handleCloseEditModal();
-        fetchUsers();
-      } catch (error) {
-        setErrorModal({
-          isOpen: true,
-          message: `Error en actualitzar l'usuari o enviar el correu:: ${error}`,
-        });
-      }
-    },
-    [fetchUsers, handleCloseEditModal]
-  ); */
+    } 
+      catch (error) {
+        console.error("API Error:", error);
+        
+        let backendErrorMessage = "Aquest email ja s'està utilitzant.";
+    
+        if (error.response && error.response.data && error.response.data.message) {
+          backendErrorMessage = error.response.data.message;
+        }
 
+      setErrorModal({
+        isOpen: true,
+        message: backendErrorMessage,
+      });
+
+    }
+  }, [fetchUsers, handleCloseEditModal, users]);
+  
   const handlePlacesClick = (target) => {
     if (target === "users") {
       setFocus("users");
@@ -223,10 +246,14 @@ const AdminDashboard = () => {
       {deleteModalState.isOpen && (
         <ModalStyles open={deleteModalState.isOpen} onClose={handleCancelDelete}>
           <ModalContentStyles>
-          <h2>Confirmar eliminación</h2>
-          <p>¿Estás seguro de que deseas eliminar al usuario <strong>{deleteModalState.selectedUser.name}</strong>?</p>
-          <button onClick={handleConfirmDelete}>Aceptar</button>
-          <button onClick={handleCancelDelete}>Cancelar</button>
+            <SubTitleMessage>Confirmar eliminació</SubTitleMessage>
+              <ParrafConfirmDelete>
+              Ets segur que vols eliminar l'usuari <strong>{deleteModalState.selectedUser.name}</strong>?
+              </ParrafConfirmDelete>
+              <ButtonsContainer>
+                <ConfirmButton onClick={handleConfirmDelete}>Aceptar</ConfirmButton>
+                <CancelButton onClick={handleCancelDelete}>Cancel·lar</CancelButton>
+              </ButtonsContainer>
           </ModalContentStyles>
         </ModalStyles>
       )}
@@ -238,7 +265,14 @@ const AdminDashboard = () => {
           subtitleConfirm={isEditing ? "Usuari actualitzat correctament" : "Usuari creat correctament"}
         />
       )}
-
+      {deleteConfirmationPopupOpen && (
+        <ConfirmationPopup
+          open={deleteConfirmationPopupOpen}
+          onClose={() => setDeleteConfirmationPopupOpen(false)}
+          subtitleConfirm="Usuari eliminat correctament"
+        />
+      )}
+      
       <ErrorModal
         isOpen={errorModal.isOpen}
         onClose={() => setErrorModal({ isOpen: false, message: "" })}

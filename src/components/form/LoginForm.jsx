@@ -18,7 +18,7 @@ import ConfirmButton from "../buttons/ConfirmButton";
 import { RiEyeCloseLine } from "react-icons/ri";
 import { IoEyeOutline } from "react-icons/io5";
 import ErrorModal from "../popup/modals/ErrorModal";
-import PopUpSuccess from "../popup/reserve/PopUpSuccess";
+import ConfirmationPopup from "../popup/confirmationPopup/ConfirmationPopup";
 
 const LoginForm = () => {
   const { login } = useContext(AuthContext);
@@ -34,7 +34,7 @@ const LoginForm = () => {
   const [token, setToken] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
-  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+  const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -72,8 +72,8 @@ const LoginForm = () => {
         localStorage.setItem("userRole", userDTO.role.toLowerCase());
         setUserDTO(userDTO);
         setToken(cleanedToken);
-        setSuccessPopupOpen(true);
-        console.log(userDTO.role.toLowerCase());
+        setConfirmationPopupOpen(true);
+    
       } else {
         setErrorModal({
           isOpen: true,
@@ -97,7 +97,6 @@ const LoginForm = () => {
       if (userRole === "admin") {
         navigate("/panell-administrador");
       } else {
-        console.log("Navigating to /panell-usuari");
         navigate("/panell-usuari");
       }
     }
@@ -156,7 +155,15 @@ const LoginForm = () => {
         onClose={() => setErrorModal({ isOpen: false, message: "" })}
         message={errorModal.message}
       />
-      <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={handleCloseSuccess}
+          subtitleConfirm={
+            "Inici de sessió amb èxit."
+          }
+        />
+      )}
     </>
   );
 };
