@@ -2,16 +2,26 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { AuthContext } from "../../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
+
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
+
 import HourSelect from "../../components/inputs/HourSelect";
+
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
+
 import { Space } from "../../pages/meetingRoom/MeetingRoomBookingStyled";
+
 import { DivReserve } from "./MeetingRoomBookingStyled";
+
 import PlacesButton from "../../components/buttons/PlacesButton";
+
 import Calendar from "../../components/calendar/Calendar";
+
 import { Hr2 } from "../../components/calendar/CalendarStyled";
+
 import ContainerButtons from "../../components/container/ButtonsContainer";
+
 import TitleMobile from "../../components/title/Title";
 import { apiRequest } from "../../services/apiRequest";
 import { API_GET_RESERVATIONS_BY_ID,API_CREATE_RESERVATIONS } from "../../config/apiEndpoints";
@@ -20,7 +30,9 @@ import ErrorModal from "../../components/popup/modals/ErrorModal";
 const ReserveMeetingRoom = () => {
   const { authToken,user } = useContext(AuthContext);
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+
   const [selectedDates, setSelectedDates] = useState([]);
   const [availableHours, setAvailableHours] = useState([]);
   const [selectedHour, setSelectedHour] = useState(null);
@@ -188,6 +200,7 @@ const ReserveMeetingRoom = () => {
     <>
       <DivReserve>
         <TitleMobile title="Fer reserva de sala de reunions" />
+
         <ContainerButtons>
           <PlacesButton
             text="Taules individuals"
@@ -213,6 +226,7 @@ const ReserveMeetingRoom = () => {
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
         </ContainerButtons>
+
         <Hr2 />
 
           {availableHours.length > 0 && (
@@ -253,6 +267,7 @@ const ReserveMeetingRoom = () => {
 
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
+
       <Space></Space>
       <ErrorModal
         isOpen={errorModal.isOpen}
@@ -264,3 +279,4 @@ const ReserveMeetingRoom = () => {
 };
 
 export default ReserveMeetingRoom;
+
