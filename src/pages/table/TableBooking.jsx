@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 
 import { AuthContext } from "../../auth/AuthProvider";
 
+import { useNavigate } from "react-router-dom";
 import Calendar from "../../components/calendar/Calendar";
 
 import ContainerButtons from "../../components/container/ButtonsContainer";
@@ -51,6 +52,8 @@ const ReserveTable = () => {
   const [reservationData, setReservationData] = useState(null);
 
   const [error, setError] = useState("");
+  const [focus, setFocus] = useState("tables");
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
@@ -166,6 +169,22 @@ const ReserveTable = () => {
   const handleTableSelection = (table) => {
     setSelectedTable(table);
   };
+  const handleManageClick =(target)=>{
+    switch(target){
+      case "tables":
+        setFocus("tables");
+        navigate("/reserva-taula");
+        break;
+      case "offices":
+        setFocus("offices");
+        navigate("/reserva-oficina"); 
+        break;
+      case "meetings":
+        setFocus("meetings");
+        navigate("/reserva-reunio"); 
+        break;
+    }
+  }
 
   return (
     <>
@@ -173,20 +192,22 @@ const ReserveTable = () => {
         <TitleMobile title="Fer reserva de taula individual" />
 
         <ContainerButtons>
-          <PlacesButton text="taules individuals" focus={true} />
-
           <PlacesButton
-            text="oficines privades"
-            link="/reserva-oficina"
-            focus={false}
-          />
-
-          <PlacesButton
-            text="sala de reunions"
-            link="/reserva-reunio"
-            focus={false}
-          />
-        </ContainerButtons>
+                text="Taules individuals"
+                onClick={() => handleManageClick("tables")}
+                focus={focus === "tables"}
+            />
+            <PlacesButton
+                text="Oficines privades"
+                onClick={() => handleManageClick("offices")}
+                focus={focus === "offices"}
+            />
+            <PlacesButton
+                text="Sala de reunions"
+                onClick={() => handleManageClick("meetings")}
+                focus={focus === "meetings"}
+            />
+        </ContainerButtons> 
 
         <Calendar
           onChange={setSelectedDates}

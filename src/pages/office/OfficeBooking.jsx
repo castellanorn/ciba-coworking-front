@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Calendar from "../../components/calendar/Calendar";
 import ContainerButtons from "../../components/container/ButtonsContainer";
 import TitleMobile from "../../components/title/Title";
@@ -6,7 +7,6 @@ import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
-import HourSelect from "../../components/inputs/HourSelect";
 import { Space } from "../../pages/office/OfficeBookingStyled";
 import PlacesButton from "../../components/buttons/PlacesButton";
 import { DivReserve } from "./OfficeBookingStyled";
@@ -19,6 +19,7 @@ import {
   API_GET_SPACE_BY_ID,
 } from "../../config/apiEndpoints";
 import { AuthContext } from "../../auth/AuthProvider";
+import OfficesInput from "../../components/inputs/OfficesInput";
 
 const ReserveOffice = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -28,7 +29,9 @@ const ReserveOffice = () => {
   const [selectedDates, setSelectedDates] = useState([]);
   const [availableHours, setAvailableHours] = useState([]);
   const [error, setError] = useState("");
-  const { authToken, user } = useContext(AuthContext);
+  const [focus, setFocus] = useState("offices");
+  const navigate = useNavigate();
+    const { authToken, user } = useContext(AuthContext);
 
   const headers = {
     "Content-Type": "application/json",
@@ -217,24 +220,43 @@ const ReserveOffice = () => {
     setSelectedOffice(office);
   };
 
-
+  const handleManageClick =(target)=>{
+    switch(target){
+      case "tables":
+        setFocus("tables");
+        navigate("/reserva-taula");
+        break;
+      case "offices":
+        setFocus("offices");
+        navigate("/reserva-oficina"); 
+        break;
+      case "meetings":
+        setFocus("meetings");
+        navigate("/reserva-reunio"); 
+        break;
+    }
+  }
   return (
     <>
       <DivReserve>
         <TitleMobile title="Fer reserva d' oficina" />
         <ContainerButtons>
           <PlacesButton
-            text="taules individuals"
-            focus={false}
-            link="/reserva-taula"
-          />
-          <PlacesButton text="oficines privades" focus={true} />
-          <PlacesButton
-            text="sala de reunions"
-            link="/reserva-reunio"
-            focus={false}
-          />
-        </ContainerButtons>
+                text="Taules individuals"
+                onClick={() => handleManageClick("tables")}
+                focus={focus === "tables"}
+            />
+            <PlacesButton
+                text="Oficines privades"
+                onClick={() => handleManageClick("offices")}
+                focus={focus === "offices"}
+            />
+            <PlacesButton
+                text="Sala de reunions"
+                onClick={() => handleManageClick("meetings")}
+                focus={focus === "meetings"}
+            />
+        </ContainerButtons> 
 
         <Calendar
           onChange={setSelectedDates}
@@ -265,10 +287,8 @@ const ReserveOffice = () => {
 
         <Hr2 />
 
-        <label htmlFor="hoursSelect"></label>
-
-{availableHours.length > 0 && (
-        <HourSelect
+      {availableHours.length > 0 && (
+        <OfficesInput
           availableHours={availableHours}
           selectedHour={selectedHour}
           onChange={handleHourChange}
