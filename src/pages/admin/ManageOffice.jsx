@@ -1,28 +1,33 @@
-import { useState, useCallback,useContext } from "react";
+
+import { useState, useCallback, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AuthContext } from "../../auth/AuthProvider";
+import { AuthContext } from "../../auth/AuthProvider"; // Importar AuthContext para usar el token de autenticación
+import { apiRequest } from "../../services/apiRequest";
+import { API_DELETE_RESERVATION, API_GET_RESERVATIONS_BY_ID } from "../../config/apiEndpoints";
+import { formatDate } from "../../config/formatDate";
+import TitleMobile from '../../components/title/Title';
+import ContainerButtons from '../../components/container/ButtonsContainer';
+import PlacesButton from "../../components/buttons/PlacesButton";
+import Table from "../../components/table/Table";
+import TableMobile from "../../components/table/TableMobile";
 import { Line } from '../../components/title/TitleStyled'
-import ContainerButtons from '../../components/container/ButtonsContainer'
-import PlacesButton from "../../components/buttons/PlacesButton"
-import TitleMobile from '../../components/title/Title'
-import Table from "../../components/table/Table"
-import TableMobile from "../../components/table/TableMobile"
 import { columnsEditReservations, columnMappingEditReservations } from '../../config/tableData';
 import { Subtitle, TableSection } from '../user/UserPagesStyled'
 import Calendar from "../../components/calendar/Calendar";
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
-import {apiRequest} from "../../services/apiRequest"
-import {API_DELETE_RESERVATION, API_GET_RESERVATIONS_BY_ID} from "../../config/apiEndpoints"
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
-import { formatDate } from "../../config/formatDate";
 import { RoleInput } from "../../components/inputs/RoleInput";
 import { TitleSelectDate } from "../../components/calendar/CalendarStyled";
+import Paragraph from '../../components/textComponents/Paragraph';
+import styled from "styled-components";
+
 import { splitReservations } from '../../config/reservationHelpers';
 import { formatTime } from '../../config/formatTime';
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 
+// Componente ManageOffice
 const ManageOffice = () => {
   const { authToken } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -36,47 +41,40 @@ const ManageOffice = () => {
     isOpen: false,
     selectedReservation: null,
   });
+
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${authToken}`,
   };
 
- /*  const handleRadioChange = (event) => {
-    if(event.target.value==='Oficina 1'){
-      const officeValue ='2';
-      setSelectedOffice(officeValue);
-      console.log('oficina ' + officeValue);
-    }else if (event.target.value==='Oficina 2'){
-      const officeValue ='3';
-      setSelectedOffice(officeValue);
-      console.log('oficina ' + officeValue);
-    }
-  }; */
+ 
+  
   const handleRadioChange = (event) => {
     const officeValue = event.target.value; 
     setSelectedOffice(officeValue); 
     setAvailableReservations([]);
-    console.log('Oficina seleccionada: ' + officeValue);
   };
-  //Search reservations
+
+  // Buscar reservas
   const handleFindResults = async () => {
     if (selectedDates.length !== 2) {
-      setError("Si us plau, selecciona un rang de dates.");
+      setError("Por favor, selecciona un rango de fechas.");
       return;
-    }  
-    
+    }
+
     const startDate = selectedDates[0].format("YYYY-MM-DD");
-    const endDate = selectedDates[1].format("YYYY-MM-DD"); 
-    try{
+    const endDate = selectedDates[1].format("YYYY-MM-DD");
+
+    try {
       setError("");
       const body = {
         startDate: startDate,
         endDate: endDate,
       };
-      console.log(body)
-      const officeId=selectedOffice;
+      console.log("Cuerpo de la solicitud:", body);
+      const officeId = selectedOffice;
       if (!officeId) {
-        setError("Selecciona una oficina abans de buscar.");
+        setError("Selecciona una oficina antes de buscar.");
         return;
       }
       console.log(officeId)
@@ -95,10 +93,14 @@ const ManageOffice = () => {
         startTime: formatTime(reservation.startTime),
         endTime: formatTime(reservation.endTime),
       }));
-  
+
       setAvailableReservations(formattedReservations);
-    }catch (error) {
-      setError(error.message); 
+
+      if (formattedReservations.length === 0) {
+        setError("Per aquestes dates no hi ha reserves");
+      }
+    } catch (error) {
+      setError(error.message);
     }
     console.log(availableReservations)
   }
@@ -108,7 +110,7 @@ const ManageOffice = () => {
   const handleDeleteClick = useCallback((reservation) => {
     setDeleteModalState({
       isOpen: true,
-      selectedReservation: reservation, 
+      selectedReservation: reservation,
     });
   }, []);
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
@@ -117,7 +119,14 @@ const ManageOffice = () => {
       if (deleteModalState.selectedReservation) {
         const reservationId = deleteModalState.selectedReservation.id;
         await apiRequest(API_DELETE_RESERVATION(reservationId), "DELETE", null, headers);
-        handleFindResults();
+
+        setAvailableReservations((prevReservations) =>
+          prevReservations.filter(
+            (reservation) => reservation.id !== deleteModalState.selectedReservation.id
+          )
+        );
+       
+        // handleFindResults();
           setConfirmationPopupOpen({
             isOpen: true,
           });
@@ -131,7 +140,7 @@ const ManageOffice = () => {
     } finally {
       setDeleteModalState({
         isOpen: false,
-        selectedUser: null,
+        selectedReservation: null,
       });
     }
   }, [deleteModalState.selectedReservation, handleFindResults,headers]);
@@ -160,9 +169,9 @@ const ManageOffice = () => {
   }
   return (
     <div>
-      <TitleMobile title="Edició de reserves" />
+      <TitleMobile title="Edición de reservas" />
       <ContainerButtons>
-            <PlacesButton
+      <PlacesButton
                 text="Taules individuals"
                 onClick={() => handleManageClick("tables")}
                 focus={focus === "tables"}
@@ -201,32 +210,36 @@ const ManageOffice = () => {
       />
 
       <ContainerButtons>
-          <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
-        </ContainerButtons>
-      <Line />
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
+      </ContainerButtons>
+
+      {error && <Paragraph text={error} color="red" />}      
       {availableReservations.length > 0 && (
         <TableSection>
           <Table 
             columns={columnsEditReservations} 
             data={availableReservations} 
             columnMapping={columnMappingEditReservations} 
-            actions={['delete']} onDelete={handleDeleteClick}/>
+            actions={['delete']} 
+            onDelete={handleDeleteClick}
+          />
           <TableMobile 
             data={availableReservations} 
             type='adminReserves' 
-            actions={['delete']} onDelete={handleDeleteClick}/>
+            actions={['delete']} 
+            onDelete={handleDeleteClick}
+          />
         </TableSection>
       )}
       {deleteModalState.isOpen && (
         <PopUpConfirmReserve
-        open={deleteModalState.isOpen}
-        reservation={deleteModalState.selectedReservation}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-        actionType="delete"
-        button={{ deleteText: "Eliminar", cancelText: "Cancelar" }}
-      />
+          open={deleteModalState.isOpen}
+          reservation={deleteModalState.selectedReservation}
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          actionType="delete"
+          button={{ deleteText: "Eliminar", cancelText: "Cancelar" }}
+        />
       )}
       {confirmationPopupOpen && (
         <ConfirmationPopup
@@ -241,7 +254,7 @@ const ManageOffice = () => {
         message={errorModal.message}
       />
     </div>
-  )
+  );
 }
 
-export default ManageOffice
+export default ManageOffice;
