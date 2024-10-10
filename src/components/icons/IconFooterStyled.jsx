@@ -10,7 +10,12 @@ box-sizing: border-box;
     background-color:var(--violet);
     border-radius:50%;
     width:45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
         svg {
-        color: white;         
+        color: white;  
+        width: 35px;       
     }
 `;

@@ -10,16 +10,25 @@ import {
 } from "../../config/apiEndpoints";
 
 import Calendar from "../../components/calendar/Calendar";
+
 import ContainerButtons from "../../components/container/ButtonsContainer";
+
 import TitleMobile from "../../components/title/Title";
+
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
+
 import ConfirmButton from "../../components/buttons/ConfirmButton";
+
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
 import { SeatSpace } from "../../components/map/SeatSpace";
 import { Space } from "../../pages/office/OfficeBookingStyled";
+
 import PlacesButton from "../../components/buttons/PlacesButton";
+
 import { DivReserve } from "./TableBookingStyled";
+
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
+
 import { RoleInput } from "../../components/inputs/RoleInput";
 import Paragraph from "../../components/textComponents/Paragraph";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
@@ -32,7 +41,9 @@ const ReserveTable = () => {
   const navigate = useNavigate();
 
   const [selectedTable, setSelectedTable] = useState("");
+
   const [selectedDates, setSelectedDates] = useState([]);
+
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [availableTables, setAvailableTables] = useState([]);
   const [reservationData, setReservationData] = useState([]);
@@ -89,11 +100,13 @@ const ReserveTable = () => {
   const handleFindResults = async () => {
     if (selectedDates.length === 0) {
       setError("Si us plau, selecciona un o més dies.");
+
       return;
     }
 
     if (!selectedTimeSlot && userRole === "user") {
       setError("Si us plau, selecciona una franja horària.");
+
       return;
     }
 
@@ -221,13 +234,16 @@ const ReserveTable = () => {
     <>
       <DivReserve>
         <TitleMobile title="Fer reserva de taula individual" />
+
         <ContainerButtons>
           <PlacesButton text="taules individuals" focus={true} />
+
           <PlacesButton
             text="oficines privades"
             link="/reserva-oficina"
             focus={false}
           />
+
           <PlacesButton
             text="sala de reunions"
             link="/reserva-reunio"
@@ -240,6 +256,7 @@ const ReserveTable = () => {
           value={selectedDates}
           setError={setError}
         />
+
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <Hr2 />
@@ -270,6 +287,7 @@ const ReserveTable = () => {
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
         </ContainerButtons>
+
         <Hr2 />
 
         {availableTables.length === 0 ? (<Paragraph text = "Selecciona las fechas, la franja y pulsa Buscar"/>) 

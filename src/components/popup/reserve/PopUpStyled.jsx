@@ -103,4 +103,5 @@ export const H6 = styled.h6`
     font-family: "Marianina XWd FY W03 Medium";
     font-size:16px;
     color:#656565;
+    margin:20px 0;
 `;

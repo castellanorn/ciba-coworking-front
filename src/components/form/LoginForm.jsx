@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
+import { StyledRiEyeCloseLine, StyledIoEyeOutline } from "./LoginFormStyled"; 
 import { AUTH_LOGIN_URL } from "../../config/apiEndpoints";
 import { AuthContext } from "../../auth/AuthProvider";
 import { apiRequest } from "../../services/apiRequest";
@@ -15,8 +15,7 @@ import {
 import Field from "../inputs/Field";
 import CancelButton from "../buttons/CancelButton";
 import ConfirmButton from "../buttons/ConfirmButton";
-import { RiEyeCloseLine } from "react-icons/ri";
-import { IoEyeOutline } from "react-icons/io5";
+
 import ErrorModal from "../popup/modals/ErrorModal";
 import ConfirmationPopup from "../popup/confirmationPopup/ConfirmationPopup";
 
@@ -41,7 +40,7 @@ const LoginForm = () => {
   };
 
   const handleCancelButtonClick = () => {
-    navigate("/inici-sessio");
+    window.location.reload()
   };
 
   const onSubmit = async (data) => {
@@ -139,13 +138,13 @@ const LoginForm = () => {
             })}
           />
           <EyeIcon onClick={togglePasswordVisibility}>
-            {showPassword ? <RiEyeCloseLine /> : <IoEyeOutline />}
+            {showPassword ? <StyledRiEyeCloseLine /> : <StyledIoEyeOutline/>}
           </EyeIcon>
         </InputWrapper>
 
         <ButtonsContainer>
           <ConfirmButton type="submit">Acceptar</ConfirmButton>
-          <CancelButton type = "button" onClick={handleCancelButtonClick}>
+          <CancelButton type= "button" onClick={handleCancelButtonClick}>
             Cancel·lar
           </CancelButton>
         </ButtonsContainer>
