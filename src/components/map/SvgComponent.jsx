@@ -1,17 +1,35 @@
-
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import styled from "styled-components";
+import { MapSVG } from "./MapStyled";
 
-const MapSVG = styled.svg`
-  width: 290px;
-  height: auto;
-  color: var(--ligthgray);
-`;
-
+// eslint-disable-next-line react/prop-types
 const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props }) => {
-  const [hoveredBlock, setHoveredBlock] = useState(null);
+  if (!blocks || blocks.length === 0) {
+    return <div>No se encontraron bloques de asientos.</div>;
+  }
+    const [hoveredBlock, setHoveredBlock] = useState(null);
   const [focusedBlock, setFocusedBlock] = useState(null);
+
+  // Definir los estados posibles
+  const seatStates = {
+    NOT_SALABLE: 'not_salable',
+    SELECTED: 'selected',
+    COLOR: 'color'
+  };
+
+  // Función para cambiar de estado
+  const getNextSeatState = (currentState) => {
+    switch (currentState) {
+      case seatStates.NOT_SALABLE:
+        return seatStates.NOT_SALABLE; // El estado not_salable no cambia
+      case seatStates.SELECTED:
+        return seatStates.COLOR;
+      case seatStates.COLOR:
+        return seatStates.SELECTED;
+      default:
+        return seatStates.COLOR;
+    }
+  };
 
   return (
     <MapSVG
@@ -24,80 +42,9 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
     >
       {title ? <title id={titleId}>{title}</title> : null}
 
-      {blocks.map(block => (
-                <g key={block.id} onClick={() => block.available && onSeatClick(block)}>
-                    {block.seats.map((seat, index) => (
-                        <rect
-                            key={index}
-                            x={seat.x}
-                            y={seat.y}
-                            width={seat.width}
-                            height={seat.height}
-                            transform={seat.transform}
-                            translate={seat.translate}
-                            rotate={seat.rotate}
-                            fill={
-                                block.available === false
-                                    ? config.style.seat.not_salable
-                                    : block.available === true 
-                                    ? config.style.seat.selected
-                                    : config.style.seat.color
-                            }
-                            stroke={
-                                block.id === focusedBlock
-                                    ? config.style.seat.focus
-                                    : block.id === hoveredBlock
-                                        ? config.style.seat.hover
-                                      /*   :block.reserved */
-                                      /*   ? config.style.seat.color */
-                                        : "none"
-                            }
-                            /* strokeWidth={ */
-                            /*     block.reserved */
-                            /*         ? config.style.seat.strokeWidth */
-                            /*         : "none" */
-                            /* } */
-                            onClick={() => onSeatClick(block)}
-                            onMouseEnter={() => setHoveredBlock(block.id)}
-                            onMouseLeave={() => setHoveredBlock(null)}
-                            onFocus={() => setFocusedBlock(block.id)}
-                            onBlur={() => setFocusedBlock(null)}
-                        />
-                    ))}
-                    {block.path && (
-                        <path
-                            className='cls-3'
-                            d={block.path}
-                            fill={
-                              block.available === false
-                              ? config.style.seat.not_salable
-                              : block.available === true 
-                              ? config.style.seat.selected
-                              : config.style.seat.color
-                            
-                            
-                            
-                            
-                            }
-                        />
-                    )}
-                    <text
-                        x={block.seats[0].x + block.seats[0].width / 2}
-                        y={block.seats[0].y + block.seats[0].height / 2}
-                        textAnchor="middle"
-                        alignmentBaseline="middle"
-                        fill={config.style.block.title_color}
-                        fontSize="18"
-                        fontFamily="Marianina FY Bold"
-                    >
-                    {block.title}
-                    </text>
-                </g>
-            ))}
-
-            <defs>
-                <style>
-                    {`
+      <defs>
+        <style>
+          {`
             .cls-1, .cls-2 {
               fill: none;
               stroke-linecap: round;
@@ -118,9 +65,76 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
               stroke-width: 0.25px;
             }
           `}
-                </style>
-            </defs>
+        </style>
+      </defs>
 
+      {blocks.map(block => (
+        <g 
+          key={block.id} 
+          onClick={() => block.available && onSeatClick(block)}
+        >
+          {block.seats.map((seat, index) => (
+            <rect
+              key={index}
+              x={seat.x}
+              y={seat.y}
+              width={seat.width}
+              height={seat.height}
+              transform={seat.transform}
+              translate={seat.translate}
+              rotate={seat.rotate}
+              fill={
+                block.available === seatStates.NOT_SALABLE
+                  ? config.style.seat.not_salable
+                  : block.available === seatStates.SELECTED
+                  ? config.style.seat.selected
+                  : config.style.seat.color
+              }
+              stroke={
+                block.id === focusedBlock
+                  ? config.style.seat.focus
+                  : block.id === hoveredBlock
+                    ? config.style.seat.hover
+                    : "none"
+              }
+              onClick={() => {
+                const nextSeatState = getNextSeatState(block.available);
+                block.available = nextSeatState;
+                onSeatClick(block);
+              }}
+              onMouseEnter={() => setHoveredBlock(block.id)}
+              onMouseLeave={() => setHoveredBlock(null)}
+              onFocus={() => setFocusedBlock(block.id)}
+              onBlur={() => setFocusedBlock(null)}
+            />
+          ))}
+          {block.path && (
+            <path
+              className='cls-3'
+              d={block.path}
+              fill={
+                block.available === seatStates.NOT_SALABLE
+                  ? config.style.seat.not_salable
+                  : block.available === seatStates.SELECTED
+                  ? config.style.seat.selected
+                  : config.style.seat.color
+              }
+            />
+          )}
+          <text
+            x={block.seats[0].x + block.seats[0].width / 2}
+            y={block.seats[0].y + block.seats[0].height / 2}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            fill={config.style.block.title_color}
+            fontSize="18"
+            fontFamily="Marianina FY Bold"
+          >
+            {block.title}
+          </text>
+        </g>
+      ))}
+    
     <path
       className="cls-1"
       d="M171.64,590.14h-36V607.5H9.64V283.56c.33-150,122-273.14,272-274.59l128.5,0V533.17H255.86v57h-36"
@@ -564,4 +578,4 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
   </MapSVG>
 )
 }
-export default SvgComponent;
+export { SvgComponent };
