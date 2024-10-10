@@ -22,6 +22,10 @@ import { TitleSelectDate } from "../../components/calendar/CalendarStyled";
 import Paragraph from '../../components/textComponents/Paragraph';
 import styled from "styled-components";
 
+import { splitReservations } from '../../config/reservationHelpers';
+import { formatTime } from '../../config/formatTime';
+import ErrorModal from "../../components/popup/modals/ErrorModal";
+import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 
 // Componente ManageOffice
 const ManageOffice = () => {
@@ -32,6 +36,7 @@ const ManageOffice = () => {
   const [availableReservations, setAvailableReservations] = useState([]);
   const [error, setError] = useState("");
   const [selectedOffice, setSelectedOffice] = useState("");
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [deleteModalState, setDeleteModalState] = useState({
     isOpen: false,
     selectedReservation: null,
@@ -48,7 +53,6 @@ const ManageOffice = () => {
     const officeValue = event.target.value; 
     setSelectedOffice(officeValue); 
     setAvailableReservations([]);
-    console.log('Oficina seleccionada: ' + officeValue);
   };
 
   // Buscar reservas
@@ -73,12 +77,21 @@ const ManageOffice = () => {
         setError("Selecciona una oficina antes de buscar.");
         return;
       }
-      console.log("ID de la oficina:", officeId);
-      const reservations = await apiRequest(API_GET_RESERVATIONS_BY_ID(officeId), "POST", body, headers); // Pasar headers aquí
+      console.log(officeId)
+      const reservations = await apiRequest(API_GET_RESERVATIONS_BY_ID(officeId), "POST", body,headers);
+      if (reservations.length === 0) {
+        setErrorModal({
+          isOpen: true,
+          message: "No hi ha reserves de taules individuals amb aquest rang de dates.",
+        });
+        return;  
+      }
       const formattedReservations = reservations.map(reservation => ({
         ...reservation,
-        startDate: formatDate(reservation.startDate),
+        startDate: formatDate(reservation.startDate),  
         endDate: formatDate(reservation.endDate),
+        startTime: formatTime(reservation.startTime),
+        endTime: formatTime(reservation.endTime),
       }));
 
       setAvailableReservations(formattedReservations);
@@ -89,22 +102,23 @@ const ManageOffice = () => {
     } catch (error) {
       setError(error.message);
     }
-    
-    console.log("Reservas disponibles:", availableReservations);
-  };
+    console.log(availableReservations)
+  }
 
-  // Funciones para manejar la eliminación de reservas
+
+  //Delete modal y function
   const handleDeleteClick = useCallback((reservation) => {
     setDeleteModalState({
       isOpen: true,
       selectedReservation: reservation,
     });
   }, []);
-
+  const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
   const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedReservation) {
-        await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE", null, headers);
+        const reservationId = deleteModalState.selectedReservation.id;
+        await apiRequest(API_DELETE_RESERVATION(reservationId), "DELETE", null, headers);
 
         setAvailableReservations((prevReservations) =>
           prevReservations.filter(
@@ -112,17 +126,24 @@ const ManageOffice = () => {
           )
         );
        
-        // handleFindResults(); 
+        // handleFindResults();
+          setConfirmationPopupOpen({
+            isOpen: true,
+          });
       }
     } catch (error) {
-      console.error("Error eliminando la reserva:", error);
+      setErrorModal({
+        isOpen: true,
+        message: `Error a la eliminació de reserva: ${error}`,
+      });
+      console.log(error)
     } finally {
       setDeleteModalState({
         isOpen: false,
         selectedReservation: null,
       });
     }
-  }, [deleteModalState.selectedReservation, handleFindResults]);
+  }, [deleteModalState.selectedReservation, handleFindResults,headers]);
 
   const handleCancelDelete = useCallback(() => {
     setDeleteModalState({
@@ -165,13 +186,15 @@ const ManageOffice = () => {
                 onClick={() => handleManageClick("meetings")}
                 focus={focus === "meetings"}
             />
-      </ContainerButtons>
-      <Line />        
-      <Calendar onChange={setSelectedDates} value={selectedDates} setError={setError} />
-      <TitleSelectDate>Selecciona la oficina</TitleSelectDate>
-      
-      {/* Radio buttons para seleccionar oficina */}
-      <RoleInput 
+        </ContainerButtons>       
+        <Line />
+        <Calendar
+        onChange={setSelectedDates}
+        value={selectedDates}
+        setError={setError}
+      />
+      <TitleSelectDate>Selecciona l'oficina</TitleSelectDate>
+        <RoleInput 
         label='Oficina 1'
         name='2' // ID para Oficina 1
         selectedOption={selectedOffice}
@@ -185,6 +208,7 @@ const ManageOffice = () => {
         onChange={handleRadioChange}
         userRole={"USER"}
       />
+
       <ContainerButtons>
         <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
       </ContainerButtons>
@@ -217,6 +241,18 @@ const ManageOffice = () => {
           button={{ deleteText: "Eliminar", cancelText: "Cancelar" }}
         />
       )}
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={() => setConfirmationPopupOpen(false)}
+          subtitleConfirm="La reserva ha fet eliminada amb èxit."
+        />
+      )}
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ isOpen: false, message: "" })}
+        message={errorModal.message}
+      />
     </div>
   );
 }

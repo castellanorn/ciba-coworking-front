@@ -35,3 +35,9 @@ export const ConfirmSubtitle = styled.div`
   margin-top: 0.5rem;
   margin-bottom: 2.5rem;
 `;
+
+export const ParrafConfirmDelete = styled.p`
+  font-size:25px;
+  padding: 0 10px;
+  text-align:center;
+`;
