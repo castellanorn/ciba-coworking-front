@@ -1,28 +1,20 @@
 import { TitleSelectDate } from "../calendar/CalendarStyled";
 import { Option, Select } from "./InputStyled";
-
-function HourSelect({ selectedHour, onChange }) { 
-    const hours = [];
-
-    for (let i = 8; i < 20; i++) {
-        const startHour = i < 10 ? `0${i}:00` : `${i}:00`;
-        const endHour = (i + 1) < 10 ? `0${i + 1}:00` : `${i + 1}:00`;
-        hours.push(
-            <Option key={startHour} value={`${startHour}-${endHour}`}>
-                {`${startHour}-${endHour}h`}
-            </Option>
-        );
-    }
-
-    return (
-        <>
-            <TitleSelectDate>Selecciona l' hora</TitleSelectDate>
-            <Select value={selectedHour} onChange={onChange}>
-                <Option value="" disabled>Selecciona l' hora</Option>
-                {hours}
-            </Select>
-        </>
-    );
+function HourSelect({ availableHours, selectedHour, onChange }) {
+  return (
+    <>
+      <TitleSelectDate>Selecciona l'hora</TitleSelectDate>
+      <Select value={selectedHour?.startTime || ""} onChange={onChange}>
+        <Option value="" disabled>
+          Selecciona l'hora
+        </Option>
+        {availableHours.map((hour, index) => (
+          <Option key={index} value={hour.startDate}>
+            {hour.startDate} - {hour.endDate}
+          </Option>
+        ))}
+      </Select>
+    </>
+  );
 }
-
 export default HourSelect;

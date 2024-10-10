@@ -14,16 +14,18 @@ import { Hr2 } from "../../components/calendar/CalendarStyled";
 import ContainerButtons from "../../components/container/ButtonsContainer";
 import TitleMobile from "../../components/title/Title";
 import { apiRequest } from "../../services/apiRequest";
-import { API_GET_RESERVATIONS_BY_ID } from "../../config/apiEndpoints";
+import { API_GET_RESERVATIONS_BY_ID,API_CREATE_RESERVATIONS } from "../../config/apiEndpoints";
+import ErrorModal from "../../components/popup/modals/ErrorModal";
 
 const ReserveMeetingRoom = () => {
-  const { authToken } = useContext(AuthContext);
+  const { authToken,user } = useContext(AuthContext);
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [selectedDates, setSelectedDates] = useState([]);
   const [availableHours, setAvailableHours] = useState([]);
   const [selectedHour, setSelectedHour] = useState(null);
   const [error, setError] = useState("");
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [focus, setFocus] = useState("meetings");
   const navigate = useNavigate();
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
@@ -43,9 +45,9 @@ const ReserveMeetingRoom = () => {
         endDate: `${i + 1}:00:00`,
       });
     }
-
     return hours;
   };
+
   const handleHourChange = (event) => {
     const selectedSlot = availableHours.find(
       (slot) => slot.startDate === event.target.value
@@ -80,8 +82,7 @@ const ReserveMeetingRoom = () => {
         setAvailableHours(availableHours);
       }
     } catch (error) {
-      console.error("Error obteniendo las horas disponibles:", error.message);
-      setError("Error obteniendo las horas disponibles. Mostrando horas por defecto.");
+      console.log("Error obteniendo las horas disponibles:", error.message);
       const defaultHours = generateDefaultHours();
       setAvailableHours(defaultHours);
     }
@@ -118,10 +119,52 @@ const ReserveMeetingRoom = () => {
     setConfirmationPopupOpen(false);
   };
 
-
-  const handleAcceptConfirm = () => {
-    handleCloseConfirm();
-    handleOpenSuccess();
+  const handleAcceptConfirm = async () => {
+    if (
+      !selectedDates.length ||
+      !selectedHour.startTime ||
+      !selectedHour.endTime
+    ) {
+      setError("Selecciona fechas y una hora antes de continuar.");
+      return;
+    }
+  
+    try {
+      const formattedStartDate = selectedDates[0].format("YYYY-MM-DD");
+      const formattedEndDate = selectedDates[0].format("YYYY-MM-DD");
+  
+      const dataToSend = {
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        startTime: selectedHour.startTime,
+        endTime: selectedHour.endTime,
+        userDTO: {
+          id: user.id,
+        },
+        spaceDTO: {
+          id: '1',
+        },
+      };
+  
+      console.log("Cuerpo de la solicitud:", dataToSend);
+  
+      const response = await apiRequest(
+        API_CREATE_RESERVATIONS,
+        "POST",
+        dataToSend,
+        headers
+      );
+  
+      console.log("Reserva creada exitosamente:", response);
+  
+      handleCloseConfirm();
+      handleOpenSuccess();
+    } catch (error) {
+      setErrorModal({
+        isOpen: true,
+        message: `No s'ha pogut fet la reserva: ${error.message}`,
+     });
+    }
   };
 
   const handleManageClick = (target) => {
@@ -172,19 +215,13 @@ const ReserveMeetingRoom = () => {
         </ContainerButtons>
         <Hr2 />
 
-        <label htmlFor="hoursSelect">Selecciona una franja horaria:</label>
-        <select
-          id="hoursSelect"
-          value={selectedHour.startDate || ""}
+          {availableHours.length > 0 && (
+        <HourSelect
+          availableHours={availableHours}
+          selectedHour={selectedHour}
           onChange={handleHourChange}
-        >
-          <option value="">Seleccione una hora</option>
-          {availableHours.map((hour, index) => (
-            <option key={index} value={hour.startDate}>
-              {hour.startDate} - {hour.endDate}
-            </option>
-          ))}
-        </select>
+        />
+      )}
 
         <Hr2 />
 
@@ -203,8 +240,8 @@ const ReserveMeetingRoom = () => {
               endDate: selectedDates[0].format("YYYY-MM-DD"),
               startTime: selectedHour.startTime,
               endTime: selectedHour.endTime,
-              spaceDTO: { spaceType: '1' }, // ejemplo de espacio
-              userDTO: { name: user.name }, // ejemplo de usuario
+              spaceDTO: { spaceType: '1' }, 
+              userDTO: { name: user.name },
             }}
             button={{
               confirmText: "Confirmar",
@@ -217,6 +254,11 @@ const ReserveMeetingRoom = () => {
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
       <Space></Space>
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ isOpen: false, message: "" })}
+        message={errorModal.message}
+      />
     </>
   );
 };
