@@ -38,6 +38,72 @@ const ReserveTable = () => {
     Authorization: `Bearer ${authToken}`,  
   };
 
+  
+
+  const handleTableSelection = (table) => {
+    setSelectedTable(table);
+  };
+
+  const handleRadioChange = (event) => {
+    setSelectedTimeSlot(event.target.value);
+  };
+
+  
+  const fetchAvailableTables = async (dataRange) => {
+    setLoading(true);  
+    try {
+      const response = await apiRequest(API_GET_TABLES_BY_DATE, "POST", dataRange, headers);
+      const availableTables = response.map(table => ({
+          id: table.id,
+          title: table.name,
+          available: table.spaceStatus === 'actiu' ? 'color' : 'not_salable',
+        }));
+      setAvailableTables(availableTables);
+     
+    } catch (error) {
+      console.error("Error fetching tables: ", error.message);
+      setError("No s'han pogut obtenir les taules disponibles.");
+    } finally {
+      setLoading(false); 
+    }
+  };
+
+  const handleFindResults = async () => {
+    if (selectedDates.length === 0) {
+      setError("Si us plau, selecciona un o més dies.");
+      return;
+    }
+
+    if (!selectedTimeSlot) {
+      setError("Si us plau, selecciona una franja horària.");
+      return;
+    }
+
+    setError(""); 
+
+    const startDate = new Date(selectedDates[0].$d.getTime() - (selectedDates[0].$d.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+    const endDate = new Date(selectedDates[selectedDates.length - 1].$d.getTime() - (selectedDates[selectedDates.length - 1].$d.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+
+    let startTime, endTime;
+
+    if (selectedTimeSlot === "Matí") {
+      startTime = "08:00:00";
+      endTime = "13:59:59";
+    } else if (selectedTimeSlot === "Tarda") {
+      startTime = "14:00:00";
+      endTime = "20:00:00";
+    }
+
+    const dataRange = {
+      startDate: startDate,
+      endDate: endDate,
+      startTime: startTime,
+      endTime: endTime,
+    };
+
+    await fetchAvailableTables(dataRange);
+  }
+
   const handleOpenSuccess = () => {
     setSuccessPopupOpen(true);
   };
@@ -59,103 +125,7 @@ const ReserveTable = () => {
     handleOpenSuccess();
   };
 
-  const handleRadioChange = (event) => {
-    setSelectedTimeSlot(event.target.value);
-  };
-
   
-  const fetchAvailableTables = async (dataRange) => {
-    setLoading(true);  // Set loading to true before making API call
-    try {
-      const response = await apiRequest(API_GET_TABLES_BY_DATE, "POST", dataRange, headers);
-      const availableTables = response.map(table => ({
-          id: table.id,
-          title: table.name,
-          available: table.spaceStatus === 'actiu' ? 'color' : 'not_salable',
-        }));
-      setAvailableTables(availableTables); // Set available tables from response
-      console.log("API Response: ", response);
-      console.log("availableTables: ", availableTables);
-    } catch (error) {
-      console.error("Error fetching tables: ", error.message);
-      setError("No s'han pogut obtenir les taules disponibles.");
-    } finally {
-      setLoading(false); // Stop loading after API call is done
-    }
-  };
-
-  const handleFindResults = async () => {
-    if (selectedDates.length === 0) {
-      setError("Si us plau, selecciona un o més dies.");
-      return;
-    }
-
-    if (!selectedTimeSlot) {
-      setError("Si us plau, selecciona una franja horària.");
-      return;
-    }
-
-    setError(""); // Clear error message if inputs are valid
-
-    console.log(selectedDates)
-
-    const startDate = selectedDates[0].toISOString().split('T')[0];
-    const endDate = selectedDates[selectedDates.length - 1].toISOString().split('T')[0];
-/*     const startDate = selectedDates[0].toLocaleDateString('en-CA'); // Use local date string for the first selected date
-  const endDate = selectedDates[selectedDates.length - 1].toLocaleDateString('en-CA'); */
-    let startTime, endTime;
-
-    if (selectedTimeSlot === "Matí") {
-      startTime = "08:00:00";
-      endTime = "13:59:59";
-    } else if (selectedTimeSlot === "Tarda") {
-      startTime = "14:00:00";
-      endTime = "20:00:00";
-    }
-
-    const dataRange = {
-      startDate: startDate,
-      endDate: endDate,
-      startTime: startTime,
-      endTime: endTime,
-    };
-
-    console.log("Data range for API: ", dataRange);
-
-    // Now call fetchAvailableTables after validating the inputs
-    await fetchAvailableTables(dataRange);
-  }
-
-  // Función para obtener mesas disponibles utilizando Axios
-  /* const fetchAvailableTables = async (date, startTime, endTime) => {
-    const url = API_GET_TABLES_BY_DATE;
-    const data = {
-      startDate: date,
-      endDate: date, // Ajusta esto si necesitas un rango de fechas
-      startTime: startTime,
-      endTime: endTime
-    };
-    console.log("Datos enviados a la API:", data); // Verifica los datos en la consola
-    
-    try {
-      const response = await axios.get(url, data, headers );
-      console.log("Datos recibidos de la API:", response.data); // Aquí se muestra la respuesta en la consola
-      const availableTables = response.data
-        .map(table => ({
-          id: table.id,
-          title: table.name,
-          available: table.spaceStatus === 'actiu' ? 'color' : 'not_salable',
-        }));
-      setReservationData(availableTables);
-    } catch (error) {
-      console.error("Error fetching available tables:", error);
-      setError("No s'han pogut obtenir les taules disponibles.");
-    }
-  }; 
-   */
-  
-  console.log("Datos de reserva antes de pasar a SeatSpace:", reservationData);
-
   // Función para crear una reserva de mesa utilizando Axios
  /*  const createTableReservation = async (reservationData) => {
     const url = `${API_CREATE_RESERVATION_TABLES_BY_USER}`;
@@ -170,10 +140,6 @@ const ReserveTable = () => {
   }; */
 
   
-
-  const handleTableSelection = (table) => {
-    setSelectedTable(table);
-  };
 
   return (
     <>
