@@ -151,7 +151,7 @@ const ManageOffice = () => {
       selectedReservation: null,
     });
   }, []);
-  const handleManageClick =(target)=>{
+  const handleManageClick =(target)=> {
     switch(target){
       case "tables":
         setFocus("tables");

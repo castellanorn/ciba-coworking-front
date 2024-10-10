@@ -61,3 +61,7 @@ export const API_GET_TABLES_BY_DATE = (id) =>`${API_BASE_URL}spaces/tables/date-
 //RESERVE OFFICE
 
 export const API_CREATE_RESERVATION_OFFICES = (id) => `${API_BASE_URL}reservations/create/offices`
+
+export const API_GET_SPACE_BY_ID = (id) => `${API_BASE_URL}spaces/${id}`;
+
+export const API_CREATE_RESERVATIONS= `${API_BASE_URL}reservations/create/offices`;
