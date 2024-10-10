@@ -1,40 +1,25 @@
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
-
 import ConfirmButton from "../../components/buttons/ConfirmButton";
-
 import { useState } from "react";
 
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
-
 import HourSelect from "../../components/inputs/HourSelect";
-
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
-
 import { Space } from "../../pages/meetingRoom/MeetingRoomBookingStyled";
-
 import { DivReserve } from "./MeetingRoomBookingStyled";
-
 import PlacesButton from "../../components/buttons/PlacesButton";
-
 import Calendar from "../../components/calendar/Calendar";
-
 import { Hr2 } from "../../components/calendar/CalendarStyled";
-
 import ContainerButtons from "../../components/container/ButtonsContainer";
-
 import TitleMobile from "../../components/title/Title";
-
 import axios from "axios";
 
 const ReserveMeetingRoom = () => {
+
   const { authToken } = useContext(AuthContext);
-
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
-
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
-
   const [selectedDates, setSelectedDates] = useState([]);
-
   const [error, setError] = useState("");
 
   const headers = {
