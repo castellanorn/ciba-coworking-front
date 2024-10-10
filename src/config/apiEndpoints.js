@@ -22,3 +22,10 @@ export const API_GET_RESERVATIONS_BY_DATE=`${API_BASE_URL}admin/spaces/tables/re
 export const API_DELETE_RESERVATION= (id) => `${API_BASE_URL}reservations/delete/${id}`;
 
 export const API_GET_RESERVATIONS_BY_ID= (id) => `${API_BASE_URL}spaces/${id}/date-range`;
+
+export const API_CREATE_RESERVATIONS= `${API_BASE_URL}reservations/create/offices`;
+
+
+/* export const API_GET_SPACE_BY_ID= `${API_BASE_URL}spaces/{spaceId}`; */
+
+export const API_GET_SPACE_BY_ID = (id) => `${API_BASE_URL}spaces/${id}`;

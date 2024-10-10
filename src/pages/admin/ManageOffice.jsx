@@ -101,7 +101,7 @@ const ManageOffice = () => {
     });
   }, []);
 
-  const handleConfirmDelete = useCallback(async () => {
+ const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedReservation) {
         await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE", null, headers);
@@ -130,7 +130,7 @@ const ManageOffice = () => {
       selectedReservation: null,
     });
   }, []);
-  const handleManageClick =(target)=>{
+  const handleManageClick =(target)=> {
     switch(target){
       case "tables":
         setFocus("tables");
