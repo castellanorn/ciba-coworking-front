@@ -52,7 +52,7 @@ const getNextSeatState = (currentState) => {
 
 //blocks, onSeatSelect
 const initialBlocks = emptyBlocks.emptyBlocks;
-const SeatSpace = ({ }) => {
+const SeatSpace = ({onSeatSelect }) => {
     
  /*  const filteredBlocks = initialBlocks.map(seat => {
     const isAvailable = blocks.some(fetchedSeat => fetchedSeat.id === seat.id);
@@ -66,15 +66,17 @@ const SeatSpace = ({ }) => {
   const seatmapRef = useRef(null);
 
   const handleSeatClick = (block) => {
-
-    console.log(block.id)
+    console.log(block.id);  // Log block.id for debugging
     const updatedBlocks = initialBlocks.map(b =>
       b.id === block.id
         ? { ...b, available: getNextSeatState(b.available) }
         : b
     );
-    onSeatSelect(updatedBlocks);
-   
+    
+    // Pass the selected block.id to the parent component
+    if (onSeatSelect) {
+      onSeatSelect(block);
+    }
   };
 
   const getSelectedSeats = () => {

@@ -11,7 +11,6 @@ import TitleMobile from "../../components/title/Title";
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
-import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import { SeatSpace } from "../../components/map/SeatSpace"; 
 import { Space } from "../../pages/office/OfficeBookingStyled";
 import PlacesButton from "../../components/buttons/PlacesButton";
@@ -19,20 +18,26 @@ import { DivReserve } from "./TableBookingStyled";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
 import { RoleInput } from "../../components/inputs/RoleInput";
 import Paragraph from "../../components/textComponents/Paragraph";
+import ErrorModal from "../../components/popup/modals/ErrorModal";
+import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
+import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 
 import emptyBlocks from "../../assets/emptyBlocks.json"
 
 const ReserveTable = () => {
-  const { authToken, userRole } = useContext(AuthContext); 
-  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
-  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const { authToken, userRole, user } = useContext(AuthContext); 
+
   const [selectedTable, setSelectedTable] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [availableTables, setAvailableTables] = useState([]);
   const [reservationData, setReservationData] = useState([]);
+  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "", startTime: "", endTime: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
 
   const headers = {
     "Content-Type": "application/json",
@@ -43,7 +48,10 @@ const ReserveTable = () => {
 
   const handleTableSelection = (table) => {
     setSelectedTable(table);
+    console.log(table)
   };
+
+  
 
   const handleRadioChange = (event) => {
     setSelectedTimeSlot(event.target.value);
@@ -95,71 +103,82 @@ const ReserveTable = () => {
       endTime = "20:00:00";
     }
 
-    const dataRange = {
+    const newDateRange = {
       startDate: startDate,
       endDate: endDate,
       startTime: startTime,
       endTime: endTime,
     };
-
-    await fetchAvailableTables(dataRange);
+    setDateRange(newDateRange);
+    await fetchAvailableTables(newDateRange);
 
   }
 
-  /* const createTableReserve = async (dataRange) => {
-    setLoading(true);  
+ 
+
+  const createTableReserve = async () => {
+    if (!selectedTable || !dateRange.startDate || !dateRange.endDate || !dateRange.startTime || !dateRange.endTime) {
+      setError("Please select a table and ensure all date/time fields are filled.");
+      return;
+    }
+  
+    const reservationData = {
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      startTime: dateRange.startTime,
+      endTime: dateRange.endTime,
+      userDTO: {
+        id: user.id,
+      },
+      spaceDTO: {
+        id: selectedTable.id,
+      },
+    };
+  console.log(reservationData)
     try {
-      const response = await apiRequest(API_GET_TABLES_BY_DATE, "POST", dataRange, headers);
-      const availableTables = response.map(table => ({
-          id: table.id,
-          title: table.name,
-          available: table.spaceStatus === 'actiu' ? 'color' : 'not_salable',
-        }));
-      setAvailableTables(availableTables);
+      const response = await apiRequest(API_CREATE_RESERVATION_TABLES_BY_USER, "POST", reservationData, headers);
+      console.log(response)
+      setConfirmationPopupOpen(true);
+      
      
     } catch (error) {
-      console.error("Error fetching tables: ", error.message);
-      setError("No s'han pogut obtenir les taules disponibles.");
-    } finally {
-      setLoading(false); 
-    }
-  }; */
+     setErrorModal({
+        isOpen: true,
+        message: "No s'ha pogut crear la reserva."
+      });
+    } 
+  };
+
+  const handleAcceptConfirm = async () => {
+    
+    await createTableReserve();
+    handleCloseConfirm();
+    handleOpenSuccess();
+  };
 
   const handleOpenSuccess = () => {
     setSuccessPopupOpen(true);
   };
 
   const handleCloseSuccess = () => {
-    setSuccessPopupOpen(false);
+    console.log("Before close: ", successPopupOpen);
+  setSuccessPopupOpen(false);
+  console.log("After close: ", successPopupOpen);
   };
 
   const handleOpenConfirm = () => {
+    console.log("clicked")
     setConfirmPopupOpen(true);
+    console.log(confirmPopupOpen); 
   };
 
   const handleCloseConfirm = () => {
     setConfirmPopupOpen(false);
   };
 
-  const handleAcceptConfirm = () => {
-    handleCloseConfirm();
-    handleOpenSuccess();
-  };
+  
 
   
-  
-  // Función para crear una reserva de mesa utilizando Axios
- /*  const createTableReservation = async (reservationData) => {
-    const url = `${API_CREATE_RESERVATION_TABLES_BY_USER}`;
-    
-    try {
-      const response = await axios.post(url, reservationData, { headers });
-      return response.data; // Devuelve la reserva creada
-    } catch (error) {
-      console.error("Error creating reservation:", error);
-      setError("No s'ha pogut crear la reserva.");
-    }
-  }; */
   const initialBlocks = emptyBlocks.emptyBlocks;
   console.log(initialBlocks)
 
@@ -199,14 +218,22 @@ const ReserveTable = () => {
         </>
       )} */}
 
-<SeatSpace  />
+<SeatSpace  onSeatSelect={handleTableSelection}/>
+<ContainerButtons>
+            <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
+          </ContainerButtons>
         
-        <PopUpConfirmReserve
+        
+      </DivReserve>
+      <Space />
+
+      <PopUpConfirmReserve
           open={confirmPopupOpen}
           onCancel={handleCloseConfirm}
           table={selectedTable}
           pageType="table"
           onConfirm={handleAcceptConfirm}
+          reservation = {reservationData}
           slot="slot"
           month="month"
           day="day"
@@ -217,8 +244,11 @@ const ReserveTable = () => {
         />
 
         <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
-      </DivReserve>
-      <Space />
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ isOpen: false, message: "" })}
+        message={errorModal.message}
+      />
     </>
   );
 };

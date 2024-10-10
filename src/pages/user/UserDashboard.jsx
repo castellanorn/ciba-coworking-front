@@ -43,14 +43,17 @@ const UserDashboard = () => {
     const fetchReservations = async () => {
       try {
         const response = await apiRequest(
-          API_GET_RESERVATIONS_BY_USER(9),
+          API_GET_RESERVATIONS_BY_USER(user.id),
           "GET",
           null,
           headers
         );
         setReservations(response);
       } catch (error) {
-        setError(error.message);
+        setErrorModal({
+          isOpen: true,
+          message: "No s'han pogut obtenir reserves.",
+        });
       } finally {
         setLoading(false);
       }
@@ -97,12 +100,13 @@ const UserDashboard = () => {
       setDeleteModalState({
         isOpen: false,
       });
+      setConfirmationPopupOpen(true);
 
     } catch (error) {
       console.error("API Error:", error.message);
       setErrorModal({
         isOpen: true,
-        message: `Error: ${error.message}`,
+        message: "No s'ha pogut eliminar la reserva."
       });
     } finally {
       setLoading(false);
@@ -114,13 +118,17 @@ const UserDashboard = () => {
       isOpen: false,
     });
   };
+  const handleCloseSuccess = () => {
+    navigate('/reserva-taula', { replace: true });
+    //setSuccessPopupOpen(false);
+  };
 
   if (loading) {
-    <Paragraph text="Cargando usuarios..." />;
+    return <Paragraph text="Cargando usuarios..." />;
   }
 
   if (error) {
-    <Paragraph text={`Error: ${error}`} />;
+    return <Paragraph text={`Error: ${error}`} />;
   }
 
   return (
@@ -188,23 +196,21 @@ const UserDashboard = () => {
         </ModalStyles>
       )}
 
-      {confirmationPopupOpen && (
-        <ConfirmationPopup
-          open={confirmationPopupOpen}
-          onClose={() => setConfirmationPopupOpen(false)}
-          subtitleConfirm={
-            isEditing
-              ? "Usuari actualitzat correctament"
-              : "Usuari creat correctament"
-          }
-        />
-      )}
-
-      <ErrorModal
+      
+    <ErrorModal
         isOpen={errorModal.isOpen}
         onClose={() => setErrorModal({ isOpen: false, message: "" })}
         message={errorModal.message}
       />
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={handleCloseSuccess}
+          subtitleConfirm={
+            "La reserva s'ha eliminat amb èxit."
+          }
+        />
+      )}
     </div>
   );
 };

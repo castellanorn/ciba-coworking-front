@@ -9,7 +9,48 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
   }
     const [hoveredBlock, setHoveredBlock] = useState(null);
   const [focusedBlock, setFocusedBlock] = useState(null);
+  const [selectedSeat, setSelectedSeat] = useState(null); 
 
+
+ /*  const handleSeatClick = (block, seatIndex) => { */
+ /*    if (block.available === seatStates.NOT_SALABLE) return; */
+
+ /*    if (selectedSeat && selectedSeat.blockId !== block.id) { */
+ /*      // Deseleccionar el asiento previamente seleccionado */
+ /*      const prevSelectedBlock = blocks.find(b => b.id === selectedSeat.blockId) */;
+ /*      if (prevSelectedBlock) { */
+ /*        prevSelectedBlock.available = seatStates.COLOR; */
+ /*      } */
+ /*    } */
+
+ const handleSeatClick = (block) => {
+  // Prevent clicking on non-salable seats
+  if (block.available === seatStates.NOT_SALABLE) return;
+
+  // Deselect the previously selected seat if a different one is selected
+  if (selectedSeat && selectedSeat !== block.id) {
+    const prevSelectedBlock = blocks.find(b => b.id === selectedSeat);
+    if (prevSelectedBlock) {
+      prevSelectedBlock.available = seatStates.COLOR;
+    }
+  }
+
+  // Toggle the seat state between selected and default
+  const nextSeatState = block.available === seatStates.SELECTED ? seatStates.COLOR : seatStates.SELECTED;
+  block.available = nextSeatState;
+
+  // Update the selected seat state
+  if (nextSeatState === seatStates.SELECTED) {
+    setSelectedSeat(block.id);
+  } else {
+    setSelectedSeat(null);
+  }
+
+  // Trigger the click event only for salable seats
+  if (block.available !== seatStates.NOT_SALABLE) {
+    onSeatClick(block);
+  }
+};
   // Definir los estados posibles
   const seatStates = {
     NOT_SALABLE: 'not_salable',
@@ -43,30 +84,40 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
       {title ? <title id={titleId}>{title}</title> : null}
 
       <defs>
-        <style>
-          {`
-            .cls-1, .cls-2 {
-              fill: none;
-              stroke-linecap: round;
-              stroke-linejoin: round;
-            }
-            .cls-1, .cls-2, .cls-3 {
-              stroke: #1d1d1b;
-            }
-            .cls-1 {
-              stroke-width: 4px;
-            }
-            .cls-2 {
-              stroke-width: 1.25px;
-            }
-            .cls-3 {
-              fill: #1d1d1b;
-              stroke-miterlimit: 10;
-              stroke-width: 0.25px;
-            }
-          `}
-        </style>
-      </defs>
+  <style>
+    {`
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .cls-1, .cls-2, .cls-3 {
+        stroke: #1d1d1b;
+      }
+      .cls-1 {
+        stroke-width: 4px;
+      }
+      .cls-2 {
+        stroke-width: 1.25px;
+      }
+      .cls-3 {
+        fill: #1d1d1b;
+        stroke-miterlimit: 10;
+        stroke-width: 0.25px;
+      }
+
+      .seat {
+        cursor: pointer; /* Pointer for clickable seats */
+      }
+
+      .seat.not_salable {
+        cursor: not-allowed;  /* Show 'not-allowed' cursor */
+        pointer-events: none; /* Disable click events */
+        opacity: 0.5;         /* Visually indicate non-salable */
+      }
+    `}
+  </style>
+</defs>
 
       {blocks.map(block => (
         <g 
@@ -76,6 +127,7 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
           {block.seats.map((seat, index) => (
             <rect
               key={index}
+              className={`seat ${block.available === seatStates.NOT_SALABLE ? 'not_salable' : ''}`}
               x={seat.x}
               y={seat.y}
               width={seat.width}
@@ -98,9 +150,11 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
                     : "none"
               }
               onClick={() => {
-                const nextSeatState = getNextSeatState(block.available);
-                block.available = nextSeatState;
-                onSeatClick(block);
+                if (block.available !== seatStates.NOT_SALABLE) {
+                  const nextSeatState = getNextSeatState(block.available);
+                  block.available = nextSeatState;
+                  onSeatClick(block);
+                }
               }}
               onMouseEnter={() => setHoveredBlock(block.id)}
               onMouseLeave={() => setHoveredBlock(null)}

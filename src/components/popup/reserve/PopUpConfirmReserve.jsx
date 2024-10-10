@@ -8,14 +8,12 @@ const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot,
   if (!reservation) return null;
   
   const isDeleteAction = actionType === 'delete';
-  const {
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    spaceDTO: { spaceType },
-    userDTO: { name },
-  } = reservation;
+   const {
+    startDate = "N/A",
+    endDate = "N/A",
+    startTime = "N/A",
+    endTime = "N/A"
+  } = reservation || {};  
   /* switch(pageType) {
     case 'office':
       reservationType = 'Oficina privada';
@@ -42,8 +40,7 @@ const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot,
             <TitleMessage>{isDeleteAction ? 'Eliminar reserva' : 'Confirmar reserva'}</TitleMessage>
           </DialogContentText>
           <SubTitleMessage>{startDate} - {endDate} <LineSpan>|</LineSpan> {startTime} - {endTime}</SubTitleMessage>
-          <H6>Espai reservat: {spaceType}</H6>
-          <H6>Reservat per: {name}</H6>
+          <H6>Espai reservat: {table.name}</H6>
         </DialogContent>
         <DialogActions>
           <ButtonConfirm onClick={onConfirm}>{isDeleteAction ? button.deleteText : button.confirmText}</ButtonConfirm>
