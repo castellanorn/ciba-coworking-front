@@ -19,6 +19,8 @@ import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import { RoleInput } from "../../components/inputs/RoleInput";
 import { TitleSelectDate } from "../../components/calendar/CalendarStyled";
+import Paragraph from '../../components/textComponents/Paragraph';
+import styled from "styled-components";
 
 
 // Componente ManageOffice
@@ -80,6 +82,10 @@ const ManageOffice = () => {
       }));
 
       setAvailableReservations(formattedReservations);
+
+      if (formattedReservations.length === 0) {
+        setError("Per aquestes dates no hi ha reserves");
+      }
     } catch (error) {
       setError(error.message);
     }
@@ -183,7 +189,7 @@ const ManageOffice = () => {
         <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
       </ContainerButtons>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <Paragraph text={error} color="red" />}      
       {availableReservations.length > 0 && (
         <TableSection>
           <Table 
