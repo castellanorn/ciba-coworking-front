@@ -2,30 +2,20 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { AuthContext } from "../../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
-
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
-
-import HourSelect from "../../components/inputs/HourSelect";
-
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
-
 import { Space } from "../../pages/meetingRoom/MeetingRoomBookingStyled";
-
 import { DivReserve } from "./MeetingRoomBookingStyled";
-
 import PlacesButton from "../../components/buttons/PlacesButton";
-
 import Calendar from "../../components/calendar/Calendar";
-
 import { Hr2 } from "../../components/calendar/CalendarStyled";
-
 import ContainerButtons from "../../components/container/ButtonsContainer";
-
 import TitleMobile from "../../components/title/Title";
 import { apiRequest } from "../../services/apiRequest";
 import { API_GET_RESERVATIONS_BY_ID,API_CREATE_RESERVATIONS } from "../../config/apiEndpoints";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
+import OfficesInput from "../../components/inputs/OfficesInput";
 
 const ReserveMeetingRoom = () => {
   const { authToken,user } = useContext(AuthContext);
@@ -230,7 +220,7 @@ const ReserveMeetingRoom = () => {
         <Hr2 />
 
           {availableHours.length > 0 && (
-        <HourSelect
+        <OfficesInput
           availableHours={availableHours}
           selectedHour={selectedHour}
           onChange={handleHourChange}

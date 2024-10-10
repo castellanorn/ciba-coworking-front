@@ -7,7 +7,6 @@ import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
-import HourSelect from "../../components/inputs/HourSelect";
 import { Space } from "../../pages/office/OfficeBookingStyled";
 import PlacesButton from "../../components/buttons/PlacesButton";
 import { DivReserve } from "./OfficeBookingStyled";
@@ -20,6 +19,7 @@ import {
   API_GET_SPACE_BY_ID,
 } from "../../config/apiEndpoints";
 import { AuthContext } from "../../auth/AuthProvider";
+import OfficesInput from "../../components/inputs/OfficesInput";
 
 const ReserveOffice = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -287,10 +287,8 @@ const ReserveOffice = () => {
 
         <Hr2 />
 
-        <label htmlFor="hoursSelect"></label>
-
-{availableHours.length > 0 && (
-        <HourSelect
+      {availableHours.length > 0 && (
+        <OfficesInput
           availableHours={availableHours}
           selectedHour={selectedHour}
           onChange={handleHourChange}
