@@ -1,11 +1,21 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../auth/AuthWrapper";
+import { AuthContext } from "../auth/AuthProvider";
 
-// eslint-disable-next-line react/prop-types
-const PrivateRoute = ({ children }) => {
-    const { authToken } = useContext(AuthContext);
-    return authToken ? children : <Navigate to="/login" />;
+const PrivateRoute = ({ children, requiredRole }) => {
+  const { authToken, userRole } = useContext(AuthContext);
+
+  if (!authToken) {
+    console.log("No hay token");
+    return <Navigate to="/inici-sessio" />;
+  }
+
+  if (requiredRole && userRole !== requiredRole) {
+    console.log(userRole, requiredRole);
+    return <Navigate to="/" />;
+  }
+
+  return children;
 };
 
 export default PrivateRoute;

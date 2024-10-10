@@ -1,8 +1,14 @@
+import TitleMobile from "../components/title/Title"
+import SeatMap from "../components/map/SeatMap"
 
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <>
+    <TitleMobile
+      title="Home"   
+    />
+    </>
   )
 }
 

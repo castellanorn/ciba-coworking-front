@@ -5,8 +5,8 @@ export const apiRequest = async (endpoint, method = "GET", data = null, headers 
         const response = await axios({
             url: endpoint,   
             method,          
-            data,            
-            headers,         
+            data,
+            headers       
         });
         
         return response.data;
@@ -14,11 +14,9 @@ export const apiRequest = async (endpoint, method = "GET", data = null, headers 
         console.error("API request error:", error);
 
         if (error.response) {
-            // Error response from the server
             const { status, data } = error.response;
             let errorMessage = data.message || "Something went wrong";
             
-            // Handle different status codes
             if (status === 400) {
                 errorMessage = "Bad Request: " + errorMessage;
             } else if (status === 401) {
