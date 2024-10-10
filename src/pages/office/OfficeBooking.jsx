@@ -41,12 +41,12 @@ const ReserveOffice = () => {
   const generateDefaultHours = () => {
     const hours = [];
     let startHour = 8;
-    let endHour = 20; // 8 PM
+    let endHour = 20;
 
     for (let i = startHour; i < endHour; i++) {
       hours.push({
-        startDate: `${i}:00:00`, // Formato HH:mm:ss para startDate
-        endDate: `${i + 1}:00:00`, // Formato HH:mm:ss para endDate
+        startDate: `${i}:00:00`,
+        endDate: `${i + 1}:00:00`,
       });
     }
 
@@ -75,7 +75,6 @@ const ReserveOffice = () => {
       );
       console.log("Respuesta de horas disponibles:", response);
 
-      // Si la respuesta es 404, o no hay horas disponibles
       if (
         !response ||
         response.status === 404 ||
@@ -85,22 +84,20 @@ const ReserveOffice = () => {
         console.log(
           "No se encontraron horas disponibles. Mostrando horas por defecto."
         );
-        const defaultHours = generateDefaultHours(); // Generar horas por defecto
-        setAvailableHours(defaultHours); // Llenar el select con horas por defecto
+        const defaultHours = generateDefaultHours(); 
+        setAvailableHours(defaultHours);
       } else {
         const availableHours = response.availableHours.map((item) => ({
           startDate: item.startDate,
           endDate: item.endDate,
         }));
-        setAvailableHours(availableHours); // Llenar el select con las horas de la API
+        setAvailableHours(availableHours);
       }
     } catch (error) {
-      console.error("Error obteniendo las horas disponibles:", error.message);
-      setError("Error obteniendo las horas disponibles. Intenta nuevamente.");
+      console.log(error.message);
 
-      // Si ocurre un error, llenamos el select con las horas por defecto
-      const defaultHours = generateDefaultHours(); // Generar horas por defecto
-      setAvailableHours(defaultHours); // Llenar el select con horas por defecto
+      const defaultHours = generateDefaultHours();
+      setAvailableHours(defaultHours);
     }
   };
 
@@ -141,23 +138,16 @@ const ReserveOffice = () => {
 
   const handleOpenSuccess = () => {
     setSuccessPopupOpen(true);
-    console.log(selectedDates);
   };
 
   const handleCloseSuccess = () => {
     setSuccessPopupOpen(false);
+    setConfirmationPopupOpen(false); 
   };
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
   const handleOpenConfirm = () => {
-    console.log("Selected Dates:", selectedDates);
-    console.log("Selected Office:", selectedOffice);
-    console.log("Selected Hour:", selectedHour);
-    /*     if (!selectedDates.length || !selectedOffice || !selectedHour) {
-      setError("Selecciona fechas, una oficina y una hora antes de continuar.");
-      return;
-    } */
 
     if (
       !selectedDates.length ||
@@ -168,9 +158,8 @@ const ReserveOffice = () => {
       setError("Selecciona fechas, una oficina y una hora antes de continuar.");
       return;
     }
-    setError(""); // Limpiar cualquier error previo
+    setError("");
     setConfirmationPopupOpen(true);
-    console.log("Estado del popup de confirmación:", confirmationPopupOpen);
   };
 
   const handleCloseConfirm = () => {
@@ -178,10 +167,6 @@ const ReserveOffice = () => {
   };
 
   const handleAcceptConfirm = async () => {
-    /*     if (!selectedHour.startDate || !selectedHour.endDate) {
-      setError("Por favor selecciona un horario antes de continuar.");
-      return;
-    } */
 
     if (
       !selectedDates.length ||
@@ -194,26 +179,23 @@ const ReserveOffice = () => {
     }
 
     try {
-      // Formateamos las fechas seleccionadas al formato 'YYYY/MM/DD'
       const formattedStartDate = selectedDates[0].format("YYYY-MM-DD");
       const formattedEndDate = selectedDates[0].format("YYYY-MM-DD");
 
       // Estructuramos el objeto que debe enviarse al backend
       const dataToSend = {
-        startDate: formattedStartDate, // Fecha en formato 'YYYY/MM/DD'
-        endDate: formattedEndDate,     // Fecha en formato 'YYYY/MM/DD'
-        startTime: selectedHour.startTime, // Hora de inicio en formato '00:00:00'
-        endTime: selectedHour.endTime,     // Hora de fin en formato '00:00:00'
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        startTime: selectedHour.startTime,
+        endTime: selectedHour.endTime,
         userDTO: {
-          id: user.id,  // ID del usuario
+          id: user.id,
         },
         spaceDTO: {
-          id: selectedOffice === "Oficina 1" ? 1 : 2,  // ID de la oficina
+          id: selectedOffice === "Oficina 1" ? 1 : 2,  
         },
       };
-      console.log("Cuerpo de la solicitud:", dataToSend);
 
-      // Realizamos la solicitud POST enviando el array con el cuerpo de la solicitud
       const response = await apiRequest(
         API_CREATE_RESERVATIONS,
         "POST",
@@ -223,22 +205,18 @@ const ReserveOffice = () => {
 
       console.log("Reserva creada exitosamente:", response);
 
-      // Si todo va bien, abre el popup de éxito
       handleOpenSuccess();
     } catch (error) {
       console.error("Error al realizar la reserva:", error.message);
-      setError(error.message); // Mostrar el error en la UI
+      setError(error.message);
     }
   };
 
   const handleRadioChange = (event) => {
-    const office = event.target.value; // Asignar la oficina seleccionada
+    const office = event.target.value; 
     setSelectedOffice(office);
   };
 
-  /* const handleHourChange = (event) => {
-    setSelectedHour(event.target.value); // Asignar la hora seleccionada
-  }; */
 
   return (
     <>
@@ -287,32 +265,20 @@ const ReserveOffice = () => {
 
         <Hr2 />
 
-        {/*         {availableHours.length > 0 && (
-          <HourSelect selectedHour={selectedHour} onChange={handleHourChange} availableHours={availableHours} />
-        )}
- */}
+        <label htmlFor="hoursSelect"></label>
 
-        <label htmlFor="hoursSelect">Selecciona una franja horaria:</label>
-        <select
-          id="hoursSelect"
-          value={selectedHour.startDate || ""}
+{availableHours.length > 0 && (
+        <HourSelect
+          availableHours={availableHours}
+          selectedHour={selectedHour}
           onChange={handleHourChange}
-        >
-          <option value="">Seleccione una hora</option>
-          {availableHours.map((hour, index) => (
-            <option key={index} value={hour.startDate}>
-              {hour.startDate} - {hour.endDate}
-            </option>
-          ))}
-        </select>
+        />
+      )}
         <Hr2 />
-
-        {/* Confirm Reservation */}
         <ContainerButtons>
           <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
         </ContainerButtons>
 
-        {/* Confirmation and Success Popups */}
         {confirmationPopupOpen && (
 
           <PopUpConfirmReserve
@@ -324,8 +290,8 @@ const ReserveOffice = () => {
               endDate: selectedDates[0].format("YYYY-MM-DD"),
               startTime: selectedHour.startTime,
               endTime: selectedHour.endTime,
-              spaceDTO: { spaceType: selectedOffice }, // ejemplo de espacio
-              userDTO: { name: user.name }, // ejemplo de usuario
+              spaceDTO: { spaceType: selectedOffice },
+              userDTO: { name: user.name },
             }}
             button={{
               confirmText: "Confirmar",
