@@ -1,14 +1,14 @@
 import { RadioGroup, RadioLabel } from "./InputStyled";
 
 function RadioInput({ label, name, selectedOption, onChange }) {
-  const isSelected = selectedOption === label;
+  const isSelected = selectedOption === name;
   return (
     <RadioGroup>
       <RadioLabel>
         <input
           type="radio"
           name={name}
-          value={label}
+          value={name}
           checked={isSelected}
           onChange={onChange}
         />

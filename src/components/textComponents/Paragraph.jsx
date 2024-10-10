@@ -1,14 +1,14 @@
-import React from 'react'
-import { ParagraphStyled } from './ParagraphStyled'
+import React from 'react';
+import { ParagraphStyled } from './ParagraphStyled';
 
-const Paragraph = ({text}) => {
+const Paragraph = ({ text, color = 'black' }) => {
     return (
-    <>
-        <ParagraphStyled>
-            {text}
-        </ParagraphStyled>
-    </>
-    )
+        <>
+            <ParagraphStyled color={color}>
+                {text}
+            </ParagraphStyled>
+        </>
+    );
 }
 
-export default Paragraph
+export default Paragraph;
