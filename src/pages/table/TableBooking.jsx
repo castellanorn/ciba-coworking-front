@@ -8,7 +8,6 @@ import {
   API_CREATE_RESERVATION_TABLES_BY_USER,
   API_CREATE_RESERVATION_LONG_TERM_BY_ADMIN,
 } from "../../config/apiEndpoints";
-import axios from "axios"; // Importa Axios
 
 import Calendar from "../../components/calendar/Calendar";
 import ContainerButtons from "../../components/container/ButtonsContainer";
@@ -27,7 +26,6 @@ import ErrorModal from "../../components/popup/modals/ErrorModal";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 
-import emptyBlocks from "../../assets/emptyBlocks.json";
 
 const ReserveTable = () => {
   const { authToken, userRole, user } = useContext(AuthContext);
@@ -59,7 +57,6 @@ const ReserveTable = () => {
 
   const handleTableSelection = (table) => {
     setSelectedTable(table);
-    console.log(table);
   };
 
   const handleRadioChange = (event) => {
@@ -140,8 +137,6 @@ const ReserveTable = () => {
             endTime: "20:00:00",
           };
     setDateRange(newDateRange);
-
-    console.log("New Date Range: ", newDateRange);
     await fetchAvailableTables(newDateRange);
   };
 
@@ -171,12 +166,12 @@ const ReserveTable = () => {
         id: selectedTable.id,
       },
     };
-    console.log(reservationData);
+ 
     const urlCreateReservation =
       userRole === "admin"
         ? API_CREATE_RESERVATION_LONG_TERM_BY_ADMIN
         : API_GET_TABLES_BY_DATE;
-    console.log(urlCreateReservation);
+
     try {
       const response = await apiRequest(
         urlCreateReservation,
@@ -184,7 +179,7 @@ const ReserveTable = () => {
         reservationData,
         headers
       );
-      console.log(response);
+
       setReservationData(response);
       setConfirmationPopupOpen(true);
     } catch (error) {
@@ -214,7 +209,6 @@ const ReserveTable = () => {
 
   useEffect(() => {
     if (confirmPopupOpen) {
-      console.log("Date Range on Confirm Open: ", dateRange, selectedTable);
     }
   }, [confirmPopupOpen, dateRange, selectedTable]);
 
@@ -222,9 +216,6 @@ const ReserveTable = () => {
     setConfirmPopupOpen(false);
     navigate("/reserva-taula");
   };
-
-  const initialBlocks = emptyBlocks.emptyBlocks;
-  console.log(initialBlocks);
 
   return (
     <>
@@ -281,20 +272,16 @@ const ReserveTable = () => {
         </ContainerButtons>
         <Hr2 />
 
-        {/* {availableTables.length === 0 ? (<Paragraph test = "Selecciona las fechas, la franja y pulsa Buscar"/>) 
+        {availableTables.length === 0 ? (<Paragraph text = "Selecciona las fechas, la franja y pulsa Buscar"/>) 
       : (<>
-          <SeatSpace blocks={availableTables} onSeatSelect={handleTableSelection} />
+          <SeatSpace availableTables={availableTables} onSeatSelect={handleTableSelection} />
           <ContainerButtons>
             <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
           </ContainerButtons>
           
         </>
-      )} */}
+      )}
 
-        <SeatSpace onSeatSelect={handleTableSelection} />
-        <ContainerButtons>
-          <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
-        </ContainerButtons>
       </DivReserve>
       <Space />
 

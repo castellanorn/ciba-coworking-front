@@ -27,9 +27,6 @@ const config = {
   },
 };
 
-
-
-
 const seatStates = {
   NOT_SALABLE: 'not_salable',
   SELECTED: 'selected',
@@ -52,28 +49,28 @@ const getNextSeatState = (currentState) => {
 
 //blocks, onSeatSelect
 const initialBlocks = emptyBlocks.emptyBlocks;
-const SeatSpace = ({onSeatSelect }) => {
-    
- /*  const filteredBlocks = initialBlocks.map(seat => {
-    const isAvailable = blocks.some(fetchedSeat => fetchedSeat.id === seat.id);
+const SeatSpace = ({availableTables, onSeatSelect }) => {
+  const filteredBlocks = initialBlocks.map(seat => {
+    const isAvailable = availableTables.some(fetchedSeat => fetchedSeat.id === seat.id);
     return {
       ...seat, 
       available: isAvailable ? "color" : "not_salable",
     };
-  }); */
+  });
   
+
 
   const seatmapRef = useRef(null);
 
   const handleSeatClick = (block) => {
-    console.log(block.id);  // Log block.id for debugging
+    
     const updatedBlocks = initialBlocks.map(b =>
       b.id === block.id
         ? { ...b, available: getNextSeatState(b.available) }
         : b
     );
     
-    // Pass the selected block.id to the parent component
+
     if (onSeatSelect) {
       onSeatSelect(block);
     }
@@ -103,14 +100,7 @@ const SeatSpace = ({onSeatSelect }) => {
     <div>
       <TitleSelectTable>Selecciona taula:</TitleSelectTable>
       <MapContainer>
-        <SvgComponent blocks={initialBlocks} onSeatClick={handleSeatClick} config={config} />
-        {/* <Seatmap>
-          ref={seatmapRef}
-          seatClick={handleSeatClick}
-          blocks={filteredBlocks}
-          config={config}
-                    
-        </Seatmap> */}
+        <SvgComponent blocks={filteredBlocks} onSeatClick={handleSeatClick} config={config} />
       </MapContainer>
     </div>
   );

@@ -2,7 +2,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/ma
 import { ContainerDialog, H6, LineSpan, SubTitleMessage, TitleMessage } from "./PopUpStyled";
 import { ButtonCancel, ButtonConfirm } from "../../buttons/ButtonStyled";
 
-const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, button, actionType, reservation }) => {
+const PopUpConfirmReserve = ({ open, onConfirm, onCancel, space, table, pageType, button, actionType, reservation }) => {
   let reservationType = '';
   let titleMessage = '';
   if (!reservation) return null;
@@ -40,7 +40,8 @@ const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, butto
             <TitleMessage>{isDeleteAction ? 'Eliminar reserva' : 'Confirmar reserva'}</TitleMessage>
           </DialogContentText>
           <SubTitleMessage>{reservation.startDate} - {reservation.endDate} <LineSpan>|</LineSpan> {reservation.startTime} - {reservation.endTime}</SubTitleMessage>
-          <H6>Espai reservat: {table.title}</H6>
+          {table ? (<H6>Espai reservat: {table.title}</H6>) : (<></>)}
+          {space ? (<H6>Espai reservat: {space.title}</H6>) : (<></>)} {/* //cambiar el nombre de atributo de space */}
         </DialogContent>
         <DialogActions>
           <ButtonConfirm onClick={onConfirm}>{isDeleteAction ? button.deleteText : button.confirmText}</ButtonConfirm>
