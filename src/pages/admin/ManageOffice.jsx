@@ -1,4 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback,useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { AuthContext } from "../../auth/AuthProvider";
 import { Line } from '../../components/title/TitleStyled'
 import ContainerButtons from '../../components/container/ButtonsContainer'
 import PlacesButton from "../../components/buttons/PlacesButton"
@@ -17,6 +20,9 @@ import { RoleInput } from "../../components/inputs/RoleInput";
 import { TitleSelectDate } from "../../components/calendar/CalendarStyled";
 
 const ManageOffice = () => {
+  const { authToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [focus, setFocus] = useState("offices");
   const [selectedDates, setSelectedDates] = useState([]);
   const [availableReservations, setAvailableReservations] = useState([]);
   const [error, setError] = useState("");
@@ -25,6 +31,11 @@ const ManageOffice = () => {
     isOpen: false,
     selectedReservation: null,
   });
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${authToken}`,
+  };
+
   const handleRadioChange = (event) => {
     setSelectedOffice(event.target.value);
     console.log('oficina '+ event.target.value)
@@ -74,7 +85,7 @@ const ManageOffice = () => {
   const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedReservation) {
-        await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE");
+        await apiRequest(API_DELETE_RESERVATION(deleteModalState.selectedReservation.id), "DELETE", null, headers);
         handleFindResults(); 
       }
     } catch (error) {
@@ -94,25 +105,42 @@ const ManageOffice = () => {
       selectedReservation: null,
     });
   }, []);
+  const handleManageClick =(target)=>{
+    switch(target){
+      case "tables":
+        setFocus("tables");
+        navigate("/gestio-de-taules");
+        break;
+      case "offices":
+        setFocus("offices");
+        navigate("/gestio-oficina"); 
+        break;
+      case "meetings":
+        setFocus("meetings");
+        navigate("/gestio-reunio"); 
+        break;
+    }
+  }
   return (
     <div>
       <TitleMobile title="Edició de reserves" />
       <ContainerButtons>
             <PlacesButton
                 text="Taules individuals"
-                link="/gestio-de-taules"
-                focus={false}
+                onClick={() => handleManageClick("tables")}
+                focus={focus === "tables"}
             />
             <PlacesButton
                 text="Oficines privades"
-                focus={true}
+                onClick={() => handleManageClick("offices")}
+                focus={focus === "offices"}
             />
             <PlacesButton
                 text="Sala de reunions"
-                link="/gestio-reunio"
-                focus={false}
+                onClick={() => handleManageClick("meetings")}
+                focus={focus === "meetings"}
             />
-        </ContainerButtons>        
+        </ContainerButtons>       
         <Line />
         <Calendar
         onChange={setSelectedDates}

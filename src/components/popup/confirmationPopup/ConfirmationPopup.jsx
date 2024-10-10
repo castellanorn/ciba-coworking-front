@@ -1,6 +1,6 @@
 import ImageSrc from "../../../assets/confirm-big.png";
 import ConfirmButton from "../../buttons/ConfirmButton";
-import { ConfirmationContainer, ConfirmSubtitle, ModalOverlay } from "./ConfirmationPoputStyled";
+import { ConfirmationContainer, ConfirmSubtitle, ModalOverlay } from "./ConfirmationPopupStyled";
 
 const ConfirmationPopup = ({ open, onClose, subtitleConfirm }) => {
   if (!open) return null;
@@ -12,7 +12,7 @@ const ConfirmationPopup = ({ open, onClose, subtitleConfirm }) => {
           <img src={ImageSrc} alt="confirmation-icon" />
         </span>
         <ConfirmSubtitle>{subtitleConfirm}</ConfirmSubtitle>
-        <ConfirmButton type="button" onClick={onClose}>Aceptar</ConfirmButton>
+        <ConfirmButton type="button" onClick={onClose}>Acceptar</ConfirmButton>
       </ConfirmationContainer>
     </ModalOverlay>
   );
