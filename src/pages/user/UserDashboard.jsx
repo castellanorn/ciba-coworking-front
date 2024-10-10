@@ -119,7 +119,7 @@ const UserDashboard = () => {
     });
   };
   const handleCloseSuccess = () => {
-    navigate('/reserva-taula', { replace: true });
+    navigate('/panell-usuari', { replace: true });
     //setSuccessPopupOpen(false);
   };
 
