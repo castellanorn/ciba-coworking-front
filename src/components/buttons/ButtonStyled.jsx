@@ -9,7 +9,7 @@ export const ButtonConfirm = styled.button`
     font-weight:bold;
     font-size:20px;
     cursor:pointer;
-    margin-bottom:60px;
+    margin-bottom:20px;
     background-color:white;
         &:active{
                 background-color: var(--violet);
@@ -26,7 +26,7 @@ export const ButtonCancel = styled.button`
     border:none;
     font-size:19px;
     cursor:pointer;
-    margin-bottom:60px;
+    margin-bottom:20px;
         &:active{
             background-color: white;
             color:#F8A99C;
@@ -118,6 +118,7 @@ export const ModalContentStyles = styled.div`
   padding: 20px;
   border-radius: 8px;
   position: relative;
+  width:80%;
 `;
 
 export const BiSolidPlusCircle = styled.div`
