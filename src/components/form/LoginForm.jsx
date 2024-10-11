@@ -138,7 +138,7 @@ const LoginForm = () => {
             })}
           />
           <EyeIcon onClick={togglePasswordVisibility}>
-            {showPassword ? <StyledRiEyeCloseLine /> : <StyledIoEyeOutline/>}
+            {showPassword ? <StyledIoEyeOutline /> : <StyledRiEyeCloseLine />}
           </EyeIcon>
         </InputWrapper>
 

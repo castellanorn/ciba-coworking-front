@@ -59,6 +59,7 @@ const ReserveTable = () => {
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
+  const [focus, setFocus] = useState("offices");
 
   const headers = {
     "Content-Type": "application/json",
@@ -232,24 +233,52 @@ const ReserveTable = () => {
     navigate("/reserva-taula");
   };
 
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.includes("/reserva-taula")) {
+      setFocus("tables");
+    } else if (path.includes("/reserva-oficina")) {
+      setFocus("offices");
+    } else if (path.includes("/reserva-reunio")) {
+      setFocus("meetings");
+    }
+  }, [location.pathname]);
+
+  const handleManageClick = (target) => {
+    switch (target) {
+      case "tables":
+        navigate("/reserva-taula");
+        break;
+      case "offices":
+        navigate("/reserva-oficina");
+        break;
+      case "meetings":
+        navigate("/reserva-reunio");
+        break;
+    }
+  };
+
   return (
     <>
       <DivReserve>
         <TitleMobile title="Fer reserva de taula individual" />
 
         <ContainerButtons>
-          <PlacesButton text="taules individuals" focus={true} />
+          <PlacesButton 
+            text="Taules individuals" 
+            onClick={() => handleManageClick("tables")}
+                focus={focus === "tables"} />
 
           <PlacesButton
-            text="oficines privades"
-            link="/reserva-oficina"
-            focus={false}
+            text="Oficines privades"
+            onClick={() => handleManageClick("offices")}
+                focus={focus === "offices"}
           />
 
           <PlacesButton
-            text="sala de reunions"
-            link="/reserva-reunio"
-            focus={false}
+            text="Sala de reunions"
+            onClick={() => handleManageClick("meetings")}
+                focus={focus === "meetings"}
           />
         </ContainerButtons>
 

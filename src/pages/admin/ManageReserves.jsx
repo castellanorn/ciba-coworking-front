@@ -19,7 +19,7 @@ import ConfirmationPopup from "../../components/popup/confirmationPopup/Confirma
 import Paragraph from '../../components/textComponents/Paragraph';
 
 function ManageReserves() {
-   const { authToken } = useContext(AuthContext);
+   const { authToken, user } = useContext(AuthContext);
    const navigate = useNavigate();
    const [focus, setFocus] = useState("reservations");
    const [futureReservations, setFutureReservations] = useState([]);
@@ -36,7 +36,7 @@ function ManageReserves() {
 
     const handleFindResults = useCallback(async () => {
       try {
-         const response = await apiRequest(API_GET_RESERVATIONS_BY_USER(1), "GET", null, headers);
+         const response = await apiRequest(API_GET_RESERVATIONS_BY_USER(user.id), "GET", null, headers);
          const { futureReservations, pastReservations } = splitReservations(response);
          
         const formattedFutureReservations = futureReservations.map(reservation => ({
