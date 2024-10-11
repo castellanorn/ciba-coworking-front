@@ -1,8 +1,14 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../auth/AuthProvider";
+import { apiRequest } from "../../services/apiRequest";
+import {
+  API_GET_TABLES_BY_DATE,
+  API_CREATE_RESERVATION_TABLES_BY_USER,
+  API_CREATE_RESERVATION_LONG_TERM_BY_ADMIN,
+} from "../../config/apiEndpoints";
 
-import { useNavigate } from "react-router-dom";
 import Calendar from "../../components/calendar/Calendar";
 
 import ContainerButtons from "../../components/container/ButtonsContainer";
@@ -14,11 +20,7 @@ import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
-
-import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
-
-import Map from "../../components/map/Map";
-
+import { SeatSpace } from "../../components/map/SeatSpace";
 import { Space } from "../../pages/office/OfficeBookingStyled";
 
 import PlacesButton from "../../components/buttons/PlacesButton";
@@ -28,94 +30,70 @@ import { DivReserve } from "./TableBookingStyled";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
 
 import { RoleInput } from "../../components/inputs/RoleInput";
+import Paragraph from "../../components/textComponents/Paragraph";
+import ErrorModal from "../../components/popup/modals/ErrorModal";
+import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
+import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 
-import {
-  API_GET_TABLES_BY_DATE,
-  API_CREATE_RESERVATION_TABLES_BY_USER,
-} from "../../config/apiEndpoints";
-
-import axios from "axios";
 
 const ReserveTable = () => {
-  const { authToken } = useContext(AuthContext);
-
-  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
-
-  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const { authToken, userRole, user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [selectedTable, setSelectedTable] = useState("");
 
   const [selectedDates, setSelectedDates] = useState([]);
 
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-
-  const [reservationData, setReservationData] = useState(null);
-
+  const [availableTables, setAvailableTables] = useState([]);
+  const [reservationData, setReservationData] = useState([]);
+  const [dateRange, setDateRange] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
   const [error, setError] = useState("");
-  const [focus, setFocus] = useState("tables");
-  const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
+  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
+  const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
   const headers = {
     "Content-Type": "application/json",
-
+    Accept: "application/json",
     Authorization: `Bearer ${authToken}`,
   };
 
-  const handleOpenSuccess = () => {
-    setSuccessPopupOpen(true);
-  };
-
-  const handleCloseSuccess = () => {
-    setSuccessPopupOpen(false);
-  };
-
-  const handleOpenConfirm = () => {
-    setConfirmPopupOpen(true);
-  };
-
-  const handleCloseConfirm = () => {
-    setConfirmPopupOpen(false);
-  };
-
-  const handleAcceptConfirm = () => {
-    handleCloseConfirm();
-
-    handleOpenSuccess();
+  const handleTableSelection = (table) => {
+    setSelectedTable(table);
   };
 
   const handleRadioChange = (event) => {
     setSelectedTimeSlot(event.target.value);
   };
 
-  const fetchAvailableTables = async (date, startTime, endTime) => {
-    const url = `${API_GET_TABLES_BY_DATE}?date=${date}&startTime=${startTime}&endTime=${endTime}`;
-
+  const fetchAvailableTables = async (dateRange) => {
+    setLoading(true);
     try {
-      const response = await axios.get(url, { headers });
-
-      setReservationData(response.data); // Asume que la respuesta es un array de mesas disponibles
+      const response = await apiRequest(
+        API_GET_TABLES_BY_DATE,
+        "POST",
+        dateRange,
+        headers
+      );
+      const availableTables = response.map((table) => ({
+        id: table.id,
+        title: table.name,
+        available: table.spaceStatus === "actiu" ? "color" : "not_salable",
+      }));
+      setAvailableTables(availableTables);
     } catch (error) {
-      console.error("Error fetching available tables:", error);
-
+      console.error("Error fetching tables: ", error.message);
       setError("No s'han pogut obtenir les taules disponibles.");
-    }
-  };
-
-  // Función para crear una reserva de mesa utilizando Axios
-
-  const createTableReservation = async (reservationData) => {
-    const url = `${API_CREATE_RESERVATION_TABLES_BY_USER}`;
-
-    try {
-      const response = await axios.post(url, reservationData, { headers });
-
-      return response.data; // Devuelve la reserva creada
-    } catch (error) {
-      console.error("Error creating reservation:", error);
-
-      setError("No s'ha pogut crear la reserva.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -126,7 +104,7 @@ const ReserveTable = () => {
       return;
     }
 
-    if (!selectedTimeSlot) {
+    if (!selectedTimeSlot && userRole === "user") {
       setError("Si us plau, selecciona una franja horària.");
 
       return;
@@ -134,57 +112,125 @@ const ReserveTable = () => {
 
     setError("");
 
-    const formatDateToLocal = (date) => {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');  // Mes empieza desde 0
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    };
-    const startDate = formatDateToLocal(selectedDates[0]);
-    const endDate = formatDateToLocal(selectedDates[selectedDates.length - 1]);
+    const startDate = new Date(
+      selectedDates[0].$d.getTime() -
+        selectedDates[0].$d.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
+    const endDate = new Date(
+      selectedDates[selectedDates.length - 1].$d.getTime() -
+        selectedDates[selectedDates.length - 1].$d.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
 
-    let startTime;
-
-    let endTime;
+    let startTime, endTime;
 
     if (selectedTimeSlot === "Matí") {
       startTime = "08:00:00";
-
       endTime = "13:59:59";
     } else if (selectedTimeSlot === "Tarda") {
       startTime = "14:00:00";
-
       endTime = "20:00:00";
     }
 
-    console.log("Dia/dies seleccionats:", startDate, endDate);
+    const newDateRange =
+      userRole === "user"
+        ? {
+            startDate: startDate,
+            endDate: endDate,
+            startTime: startTime,
+            endTime: endTime,
+          }
+        : {
+            startDate: startDate,
+            endDate: endDate,
+            startTime: "08:00:00",
+            endTime: "20:00:00",
+          };
+          
+    setDateRange(newDateRange);
 
-    console.log("Franja horaria seleccionada:", selectedTimeSlot);
-
-    console.log("Hora d'inici:", startTime, "Hora de fi:", endTime);
-
-    // await fetchAvailableTables(startDate, startTime, endTime);
+    await fetchAvailableTables(newDateRange);
   };
 
-  const handleTableSelection = (table) => {
-    setSelectedTable(table);
-  };
-  const handleManageClick =(target)=>{
-    switch(target){
-      case "tables":
-        setFocus("tables");
-        navigate("/reserva-taula");
-        break;
-      case "offices":
-        setFocus("offices");
-        navigate("/reserva-oficina"); 
-        break;
-      case "meetings":
-        setFocus("meetings");
-        navigate("/reserva-reunio"); 
-        break;
+  const createTableReserve = async () => {
+    if (
+      !selectedTable ||
+      !dateRange.startDate ||
+      !dateRange.endDate ||
+      !dateRange.startTime ||
+      !dateRange.endTime
+    ) {
+      setError(
+        "Si us plau, selecciona una taula i assegura't que tots els camps de data/hora estan omplerts."
+      );
+      return;
     }
-  }
+
+    const reservationData = {
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      startTime: dateRange.startTime,
+      endTime: dateRange.endTime,
+      userDTO: {
+        id: user.id,
+      },
+      spaceDTO: {
+        id: selectedTable.id,
+      },
+    };
+ 
+    const urlCreateReservation =
+      userRole === "admin"
+        ? API_CREATE_RESERVATION_LONG_TERM_BY_ADMIN
+        : API_GET_TABLES_BY_DATE;
+
+    try {
+      const response = await apiRequest(
+        urlCreateReservation,
+        "POST",
+        reservationData,
+        headers
+      );
+
+      setReservationData(response);
+      setConfirmationPopupOpen(true);
+    } catch (error) {
+      setErrorModal({
+        isOpen: true,
+        message: "No s'ha pogut crear la reserva.",
+      });
+    }
+  };
+
+  const handleAcceptConfirm = async () => {
+    await createTableReserve();
+    handleCloseConfirm();
+    setConfirmationPopupOpen(true);
+  };
+
+  const handleCloseSuccess = () => {
+    setConfirmationPopupOpen(false);
+    userRole === "admin"
+      ? navigate("/gestio-reserves")
+      : navigate("/panell-usuari");
+  };
+
+  const handleOpenConfirm = () => {
+    setConfirmPopupOpen(true);
+  };
+
+  useEffect(() => {
+    if (confirmPopupOpen) {
+    }
+  }, [confirmPopupOpen, dateRange, selectedTable]);
+
+  const handleCloseConfirm = () => {
+    setConfirmPopupOpen(false);
+    navigate("/reserva-taula");
+  };
 
   return (
     <>
@@ -192,22 +238,20 @@ const ReserveTable = () => {
         <TitleMobile title="Fer reserva de taula individual" />
 
         <ContainerButtons>
+          <PlacesButton text="taules individuals" focus={true} />
+
           <PlacesButton
-                text="Taules individuals"
-                onClick={() => handleManageClick("tables")}
-                focus={focus === "tables"}
-            />
-            <PlacesButton
-                text="Oficines privades"
-                onClick={() => handleManageClick("offices")}
-                focus={focus === "offices"}
-            />
-            <PlacesButton
-                text="Sala de reunions"
-                onClick={() => handleManageClick("meetings")}
-                focus={focus === "meetings"}
-            />
-        </ContainerButtons> 
+            text="oficines privades"
+            link="/reserva-oficina"
+            focus={false}
+          />
+
+          <PlacesButton
+            text="sala de reunions"
+            link="/reserva-reunio"
+            focus={false}
+          />
+        </ContainerButtons>
 
         <Calendar
           onChange={setSelectedDates}
@@ -219,23 +263,28 @@ const ReserveTable = () => {
 
         <Hr2 />
 
-        <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
+        {userRole === "admin" ? (
+          <></>
+        ) : (
+          <>
+            <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
 
-        <RoleInput
-          label="Matí"
-          name="morning"
-          selectedOption={selectedTimeSlot}
-          onChange={handleRadioChange}
-          userRole={"USER"}
-        />
-
-        <RoleInput
-          label="Tarda"
-          name="afternoon"
-          selectedOption={selectedTimeSlot}
-          onChange={handleRadioChange}
-          userRole={"USER"}
-        />
+            <RoleInput
+              label="Matí"
+              name="Matí"
+              selectedOption={selectedTimeSlot}
+              onChange={handleRadioChange}
+              userRole={"USER"}
+            />
+            <RoleInput
+              label="Tarda"
+              name="Tarda"
+              selectedOption={selectedTimeSlot}
+              onChange={handleRadioChange}
+              userRole={"USER"}
+            />
+          </>
+        )}
 
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
@@ -243,32 +292,44 @@ const ReserveTable = () => {
 
         <Hr2 />
 
-        <Map onTableSelect={handleTableSelection} tableData={reservationData} />
+        {availableTables.length === 0 ? (<Paragraph text = "Selecciona las fechas, la franja y pulsa Buscar"/>) 
+      : (<>
+          <SeatSpace availableTables={availableTables} onSeatSelect={handleTableSelection} />
+          <ContainerButtons>
+            <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
+          </ContainerButtons>
+          
+        </>
+      )}
 
-        <ContainerButtons>
-          <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
-        </ContainerButtons>
-
-        <PopUpConfirmReserve
-          open={confirmPopupOpen}
-          onCancel={handleCloseConfirm}
-          table={selectedTable}
-          pageType="table"
-          onConfirm={handleAcceptConfirm}
-          slot="slot"
-          month="month"
-          day="day"
-          button={{
-            confirmText: "Confirmar",
-
-            cancelText: "Cancelar",
-          }}
-        />
-
-        <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
-
       <Space />
+
+      <PopUpConfirmReserve
+        open={confirmPopupOpen}
+        onConfirm={handleAcceptConfirm}
+        onCancel={handleCloseConfirm}
+        table={selectedTable}
+        pageType="table"
+        button={{
+          confirmText: "Confirmar",
+          cancelText: "Cancelar",
+        }}
+        reservation={dateRange}
+      />
+
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ isOpen: false, message: "" })}
+        message={errorModal.message}
+      />
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={handleCloseSuccess}
+          subtitleConfirm={"Reserva feta amb èxit."}
+        />
+      )}
     </>
   );
 };

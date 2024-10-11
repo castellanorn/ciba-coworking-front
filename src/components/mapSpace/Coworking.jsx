@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
-import Plano from '../../components/mapSpace/Plano';
+import SvgComponent from '../../components/map/SvgComponent';
 import { Seatmap } from '@alisaitteke/seatmap-canvas-react';
 
 const Container = styled.div`

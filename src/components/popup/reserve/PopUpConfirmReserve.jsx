@@ -2,20 +2,18 @@ import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/ma
 import { ContainerDialog, H6, LineSpan, SubTitleMessage, TitleMessage } from "./PopUpStyled";
 import { ButtonCancel, ButtonConfirm } from "../../buttons/ButtonStyled";
 
-const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot, month, day, button, actionType, reservation }) => {
+const PopUpConfirmReserve = ({ open, onConfirm, onCancel, space, table, pageType, button, actionType, reservation }) => {
   let reservationType = '';
   let titleMessage = '';
   if (!reservation) return null;
   
   const isDeleteAction = actionType === 'delete';
-  const {
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    spaceDTO: { spaceType },
-    userDTO: { name },
-  } = reservation;
+/*   const {
+    startDate = "N/A",
+    endDate = "N/A",
+    startTime = "N/A",
+    endTime = "N/A"
+  } = reservation;   */
   /* switch(pageType) {
     case 'office':
       reservationType = 'Oficina privada';
@@ -41,9 +39,9 @@ const PopUpConfirmReserve = ({ open, onConfirm, onCancel, table, pageType, slot,
           <DialogContentText>
             <TitleMessage>{isDeleteAction ? 'Eliminar reserva' : 'Confirmar reserva'}</TitleMessage>
           </DialogContentText>
-          <SubTitleMessage>{startDate} - {endDate} <LineSpan>|</LineSpan> {startTime} - {endTime}</SubTitleMessage>
-          <H6>Espai reservat: {spaceType}</H6>
-          <H6>Reservat per: {name}</H6>
+          <SubTitleMessage>{reservation.startDate} - {reservation.endDate} <LineSpan>|</LineSpan> {reservation.startTime} - {reservation.endTime}</SubTitleMessage>
+          {table ? (<H6>Espai reservat: {table.title}</H6>) : (<></>)}
+          {space ? (<H6>Espai reservat: {space.title}</H6>) : (<></>)} {/* //cambiar el nombre de atributo de space */}
         </DialogContent>
         <DialogActions>
           <ButtonConfirm onClick={onConfirm}>{isDeleteAction ? button.deleteText : button.confirmText}</ButtonConfirm>

@@ -1,13 +1,6 @@
-import { MapContainer, TitleSelectTable } from "./MapStyled"
-/* import { SeatSpace } from "../mapSpace/SeatSpace" */
-import { Coworking } from "../mapSpace/Coworking"
+import { MapContainer, TitleSelectTable, MapSpace } from "./MapStyled"
 import styled from "styled-components";
-
-const MapSpace = styled.div`
-    width: auto;
-    height: 100vh;
-
-`;
+import { Coworking } from "../mapSpace/Coworking";
 
 
 const SeatMap = () => {
@@ -15,12 +8,10 @@ return (
     <MapSpace>
         <TitleSelectTable>Selecciona taula:</TitleSelectTable>
         <MapContainer>
-          {/*   <SeatSpace /> */}
             <Coworking />
         </MapContainer>
-        
     </MapSpace>
 )
 }
 
-export default SeatMap
+export { SeatMap }
