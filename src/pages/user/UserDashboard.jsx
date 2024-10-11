@@ -20,6 +20,11 @@ import { columnsReserves, columnMappingReserves } from "../../config/tableData";
 import Paragraph from "../../components/textComponents/Paragraph";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
+import { SubTitleMessage } from "../../components/popup/reserve/PopUpStyled";
+import { ParrafConfirmDelete } from "../../components/popup/confirmationPopup/ConfirmationPopupStyled";
+import ConfirmButton from "../../components/buttons/ConfirmButton";
+import CancelButton from "../../components/buttons/CancelButton";
+import { ButtonsContainer } from "../../components/container/ButtonsContainerStyled";
 
 const UserDashboard = () => {
   const { authToken, user } = useContext(AuthContext);
@@ -180,10 +185,12 @@ const UserDashboard = () => {
           onClose={handleCancelDelete}
         >
           <ModalContentStyles>
-            <h2>Confirmar eliminación</h2>
-            <p>Estàs segur/a que vols eliminar la reserva</p>
-            <button onClick={handleConfirmDelete}>Aceptar</button>
-            <button onClick={handleCancelDelete}>Cancelar</button>
+            <SubTitleMessage>Confirmar eliminación</SubTitleMessage>
+            <ParrafConfirmDelete>Estàs segur/a que vols eliminar la reserva</ParrafConfirmDelete>
+            <ButtonsContainer>
+              <ConfirmButton onClick={handleConfirmDelete}>Aceptar</ConfirmButton>
+              <CancelButton onClick={handleCancelDelete}>Cancelar</CancelButton >
+            </ButtonsContainer>
           </ModalContentStyles>
         </ModalStyles>
       )}

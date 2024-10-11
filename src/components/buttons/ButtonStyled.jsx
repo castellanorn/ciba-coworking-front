@@ -118,6 +118,7 @@ export const ModalContentStyles = styled.div`
   padding: 20px;
   border-radius: 8px;
   position: relative;
+  width:80%;
 `;
 
 export const BiSolidPlusCircle = styled.div`
