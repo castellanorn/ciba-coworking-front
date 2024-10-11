@@ -48,7 +48,7 @@ const UserDashboard = () => {
     const fetchReservations = async () => {
       try {
         const response = await apiRequest(
-          API_GET_RESERVATIONS_BY_USER(2),
+          API_GET_RESERVATIONS_BY_USER(user.id),
           "GET",
           null,
           headers

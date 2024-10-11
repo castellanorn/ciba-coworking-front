@@ -12,45 +12,6 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
   const [selectedSeat, setSelectedSeat] = useState(null); 
 
 
- /*  const handleSeatClick = (block, seatIndex) => { */
- /*    if (block.available === seatStates.NOT_SALABLE) return; */
-
- /*    if (selectedSeat && selectedSeat.blockId !== block.id) { */
- /*      // Deseleccionar el asiento previamente seleccionado */
- /*      const prevSelectedBlock = blocks.find(b => b.id === selectedSeat.blockId) */;
- /*      if (prevSelectedBlock) { */
- /*        prevSelectedBlock.available = seatStates.COLOR; */
- /*      } */
- /*    } */
-
- const handleSeatClick = (block) => {
-  // Prevent clicking on non-salable seats
-  if (block.available === seatStates.NOT_SALABLE) return;
-
-  // Deselect the previously selected seat if a different one is selected
-  if (selectedSeat && selectedSeat !== block.id) {
-    const prevSelectedBlock = blocks.find(b => b.id === selectedSeat);
-    if (prevSelectedBlock) {
-      prevSelectedBlock.available = seatStates.COLOR;
-    }
-  }
-
-  // Toggle the seat state between selected and default
-  const nextSeatState = block.available === seatStates.SELECTED ? seatStates.COLOR : seatStates.SELECTED;
-  block.available = nextSeatState;
-
-  // Update the selected seat state
-  if (nextSeatState === seatStates.SELECTED) {
-    setSelectedSeat(block.id);
-  } else {
-    setSelectedSeat(null);
-  }
-
-  // Trigger the click event only for salable seats
-  if (block.available !== seatStates.NOT_SALABLE) {
-    onSeatClick(block);
-  }
-};
   // Definir los estados posibles
   const seatStates = {
     NOT_SALABLE: 'not_salable',
@@ -152,13 +113,26 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
               onClick={() => {
                 if (block.available !== seatStates.NOT_SALABLE) {
                   const nextSeatState = getNextSeatState(block.available);
+            
+                  // Update the available state of the clicked block
                   block.available = nextSeatState;
+            
+                  // Call the onSeatClick handler to propagate changes
                   onSeatClick(block);
                 }
               }}
               onMouseEnter={() => setHoveredBlock(block.id)}
               onMouseLeave={() => setHoveredBlock(null)}
-              onFocus={() => setFocusedBlock(block.id)}
+              /* onFocus={() => setFocusedBlock(block.id)} */
+              onFocus={() => {
+                setFocusedBlock(block.id);
+                
+                // Change the color when the block is focused
+                if (block.available !== seatStates.NOT_SALABLE) {
+                  const nextSeatState = getNextSeatState(block.available);
+                  block.available = nextSeatState; // Change the color/state of the block
+                }
+              }}
               onBlur={() => setFocusedBlock(null)}
             />
           ))}
