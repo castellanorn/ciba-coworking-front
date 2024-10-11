@@ -182,11 +182,11 @@ const ReserveTable = () => {
         id: selectedTable.id,
       },
     };
- 
+
     const urlCreateReservation =
       userRole === "admin"
         ? API_CREATE_RESERVATION_LONG_TERM_BY_ADMIN
-        : API_GET_TABLES_BY_DATE;
+        : API_CREATE_RESERVATION_TABLES_BY_USER;
 
     try {
       const response = await apiRequest(
@@ -197,7 +197,8 @@ const ReserveTable = () => {
       );
 
       setReservationData(response);
-      setConfirmationPopupOpen(true);
+      console.log(response)
+      //setConfirmationPopupOpen(true);
     } catch (error) {
       setErrorModal({
         isOpen: true,
