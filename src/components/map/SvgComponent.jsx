@@ -51,6 +51,28 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
     onSeatClick(block);
   }
 };
+/* const handleSeatClick = (blockId, seatIndex) => {
+  const block = blocks.find(b => b.id === blockId);
+  if (!block) return;
+
+  const currentSeatState = blocks.seats[seatIndex].available;
+  if (currentSeatState === seatStates.NOT_SALABLE) return;
+
+  // No hacer nada 
+  if (selectedSeat) {
+    // Deseleccionar el asiento previamente seleccionado
+    const prevBlock = blocks.find(b => b.id === selectedSeat.blockId);
+    if (prevBlock) {
+      prevBlock.seats[selectedSeat.seatIndex].available = seatStates.COLOR;
+    }
+  }
+  // Seleccionar el nuevo asiento
+  blocks.seats[seatIndex].available = seatStates.SELECTED;
+  setSelectedSeat({ blockId, seatIndex });
+  onSeatClick(block);
+
+} */
+
   // Definir los estados posibles
   const seatStates = {
     NOT_SALABLE: 'not_salable',
@@ -158,7 +180,16 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
               }}
               onMouseEnter={() => setHoveredBlock(block.id)}
               onMouseLeave={() => setHoveredBlock(null)}
-              onFocus={() => setFocusedBlock(block.id)}
+              /* onFocus={() => setFocusedBlock(block.id)} */
+              onFocus={() => {
+                setFocusedBlock(block.id);
+                
+                // Change the color when the block is focused
+                if (block.available !== seatStates.NOT_SALABLE) {
+                  const nextSeatState = getNextSeatState(block.available);
+                  block.available = nextSeatState; // Change the color/state of the block
+                }
+              }}
               onBlur={() => setFocusedBlock(null)}
             />
           ))}
