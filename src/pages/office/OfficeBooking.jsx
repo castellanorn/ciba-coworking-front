@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../../services/apiRequest";
 import {
   API_CREATE_RESERVATIONS,
-  API_GET_RESERVATIONS_BY_ID,
-  API_GET_SPACE_BY_ID,
+  API_GET_RESERVATIONS_BY_ID
 } from "../../config/apiEndpoints";
 import { AuthContext } from "../../auth/AuthProvider";
 
@@ -20,7 +19,7 @@ import { DivReserve } from "./OfficeBookingStyled";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
 import { RoleInput } from "../../components/inputs/RoleInput";
 import HourSelect from "../../components/inputs/HourSelect";
-import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
+
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 import ErrorModal from "../../components/popup/modals/ErrorModal";

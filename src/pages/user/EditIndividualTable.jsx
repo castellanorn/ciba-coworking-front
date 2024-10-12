@@ -21,6 +21,7 @@ import { Space } from "../office/OfficeBookingStyled";
 import Map from "../../components/map/Map";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import Paragraph from "../../components/textComponents/Paragraph";
+import CancelButton from "../../components/buttons/CancelButton";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
@@ -183,7 +184,6 @@ const EditIndividualTable = () => {
       );
 
       setReservationData(response);
-      console.log(response);
 
     } catch (error) {
       setErrorModal({
@@ -218,6 +218,12 @@ const EditIndividualTable = () => {
     setConfirmPopupOpen(false);
     navigate("/edicio-reserva-taula");
   };
+
+  const handleCancelUpdate = () => {
+    userRole === "admin"
+    ? navigate("/gestio-reserves")
+    : navigate("/panell-usuari");
+  }
 
 
   return (
@@ -259,6 +265,11 @@ const EditIndividualTable = () => {
 
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Cercar</ButtonFind>
+          <CancelButton 
+            onClick = {handleCancelUpdate}
+            type = "button">
+              Cancelar
+          </CancelButton>
         </ContainerButtons>
         <Hr2 />
 
@@ -302,7 +313,7 @@ const EditIndividualTable = () => {
         <ConfirmationPopup
           open={confirmationPopupOpen}
           onClose={handleCloseSuccess}
-          subtitleConfirm={"Reserva feta amb èxit."}
+          subtitleConfirm={"La reserva s'ha actualitzat amb èxit."}
         />
       )}
     </>
