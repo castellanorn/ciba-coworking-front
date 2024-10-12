@@ -244,7 +244,7 @@ const EditIndividualTable = () => {
           <></>
         ) : (
           <>
-            <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
+            <TitleSelectDate>Tria la franja horària</TitleSelectDate>
 
             <RoleInput
               label="Matí"
@@ -268,7 +268,7 @@ const EditIndividualTable = () => {
           <CancelButton 
             onClick = {handleCancelUpdate}
             type = "button">
-              Cancelar
+              Cancel·lar
           </CancelButton>
         </ContainerButtons>
         <Hr2 />
@@ -299,7 +299,7 @@ const EditIndividualTable = () => {
         pageType="table"
         button={{
           confirmText: "Confirmar",
-          cancelText: "Cancelar",
+          cancelText: "Cancel·lar",
         }}
         reservation={dateRange}
       />

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../../services/apiRequest";
 import {
   API_CREATE_RESERVATIONS,
-  API_GET_RESERVATIONS_BY_ID
+  API_GET_RESERVATIONS_BY_ID,
 } from "../../config/apiEndpoints";
 import { AuthContext } from "../../auth/AuthProvider";
 
@@ -19,6 +19,8 @@ import { DivReserve } from "./OfficeBookingStyled";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
 import { RoleInput } from "../../components/inputs/RoleInput";
 import HourSelect from "../../components/inputs/HourSelect";
+import OfficesInput from "../../components/inputs/OfficesInput";
+import { Subtitle } from "../user/UserPagesStyled";
 
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
@@ -46,21 +48,39 @@ const ReserveOffice = () => {
 
   const dataRange = {};
 
-  const generateDefaultHours = () => {
+  const formatHour24hFormat = (hour) => {
+    if (hour < 10) return "0" + hour;
+    return hour + "";
+  };
+
+  const generateDefaultHours = (bookedHours = []) => {
     const hours = [];
     let startHour = 8;
     let endHour = 20;
-  
+
     for (let i = startHour; i < endHour; i++) {
-      const startHourFormatted = String(i).padStart(2, "0");
-      const endHourFormatted = String(i + 1).padStart(2, "0");
-  
       hours.push({
-        startDate: `${startHourFormatted}:00:00`,
-        endDate: `${endHourFormatted}:00:00`,
+        startDate: `${formatHour24hFormat(i)}:00`,
+        endDate: `${formatHour24hFormat(i + 1)}:00`,
       });
     }
-  
+    if (bookedHours && Array.isArray(bookedHours) && bookedHours.length > 0) {
+      const newAvailableHours = [];
+
+      hours.forEach((availableHour) => {
+        const isBusyStartTime = bookedHours.find((busyHour) =>
+          busyHour.startTime.startsWith(availableHour.startDate)
+        );
+        const isBusyEndTime = bookedHours.find((busyHour) =>
+          busyHour.endTime.startsWith(availableHour.endDate)
+        );
+
+        if (!isBusyStartTime && !isBusyEndTime) {
+          newAvailableHours.push(availableHour);
+        }
+      });
+      return newAvailableHours;
+    }
     return hours;
   };
 
@@ -86,22 +106,22 @@ const ReserveOffice = () => {
         headers
       );
 
-      if (
-        !response ||
-        response.status === 404 ||
-        !response.availableHours ||
-        response.availableHours.length === 0
-      ) {
+      if (!response || response.length === 0) {
         console.log(
           "No se encontraron horas ocupadas. Mostrando horas por defecto."
         );
         const defaultHours = generateDefaultHours();
         setAvailableHours(defaultHours);
       } else {
-        const availableHours = response.availableHours.map((item) => ({
+        const reservedHours = response.map((item) => ({
           startDate: item.startDate,
           endDate: item.endDate,
+          startTime: item.startTime,
+          endTime: item.endTime,
         }));
+
+        const availableHours = generateDefaultHours(reservedHours);
+        console.log("availableHours: ", availableHours);
         setAvailableHours(availableHours);
       }
     } catch (error) {
@@ -129,6 +149,7 @@ const ReserveOffice = () => {
     )
       .toISOString()
       .split("T")[0];
+
     const endDate = new Date(
       selectedDates[selectedDates.length - 1].$d.getTime() -
         selectedDates[selectedDates.length - 1].$d.getTimezoneOffset() * 60000
@@ -153,7 +174,6 @@ const ReserveOffice = () => {
       : navigate("/panell-usuari");
   };
 
-
   const handleOpenConfirm = () => {
     if (
       !selectedDates.length ||
@@ -170,12 +190,10 @@ const ReserveOffice = () => {
     setConfirmPopupOpen(true);
   };
 
-  
   const handleCloseConfirm = () => {
     setConfirmPopupOpen(false);
     navigate("/reserva-oficina");
   };
-
 
   const handleAcceptConfirm = async () => {
     if (
@@ -208,7 +226,7 @@ const ReserveOffice = () => {
         },
       };
 
-      console.log(dataToSend)
+      console.log(dataToSend);
       const response = await apiRequest(
         API_CREATE_RESERVATIONS,
         "POST",
@@ -216,6 +234,13 @@ const ReserveOffice = () => {
         headers
       );
 
+      const newAvailableHours = availableHours.filter(
+        (hour) =>
+          hour.startDate != selectedHour.startTime &&
+          hour.endDate != selectedHour.endTime
+      );
+      setAvailableHours(newAvailableHours);
+      console.log("newAvailableHours", newAvailableHours);
       handleCloseConfirm();
       setConfirmationPopupOpen(true);
     } catch (error) {
@@ -278,7 +303,7 @@ const ReserveOffice = () => {
         />
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <TitleSelectDate>Selecciona l'oficina</TitleSelectDate>
+        <TitleSelectDate>Tria l'oficina</TitleSelectDate>
         <RoleInput
           label="Oficina 1"
           name="office1"
@@ -300,18 +325,23 @@ const ReserveOffice = () => {
 
         <Hr2 />
 
-        {availableHours.length > 0 && (
-          <HourSelect
-            availableHours={availableHours}
-            selectedHour={selectedHour}
-            onChange={handleHourChange}
-          />
+        {availableHours.length > 0 ? (
+          <>
+            <OfficesInput
+              availableHours={availableHours}
+              selectedHour={selectedHour}
+              onChange={handleHourChange}
+            />
+            <Hr2 />
+            <ContainerButtons>
+              <ConfirmButton onClick={handleOpenConfirm}>
+                Acceptar
+              </ConfirmButton>
+            </ContainerButtons>
+          </>
+        ) : (
+          <Subtitle>Tria una data i una oficina</Subtitle>
         )}
-        <Hr2 />
-        <ContainerButtons>
-          <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
-        </ContainerButtons>
-
       </DivReserve>
       <Space />
 
@@ -328,7 +358,7 @@ const ReserveOffice = () => {
         }}
         button={{
           confirmText: "Confirmar",
-          cancelText: "Cancelar",
+          cancelText: "Cancel·lar",
         }}
       />
 

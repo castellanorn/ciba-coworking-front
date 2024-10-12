@@ -258,7 +258,7 @@ const ReserveOffice = () => {
         />
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <TitleSelectDate>Selecciona l'oficina</TitleSelectDate>
+        <TitleSelectDate>Tria l'oficina</TitleSelectDate>
         <RoleInput
           label="Oficina 1"
           name="office1"
@@ -279,7 +279,7 @@ const ReserveOffice = () => {
           <CancelButton 
             onClick = {handleCancelUpdate}
             type = "button">
-              Cancelar
+              Cancel·lar
           </CancelButton>
         </ContainerButtons>
 
@@ -313,7 +313,7 @@ const ReserveOffice = () => {
         }}
         button={{
           confirmText: "Confirmar",
-          cancelText: "Cancelar",
+          cancelText: "Cancel·lar",
         }}
       />
 
