@@ -15,7 +15,7 @@ const config = {
       selected: 'var(--lightviolet)',
       check_icon_color: '#fffff',
       not_salable: "var(--grey)",
-      focus: 'var(--white)',
+      focus: 'var(--yellow)',
     },
     legend: {
       font_color: 'var(--blue)',
@@ -37,7 +37,7 @@ const seatStates = {
 const getNextSeatState = (currentState) => {
   switch (currentState) {
     case seatStates.NOT_SALABLE:
-      return seatStates.NOT_SALABLE; // El estado not_salable no cambia
+      return seatStates.NOT_SALABLE; 
     case seatStates.SELECTED:
       return seatStates.COLOR;
     case seatStates.COLOR:
@@ -47,60 +47,51 @@ const getNextSeatState = (currentState) => {
   }
 };
 
-//blocks, onSeatSelect
 const initialBlocks = emptyBlocks.emptyBlocks;
+
 const SeatSpace = ({availableTables, onSeatSelect }) => {
+  const [selectedSeat, setSelectedSeat] = useState(null);
+
   const filteredBlocks = initialBlocks.map(seat => {
     const isAvailable = availableTables.some(fetchedSeat => fetchedSeat.id === seat.id);
+
     return {
       ...seat, 
       available: isAvailable ? "color" : "not_salable",
     };
   });
-  
+
+  const [renderBlocks, setRenderBlocks] = useState(filteredBlocks)
 
 
   const seatmapRef = useRef(null);
 
   const handleSeatClick = (block) => {
     
-    const updatedBlocks = initialBlocks.map(b =>
+    const currentSeatState = block.available;
+
+    if (currentSeatState === seatStates.NOT_SALABLE) return;
+    setSelectedSeat(block);
+
+    const nextSeatState = block.available === "selected" ? seatStates.SELECTED : seatStates.COLOR;
+    
+    const updatedBlocks = filteredBlocks.map(b =>
       b.id === block.id
-        ? { ...b, available: getNextSeatState(b.available) }
+        ? { ...b, available: nextSeatState }
         : b
     );
-    
+    setRenderBlocks(updatedBlocks);
 
     if (onSeatSelect) {
       onSeatSelect(block);
     }
   };
 
-  const getSelectedSeats = () => {
-    if (seatmapRef.current) {
-      return seatmapRef.current.getSelectedSeats();
-    }
-    return [];
-  };
-
-  const formatSelectedSeats = () => {
-    const selectedSeats = getSelectedSeats();
-    return selectedSeats.map(seat => ({
-      blockId: seat.blockId,
-      coordinates: {
-        x: seat.x,
-        y: seat.y,
-        width: seat.width,
-        height: seat.height
-      }
-    }));
-  };
-
   return (
     <div>
       <TitleSelectTable>Selecciona taula:</TitleSelectTable>
       <MapContainer>
-        <SvgComponent blocks={filteredBlocks} onSeatClick={handleSeatClick} config={config} />
+        <SvgComponent blocks={renderBlocks} onSeatClick={handleSeatClick} config={config} />
       </MapContainer>
     </div>
   );

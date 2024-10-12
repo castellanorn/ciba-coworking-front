@@ -48,7 +48,7 @@ const UserDashboard = () => {
     const fetchReservations = async () => {
       try {
         const response = await apiRequest(
-          API_GET_RESERVATIONS_BY_USER(2),
+          API_GET_RESERVATIONS_BY_USER(user.id),
           "GET",
           null,
           headers
@@ -73,12 +73,14 @@ const UserDashboard = () => {
 
   const onEdit = (row) => {
     const spaceId = row.spaceDTO.id;
+    const reservationId = row.id;
+    console.log(reservationId)
     if (spaceId === 1) {
-      navigate("/edicio-reserva-sala-reunions");
+      navigate("/edicio-reserva-sala-reunions", {state: {reservationId}});
     } else if (spaceId === 2 || spaceId === 3) {
-      navigate("/edicio-reserva-oficina");
+      navigate("/edicio-reserva-oficina", {state: {reservationId}});
     } else {
-      navigate("/edicio-reserva-taula");
+      navigate("/edicio-reserva-taula", {state: {reservationId}});
     }
   };
 

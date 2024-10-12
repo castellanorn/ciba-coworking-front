@@ -1,4 +1,14 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import { AuthContext } from "../../auth/AuthProvider";
+import { apiRequest } from "../../services/apiRequest";
+import {
+  API_GET_RESERVATIONS_BY_ID,
+  API_UPDATE_RESERVATION,
+  API_GET_TABLES_BY_DATE,
+} from "../../config/apiEndpoints";
+
 import { DivReserve } from "../table/TableBookingStyled";
 import TitleMobile from "../../components/title/Title";
 import ContainerButtons from "../../components/container/ButtonsContainer";
@@ -6,89 +16,214 @@ import Calendar from "../../components/calendar/Calendar";
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
 import { RoleInput } from "../../components/inputs/RoleInput";
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
+import { SeatSpace } from "../../components/map/SeatSpace";
+import { Space } from "../office/OfficeBookingStyled";
 import Map from "../../components/map/Map";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
+import Paragraph from "../../components/textComponents/Paragraph";
+import ErrorModal from "../../components/popup/modals/ErrorModal";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
+import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
-import { Space } from "../office/OfficeBookingStyled";
-
 
 const EditIndividualTable = () => {
-  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
-  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const { authToken, userRole, user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation(); 
+
+  const reservationId = location.state?.reservationId;
+
   const [selectedTable, setSelectedTable] = useState("");
   const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedOffice, setSelectedOffice] = useState("");
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState({
-    morning: false,
-    afternoon: false,
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
+  const [availableTables, setAvailableTables] = useState([]);
+  const [reservationData, setReservationData] = useState([]);
+  const [dateRange, setDateRange] = useState({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
   });
+
+  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleOpenSuccess = () => {
-    setSuccessPopupOpen(true);
-  };
-
-  const handleCloseSuccess = () => {
-    setSuccessPopupOpen(false);
-  };
-
-  const handleOpenConfirm = () => {
-    setConfirmPopupOpen(true);
-  };
-
-  const handleCloseConfirm = () => {
-    setConfirmPopupOpen(false);
-  };
-
-  const handleAcceptConfirm = () => {
-    handleCloseConfirm();
-    handleOpenSuccess();
-  };
-  const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-    setSelectedCheckboxes((prev) => ({ ...prev, [name]: checked }));
-  };
-  const handleRadioChange = (event) => {
-    setSelectedOffice(event.target.value);
-  };
-
-  const handleFindResults = () => {
-    if (selectedDates.length === 0) {
-      setError("Si us plau, selecciona un o més dies.");
-      return;
-    }
-    const timeSlot = selectedCheckboxes.morning ? 'Matí' : selectedCheckboxes.afternoon ? 'Tarda' : '';
-
-    if (!timeSlot) {
-      setError("Si us plau, selecciona una franja horària.");
-      return;
-    }
-  
-    setError("");
-  
-    console.log("Datos enviados al backend:");
-    console.log({
-      dates: selectedDates.map(date => date.format("YYYY-MM-DD")), 
-      timeSlot: selectedTimeSlot, 
-      table: selectedTable, 
-    });
-  
-    setTimeout(() => {
-      setSelectedDates([]);
-      // setSelectedTimeSlot("");
-    }, 2000);
+  const headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Authorization: `Bearer ${authToken}`,
   };
 
   const handleTableSelection = (table) => {
     setSelectedTable(table);
   };
 
+  const handleRadioChange = (event) => {
+    setSelectedTimeSlot(event.target.value);
+  };
+
+  const fetchAvailableTables = async (dateRange) => {
+    setLoading(true);
+    try {
+      const response = await apiRequest(
+        API_GET_TABLES_BY_DATE,
+        "POST",
+        dateRange,
+        headers
+      );
+      const availableTables = response.map((table) => ({
+        id: table.id,
+        title: table.name,
+        available: table.spaceStatus === "actiu" ? "color" : "not_salable",
+      }));
+      setAvailableTables(availableTables);
+    } catch (error) {
+      console.error("Error fetching tables: ", error.message);
+      setError("No s'han pogut obtenir les taules disponibles.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFindResults = async () => {
+    if (selectedDates.length === 0) {
+      setError("Si us plau, selecciona un o més dies.");
+      return;
+    }
+
+    if (!selectedTimeSlot && userRole === "user") {
+      setError("Si us plau, selecciona una franja horària.");
+      return;
+    }
+
+    setError("");
+
+    const startDate = new Date(
+      selectedDates[0].$d.getTime() -
+        selectedDates[0].$d.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
+    const endDate = new Date(
+      selectedDates[selectedDates.length - 1].$d.getTime() -
+        selectedDates[selectedDates.length - 1].$d.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
+
+    let startTime, endTime;
+
+    if (selectedTimeSlot === "Matí") {
+      startTime = "08:00:00";
+      endTime = "13:59:59";
+    } else if (selectedTimeSlot === "Tarda") {
+      startTime = "14:00:00";
+      endTime = "20:00:00";
+    }
+
+    const newDateRange =
+      userRole === "user"
+        ? {
+            startDate: startDate,
+            endDate: endDate,
+            startTime: startTime,
+            endTime: endTime,
+          }
+        : {
+            startDate: startDate,
+            endDate: endDate,
+            startTime: "08:00:00",
+            endTime: "20:00:00",
+          };
+
+    setDateRange(newDateRange);
+
+    await fetchAvailableTables(newDateRange);
+  };
+
+  //CAMBIAR A UPDATE
+  const updateTableReserve = async () => {
+    if (
+      !selectedTable ||
+      !dateRange.startDate ||
+      !dateRange.endDate ||
+      !dateRange.startTime ||
+      !dateRange.endTime
+    ) {
+      setError(
+        "Si us plau, selecciona una taula i assegura't que tots els camps de data/hora estan omplerts."
+      );
+      return;
+    }
+
+    const reservationData = {
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      startTime: dateRange.startTime,
+      endTime: dateRange.endTime,
+      userDTO: {
+        id: user.id,
+      },
+      spaceDTO: {
+        id: selectedTable.id,
+      },
+    };
+
+
+    try {
+      const response = await apiRequest(
+        API_UPDATE_RESERVATION(reservationId),
+        "PUT",
+        reservationData,
+        headers
+      );
+
+      setReservationData(response);
+      console.log(response);
+
+    } catch (error) {
+      setErrorModal({
+        isOpen: true,
+        message: "No s'ha pogut editar la reserva.",
+      });
+    }
+  };
+
+  const handleAcceptConfirm = async () => {
+    await updateTableReserve();
+    handleCloseConfirm();
+    setConfirmationPopupOpen(true);
+  };
+  const handleCloseSuccess = () => {
+    setConfirmationPopupOpen(false);
+    userRole === "admin"
+      ? navigate("/gestio-reserves")
+      : navigate("/panell-usuari");
+  };
+
+  const handleOpenConfirm = () => {
+    setConfirmPopupOpen(true);
+  };
+
+  useEffect(() => {
+    if (confirmPopupOpen) {
+    }
+  }, [confirmPopupOpen, dateRange, selectedTable]);
+
+  const handleCloseConfirm = () => {
+    setConfirmPopupOpen(false);
+    navigate("/edicio-reserva-taula");
+  };
+
+
   return (
     <>
       <DivReserve>
-        <TitleMobile title="Edició de reserva individual" />
-        
+        <TitleMobile title="Edició de reserva de taula" />
 
         <Calendar
           onChange={setSelectedDates}
@@ -98,52 +233,78 @@ const EditIndividualTable = () => {
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <Hr2 />
-        <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
-        
-        <RoleInput
-          label="Matí"
-          name="morning"
-          selectedOption={selectedOffice}
-          onChange={handleRadioChange}
-          userRole={"USER"}
-        />
-        <RoleInput
-          label="Tarda"
-          name="afternoon"
-          selectedOption={selectedOffice}
-          onChange={handleRadioChange}
-          userRole={"USER"}
-        />
+
+        {userRole === "admin" ? (
+          <></>
+        ) : (
+          <>
+            <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
+
+            <RoleInput
+              label="Matí"
+              name="Matí"
+              selectedOption={selectedTimeSlot}
+              onChange={handleRadioChange}
+              userRole={"USER"}
+            />
+            <RoleInput
+              label="Tarda"
+              name="Tarda"
+              selectedOption={selectedTimeSlot}
+              onChange={handleRadioChange}
+              userRole={"USER"}
+            />
+          </>
+        )}
 
         <ContainerButtons>
-          <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
+          <ButtonFind onClick={handleFindResults}>Cercar</ButtonFind>
         </ContainerButtons>
         <Hr2 />
 
-        <Map onTableSelect={handleTableSelection} />
-
-        <ContainerButtons>
-          <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
-        </ContainerButtons>
-
-        <PopUpConfirmReserve
-          open={confirmPopupOpen}
-          onCancel={handleCloseConfirm}
-          table={selectedTable}
-          pageType="table"
-          onConfirm={handleAcceptConfirm}
-          slot='slot'
-          month='month'
-          day='day'
-          button={{
-            confirmText: "Confirmar", 
-            cancelText: "Cancelar"    
-          }}
-        />
-
-        <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
+        {availableTables.length === 0 ? (
+          <Paragraph text="Selecciona les dates, la franja i prem Cercar" />
+        ) : (
+          <>
+            <SeatSpace
+              availableTables={availableTables}
+              onSeatSelect={handleTableSelection}
+            />
+            <ContainerButtons>
+              <ConfirmButton onClick={handleOpenConfirm}>
+                Acceptar
+              </ConfirmButton>
+            </ContainerButtons>
+          </>
+        )}
       </DivReserve>
-      <Space/>
+      <Space />
+
+      <PopUpConfirmReserve
+        open={confirmPopupOpen}
+        onConfirm={handleAcceptConfirm}
+        onCancel={handleCloseConfirm}
+        table={selectedTable}
+        pageType="table"
+        button={{
+          confirmText: "Confirmar",
+          cancelText: "Cancelar",
+        }}
+        reservation={dateRange}
+      />
+
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ isOpen: false, message: "" })}
+        message={errorModal.message}
+      />
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={handleCloseSuccess}
+          subtitleConfirm={"Reserva feta amb èxit."}
+        />
+      )}
     </>
   );
 };

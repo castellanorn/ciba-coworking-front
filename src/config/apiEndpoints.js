@@ -35,4 +35,5 @@ export const API_CREATE_RESERVATION_LONG_TERM_BY_ADMIN= `${API_BASE_URL}admin/re
 export const API_CREATE_RESERVATION_OFFICES = `${API_BASE_URL}reservations/create/offices`
 
 export const API_CREATE_RESERVATIONS= `${API_BASE_URL}reservations/create/offices`; 
+export const API_UPDATE_RESERVATION = (id) => `${API_BASE_URL}reservations/update/${id}`; 
 

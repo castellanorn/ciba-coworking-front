@@ -10,23 +10,14 @@ import {
 } from "../../config/apiEndpoints";
 
 import Calendar from "../../components/calendar/Calendar";
-
 import ContainerButtons from "../../components/container/ButtonsContainer";
-
 import TitleMobile from "../../components/title/Title";
-
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
-
 import ConfirmButton from "../../components/buttons/ConfirmButton";
-
-import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
 import { SeatSpace } from "../../components/map/SeatSpace";
 import { Space } from "../../pages/office/OfficeBookingStyled";
-
 import PlacesButton from "../../components/buttons/PlacesButton";
-
 import { DivReserve } from "./TableBookingStyled";
-
 import { Hr2, TitleSelectDate } from "../../components/calendar/CalendarStyled";
 
 import { RoleInput } from "../../components/inputs/RoleInput";
@@ -41,9 +32,7 @@ const ReserveTable = () => {
   const navigate = useNavigate();
 
   const [selectedTable, setSelectedTable] = useState("");
-
   const [selectedDates, setSelectedDates] = useState([]);
-
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [availableTables, setAvailableTables] = useState([]);
   const [reservationData, setReservationData] = useState([]);
@@ -55,7 +44,6 @@ const ReserveTable = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
@@ -101,13 +89,11 @@ const ReserveTable = () => {
   const handleFindResults = async () => {
     if (selectedDates.length === 0) {
       setError("Si us plau, selecciona un o més dies.");
-
       return;
     }
 
     if (!selectedTimeSlot && userRole === "user") {
       setError("Si us plau, selecciona una franja horària.");
-
       return;
     }
 
@@ -182,11 +168,11 @@ const ReserveTable = () => {
         id: selectedTable.id,
       },
     };
- 
+
     const urlCreateReservation =
       userRole === "admin"
         ? API_CREATE_RESERVATION_LONG_TERM_BY_ADMIN
-        : API_GET_TABLES_BY_DATE;
+        : API_CREATE_RESERVATION_TABLES_BY_USER;
 
     try {
       const response = await apiRequest(
@@ -197,7 +183,7 @@ const ReserveTable = () => {
       );
 
       setReservationData(response);
-      setConfirmationPopupOpen(true);
+      console.log(response)
     } catch (error) {
       setErrorModal({
         isOpen: true,
@@ -316,12 +302,12 @@ const ReserveTable = () => {
         )}
 
         <ContainerButtons>
-          <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
+          <ButtonFind onClick={handleFindResults}>Cercar</ButtonFind>
         </ContainerButtons>
 
         <Hr2 />
 
-        {availableTables.length === 0 ? (<Paragraph text = "Selecciona las fechas, la franja y pulsa Buscar"/>) 
+        {availableTables.length === 0 ? (<Paragraph text = "Selecciona les dates, la franja i prem Cercar"/>) 
       : (<>
           <SeatSpace availableTables={availableTables} onSeatSelect={handleTableSelection} />
           <ContainerButtons>

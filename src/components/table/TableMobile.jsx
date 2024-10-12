@@ -9,29 +9,22 @@ import {
   Field,
   Actions,
 } from "./TableStyled";
+import { formatDate } from "../../config/formatDate";
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
 
 const formatTimeRange = (startTime, endTime) => {
-  if (startTime === "08:00:00" && endTime === "14:00:00") {
+  if (startTime === "08:00:00" && endTime === "13:59:59") {
     return "matí"; 
   } else if (startTime === "14:00:00" && endTime === "20:00:00") {
     return "tarda"; 
   }
-  return `${startTime} - ${endTime}`;
+  return `${startTime.slice(0, -3)} - ${endTime.slice(0, -3)}`;
 };
 
 const TableMobile = ({ data, type, actions, onEdit, onDelete }) => {
   const hasIdColumn = data.some((row) => row.id); 
   const hasActions = actions && actions.length > 0; 
-  const columnsCount = (hasIdColumn ? 1 : 0) + 1 + (hasActions ? 1 : 0); 
-
+  const columnsCount = (hasIdColumn ? 1 : 0) + 1 + (hasActions ? 1 : 0);
   
   const renderRowContent = (row) => {
     switch (type) {
@@ -39,17 +32,20 @@ const TableMobile = ({ data, type, actions, onEdit, onDelete }) => {
         return (
           <>
             <Field>
-              <span>Espai reservat:</span> {row.spaceDTO.spaceType}
+              <span>Espai reservat:</span>
             </Field>
             <Field>
-              <span>Taula:</span> {row.spaceDTO.name}
+              <span>{row.spaceDTO.spaceType}</span>
             </Field>
             <Field>
-              {formatTimeRange(row.startTime, row.endTime)},
-              {row.startDate === row.endDate
+              {formatTimeRange(row.startTime, row.endTime)}
+              
+    
+            </Field>
+            <Field>
+            {row.startDate === row.endDate
                 ? formatDate(row.startDate) 
                 : `${formatDate(row.startDate)} - ${formatDate(row.endDate)}`}
-    
             </Field>
           </>
         );
@@ -85,8 +81,11 @@ const TableMobile = ({ data, type, actions, onEdit, onDelete }) => {
   return (
     <MobileTableWrapper>
       <TableRow columns={columnsCount}>
-        {hasIdColumn && <TableHeader>ID</TableHeader>}
-        <TableHeader>
+        {hasIdColumn && 
+        <TableHeader >
+          ID
+        </TableHeader>}
+        <TableHeader >
           {type === "reserveUser"
             ? "Reserves"
             : type === "adminUsers"
@@ -100,7 +99,7 @@ const TableMobile = ({ data, type, actions, onEdit, onDelete }) => {
 
       {data.map((row, rowIndex) => (
         <TableRow key={rowIndex} columns={columnsCount}>
-          {hasIdColumn && <TableData>{row.id}</TableData>}
+          {hasIdColumn && <TableData >{row.id}</TableData>}
           <TableData>{renderRowContent(row)}</TableData>
           {hasActions && (
             <Actions>

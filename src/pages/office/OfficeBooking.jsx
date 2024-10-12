@@ -176,7 +176,7 @@ const ReserveOffice = () => {
       !selectedHour.startTime ||
       !selectedHour.endTime
     ) {
-      setError("Selecciona fechas, una oficina y una hora antes de continuar.");
+      setError("Selecciona la data, una oficina y una hora abans de continuar.");
       return;
     }
     setError("");
@@ -195,7 +195,7 @@ const ReserveOffice = () => {
       !selectedHour.startTime ||
       !selectedHour.endTime
     ) {
-      setError("Selecciona fechas, una oficina y una hora antes de continuar.");
+      setError("Selecciona la data, una oficina y una hora abans de continuar.");
       return;
     }
 
@@ -213,7 +213,7 @@ const ReserveOffice = () => {
           id: user.id,
         },
         spaceDTO: {
-          id: selectedOffice === "Oficina 1" ? 1 : 2,  
+          id: selectedOffice === "Oficina 1" ? 1 : 2,
         },
       };
 
@@ -235,7 +235,7 @@ const ReserveOffice = () => {
   };
 
   const handleRadioChange = (event) => {
-    const office = event.target.value; 
+    const office = event.target.value;
     setSelectedOffice(office);
   };
 
@@ -247,11 +247,11 @@ const ReserveOffice = () => {
         break;
       case "offices":
         setFocus("offices");
-        navigate("/reserva-oficina"); 
+        navigate("/reserva-oficina");
         break;
       case "meetings":
         setFocus("meetings");
-        navigate("/reserva-reunio"); 
+        navigate("/reserva-reunio");
         break;
     }
   }
@@ -275,7 +275,7 @@ const ReserveOffice = () => {
                 onClick={() => handleManageClick("meetings")}
                 focus={focus === "meetings"}
             />
-        </ContainerButtons> 
+        </ContainerButtons>
 
         <Calendar
           onChange={setSelectedDates}

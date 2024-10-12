@@ -12,45 +12,6 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
   const [selectedSeat, setSelectedSeat] = useState(null); 
 
 
- /*  const handleSeatClick = (block, seatIndex) => { */
- /*    if (block.available === seatStates.NOT_SALABLE) return; */
-
- /*    if (selectedSeat && selectedSeat.blockId !== block.id) { */
- /*      // Deseleccionar el asiento previamente seleccionado */
- /*      const prevSelectedBlock = blocks.find(b => b.id === selectedSeat.blockId) */;
- /*      if (prevSelectedBlock) { */
- /*        prevSelectedBlock.available = seatStates.COLOR; */
- /*      } */
- /*    } */
-
- const handleSeatClick = (block) => {
-  // Prevent clicking on non-salable seats
-  if (block.available === seatStates.NOT_SALABLE) return;
-
-  // Deselect the previously selected seat if a different one is selected
-  if (selectedSeat && selectedSeat !== block.id) {
-    const prevSelectedBlock = blocks.find(b => b.id === selectedSeat);
-    if (prevSelectedBlock) {
-      prevSelectedBlock.available = seatStates.COLOR;
-    }
-  }
-
-  // Toggle the seat state between selected and default
-  const nextSeatState = block.available === seatStates.SELECTED ? seatStates.COLOR : seatStates.SELECTED;
-  block.available = nextSeatState;
-
-  // Update the selected seat state
-  if (nextSeatState === seatStates.SELECTED) {
-    setSelectedSeat(block.id);
-  } else {
-    setSelectedSeat(null);
-  }
-
-  // Trigger the click event only for salable seats
-  if (block.available !== seatStates.NOT_SALABLE) {
-    onSeatClick(block);
-  }
-};
   // Definir los estados posibles
   const seatStates = {
     NOT_SALABLE: 'not_salable',
@@ -115,6 +76,10 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
         pointer-events: none; /* Disable click events */
         opacity: 0.5;         /* Visually indicate non-salable */
       }
+
+      .tableName {
+        pointer-events: none;
+      }
     `}
   </style>
 </defs>
@@ -158,7 +123,6 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
               }}
               onMouseEnter={() => setHoveredBlock(block.id)}
               onMouseLeave={() => setHoveredBlock(null)}
-              onFocus={() => setFocusedBlock(block.id)}
               onBlur={() => setFocusedBlock(null)}
             />
           ))}
@@ -183,6 +147,7 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
             fill={config.style.block.title_color}
             fontSize="18"
             fontFamily="Marianina FY Bold"
+            className='tableName'
           >
             {block.title}
           </text>
