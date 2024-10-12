@@ -32,7 +32,7 @@ const ReserveOffice = () => {
   const [availableHours, setAvailableHours] = useState([]);
   const [error, setError] = useState("");
   const [focus, setFocus] = useState("offices");
-  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
@@ -147,10 +147,6 @@ const ReserveOffice = () => {
     await fetchAvailableHours(spaceId, dataRange);
   };
 
-  const handleOpenSuccess = () => {
-    setSuccessPopupOpen(true);
-  };
-
   const handleCloseSuccess = () => {
     setConfirmationPopupOpen(false);
     userRole === "admin"
@@ -158,7 +154,7 @@ const ReserveOffice = () => {
       : navigate("/panell-usuari");
   };
 
-  //+
+
   const handleOpenConfirm = () => {
     if (
       !selectedDates.length ||
@@ -175,13 +171,13 @@ const ReserveOffice = () => {
     setConfirmPopupOpen(true);
   };
 
-  //+
+  
   const handleCloseConfirm = () => {
     setConfirmPopupOpen(false);
     navigate("/reserva-oficina");
   };
 
-  //+
+
   const handleAcceptConfirm = async () => {
     if (
       !selectedDates.length ||
@@ -317,27 +313,6 @@ const ReserveOffice = () => {
           <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
         </ContainerButtons>
 
-        {/* {confirmationPopupOpen && (
-
-          <PopUpConfirmReserve
-            open={confirmationPopupOpen}
-            onCancel={handleCloseConfirm}
-            onConfirm={handleAcceptConfirm}
-            reservation={{
-              startDate: selectedDates[0].format("YYYY-MM-DD"),
-              endDate: selectedDates[0].format("YYYY-MM-DD"),
-              startTime: selectedHour.startTime,
-              endTime: selectedHour.endTime,
-              spaceDTO: { spaceType: selectedOffice },
-              userDTO: { name: user.name },
-            }}
-            button={{
-              confirmText: "Confirmar",
-              cancelText: "Cancelar",
-            }}
-            actionType="confirm"
-          />
-        )} */}
       </DivReserve>
       <Space />
 
@@ -356,7 +331,6 @@ const ReserveOffice = () => {
           confirmText: "Confirmar",
           cancelText: "Cancelar",
         }}
-        /* actionType="confirm" */
       />
 
       <ErrorModal
