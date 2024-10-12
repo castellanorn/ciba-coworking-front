@@ -300,6 +300,7 @@ const ReserveOffice = () => {
           onChange={setSelectedDates}
           value={selectedDates}
           setError={setError}
+          selectionMode="single"
         />
         {error && <p style={{ color: "red" }}>{error}</p>}
 

@@ -74,7 +74,7 @@ const ServerDay = ({ day, outsideCurrentMonth, isSelected, selectedDates, ...oth
   );
 };
 
-export default function Calendar({ onChange, setError }) {
+export default function Calendar({ onChange, setError, selectionMode = "range" }) {
   const [selectedDates, setSelectedDates] = useState([]); 
   const { userRole } = useContext(AuthContext);
 
@@ -84,50 +84,51 @@ export default function Calendar({ onChange, setError }) {
 
   const handleDateChange = (newDate) => {
     const today = dayjs().startOf("day");
-  
-    // Verifica si la nueva fecha es anterior al día actual
+
     if (newDate.isBefore(today)) {
       setError("Selecció incorrecte. Tria un dia a partir d'avui.");
       return;
     }
-  
-    // Si ya hay dos fechas seleccionadas, resetea y empieza con la nueva fecha seleccionada
-    if (selectedDates.length === 2) {
+
+    if (selectionMode === "single") {
       setSelectedDates([newDate]);
-      setError("");  // Limpia cualquier error previo
+      setError(""); 
       return;
     }
-  
-    // Si solo hay una fecha seleccionada, aplica lógica de rango de fechas
-    if (selectedDates.length === 1) {
-      const firstDate = selectedDates[0];
-  
-      // Verifica que la segunda fecha no sea anterior a la primera
-      if (newDate.isBefore(firstDate, "day")) {
-        setError("La data de final no pot ser anterior a la data de començament.");
-        return;
-      }
-  
 
-      // Cuenta los días disponibles y verifica si el rango es mayor de 7 días
-      const availableDays = countAvailableDays(firstDate, newDate);
-      
-      if (availableDays > 7 && userRole === "user") {
-        setError("No pots seleccionar un rang de dates amb més de 7 dies disponibles.");
+    if (selectionMode === "range") {
+      if (selectedDates.length === 2) {
+        setSelectedDates([newDate]);
+        setError(""); 
         return;
       }
-    }
-  
-    setError("");  // Limpia cualquier error previo
-  
-    // Si la nueva fecha ya está seleccionada, la elimina
-    if (selectedDates.some((date) => date.isSame(newDate, "day"))) {
-      setSelectedDates(selectedDates.filter((date) => !date.isSame(newDate, "day")));
-    } else {
-      // Si hay menos de dos fechas seleccionadas, añade la nueva fecha
-      setSelectedDates([...selectedDates, newDate]);
+
+      if (selectedDates.length === 1) {
+        const firstDate = selectedDates[0];
+
+        if (newDate.isBefore(firstDate, "day")) {
+          setError("La data de final no pot ser anterior a la data de començament.");
+          return;
+        }
+
+        const availableDays = countAvailableDays(firstDate, newDate);
+
+        if (availableDays > 7 && userRole === "user") {
+          setError("No pots seleccionar un rang de dates amb més de 7 dies disponibles.");
+          return;
+        }
+      }
+
+      setError("");
+
+      if (selectedDates.some((date) => date.isSame(newDate, "day"))) {
+        setSelectedDates(selectedDates.filter((date) => !date.isSame(newDate, "day")));
+      } else {
+        setSelectedDates([...selectedDates, newDate]);
+      }
     }
   };
+
   return (
     <>
       <TitleSelectDate>Selecciona la data</TitleSelectDate>
