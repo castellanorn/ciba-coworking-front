@@ -20,6 +20,7 @@ import {
 } from "../../config/apiEndpoints";
 import { AuthContext } from "../../auth/AuthProvider";
 import OfficesInput from "../../components/inputs/OfficesInput";
+import { Subtitle } from "../user/UserPagesStyled";
 
 const ReserveOffice = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -37,24 +38,44 @@ const ReserveOffice = () => {
     "Content-Type": "application/json",
     Authorization: `Bearer ${authToken}`,
   };
-  console.log("Headers enviados:", headers);
 
-  const dataRange = {};
+  const formatHour24hFormat = (hour) => {
+    if(hour < 10)
+      return "0" + hour;
+    return hour + "";
+  }
 
-  const generateDefaultHours = () => {
+  const generateDefaultHours = (bookedHours=[]) => {
     const hours = [];
     let startHour = 8;
-    let endHour = 20;
+    let endHour = 20; 
 
     for (let i = startHour; i < endHour; i++) {
       hours.push({
-        startDate: `${i}:00:00`,
-        endDate: `${i + 1}:00:00`,
+        startDate: `${formatHour24hFormat(i)}:00`,
+        endDate: `${formatHour24hFormat(i + 1)}:00`,
       });
     }
 
+    if(bookedHours && Array.isArray(bookedHours) && bookedHours.length > 0){
+      const newAvailableHours = [];
+
+      hours.forEach(availableHour => {
+        const isBusyStartTime = bookedHours.find(busyHour => busyHour.startTime.startsWith(availableHour.startDate));
+        const isBusyEndTime = bookedHours.find(busyHour => busyHour.endTime.startsWith(availableHour.endDate));
+
+        if(!isBusyStartTime && !isBusyEndTime){     
+          newAvailableHours.push(availableHour);
+        }
+      });
+      return newAvailableHours;
+    }
     return hours;
   };
+
+  const dataRange = {};
+
+
   const handleHourChange = (event) => {
     const selectedSlot = availableHours.find(
       (slot) => slot.startDate === event.target.value
@@ -76,24 +97,19 @@ const ReserveOffice = () => {
         dataRange,
         headers
       );
-      console.log("Respuesta de horas disponibles:", response);
-
-      if (
-        !response ||
-        response.status === 404 ||
-        !response.availableHours ||
-        response.availableHours.length === 0
-      ) {
-        console.log(
-          "No se encontraron horas disponibles. Mostrando horas por defecto."
-        );
-        const defaultHours = generateDefaultHours(); 
+      if (!response || response.length === 0) {
+        // Si no se encontraron horas, generar horas por defecto
+        const defaultHours = generateDefaultHours();
         setAvailableHours(defaultHours);
       } else {
-        const availableHours = response.availableHours.map((item) => ({
+        const reservedHours = response.map((item) => ({
           startDate: item.startDate,
           endDate: item.endDate,
+          startTime: item.startTime,
+          endTime: item.endTime,
         }));
+
+        const availableHours = generateDefaultHours(reservedHours);
         setAvailableHours(availableHours);
       }
     } catch (error) {
@@ -122,6 +138,7 @@ const ReserveOffice = () => {
     )
       .toISOString()
       .split("T")[0];
+      
     const endDate = new Date(
       selectedDates[selectedDates.length - 1].$d.getTime() -
         selectedDates[selectedDates.length - 1].$d.getTimezoneOffset() * 60000
@@ -146,6 +163,7 @@ const ReserveOffice = () => {
   const handleCloseSuccess = () => {
     setSuccessPopupOpen(false);
     setConfirmationPopupOpen(false); 
+    navigate("/panell-usuari")
   };
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
@@ -206,8 +224,9 @@ const ReserveOffice = () => {
         headers
       );
 
-      console.log("Reserva creada exitosamente:", response);
-
+      const newAvailableHours = availableHours
+        .filter((hour) => hour.startDate != selectedHour.startTime && hour.endDate !=selectedHour.endTime)
+      setAvailableHours(newAvailableHours)
       handleOpenSuccess();
     } catch (error) {
       console.error("Error al realizar la reserva:", error.message);
@@ -287,13 +306,13 @@ const ReserveOffice = () => {
 
         <Hr2 />
 
-      {availableHours.length > 0 && (
-        <OfficesInput
-          availableHours={availableHours}
-          selectedHour={selectedHour}
-          onChange={handleHourChange}
-        />
-      )}
+      {availableHours.length > 0 ? (
+          <OfficesInput
+            availableHours={availableHours}
+            selectedHour={selectedHour}
+            onChange={handleHourChange}
+          />
+        ) : <Subtitle>Tria una data vàlid</Subtitle>}
         <Hr2 />
         <ContainerButtons>
           <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
