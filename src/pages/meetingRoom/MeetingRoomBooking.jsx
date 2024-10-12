@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { AuthContext } from "../../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
@@ -13,12 +13,15 @@ import { Hr2 } from "../../components/calendar/CalendarStyled";
 import ContainerButtons from "../../components/container/ButtonsContainer";
 import TitleMobile from "../../components/title/Title";
 import { apiRequest } from "../../services/apiRequest";
-import { API_GET_RESERVATIONS_BY_ID,API_CREATE_RESERVATIONS } from "../../config/apiEndpoints";
+import {
+  API_GET_RESERVATIONS_BY_ID,
+  API_CREATE_RESERVATIONS,
+} from "../../config/apiEndpoints";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
-import OfficesInput from "../../components/inputs/OfficesInput";
+import HourSelect from "../../components/inputs/HourSelect";
 
 const ReserveMeetingRoom = () => {
-  const { authToken,user } = useContext(AuthContext);
+  const { authToken, user } = useContext(AuthContext);
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
 
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
@@ -72,7 +75,12 @@ const ReserveMeetingRoom = () => {
         headers
       );
 
-      if (!response || response.status === 404 || !response.availableHours || response.availableHours.length === 0) {
+      if (
+        !response ||
+        response.status === 404 ||
+        !response.availableHours ||
+        response.availableHours.length === 0
+      ) {
         // Si no se encontraron horas, generar horas por defecto
         const defaultHours = generateDefaultHours();
         setAvailableHours(defaultHours);
@@ -98,7 +106,8 @@ const ReserveMeetingRoom = () => {
     setError("");
 
     const startDate = selectedDates[0].format("YYYY-MM-DD");
-    const endDate = selectedDates[selectedDates.length - 1].format("YYYY-MM-DD");
+    const endDate =
+      selectedDates[selectedDates.length - 1].format("YYYY-MM-DD");
 
     const dataRange = { startDate, endDate };
 
@@ -111,6 +120,9 @@ const ReserveMeetingRoom = () => {
 
   const handleCloseSuccess = () => {
     setSuccessPopupOpen(false);
+    userRole === "admin"
+    ? navigate("/gestio-reserves")
+    : navigate("/panell-usuari");
   };
 
   const handleOpenConfirm = () => {
@@ -130,11 +142,11 @@ const ReserveMeetingRoom = () => {
       setError("Selecciona fechas y una hora antes de continuar.");
       return;
     }
-  
+
     try {
       const formattedStartDate = selectedDates[0].format("YYYY-MM-DD");
       const formattedEndDate = selectedDates[0].format("YYYY-MM-DD");
-  
+
       const dataToSend = {
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -144,28 +156,28 @@ const ReserveMeetingRoom = () => {
           id: user.id,
         },
         spaceDTO: {
-          id: '1',
+          id: "1",
         },
       };
-  
+
       console.log("Cuerpo de la solicitud:", dataToSend);
-  
+
       const response = await apiRequest(
         API_CREATE_RESERVATIONS,
         "POST",
         dataToSend,
         headers
       );
-  
+
       console.log("Reserva creada exitosamente:", response);
-  
+
       handleCloseConfirm();
       handleOpenSuccess();
     } catch (error) {
       setErrorModal({
         isOpen: true,
         message: `No s'ha pogut fet la reserva: ${error.message}`,
-     });
+      });
     }
   };
 
@@ -209,7 +221,11 @@ const ReserveMeetingRoom = () => {
           />
         </ContainerButtons>
 
-        <Calendar onChange={setSelectedDates} value={selectedDates} setError={setError} />
+        <Calendar
+          onChange={setSelectedDates}
+          value={selectedDates}
+          setError={setError}
+        />
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -219,13 +235,13 @@ const ReserveMeetingRoom = () => {
 
         <Hr2 />
 
-          {availableHours.length > 0 && (
-        <OfficesInput
-          availableHours={availableHours}
-          selectedHour={selectedHour}
-          onChange={handleHourChange}
-        />
-      )}
+        {availableHours.length > 0 && (
+          <HourSelect
+            availableHours={availableHours}
+            selectedHour={selectedHour}
+            onChange={handleHourChange}
+          />
+        )}
 
         <Hr2 />
 
@@ -233,8 +249,8 @@ const ReserveMeetingRoom = () => {
           <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
         </ContainerButtons>
 
-         {/* Confirmation and Success Popups */}
-         {confirmationPopupOpen && (
+        {/* Confirmation and Success Popups */}
+        {confirmationPopupOpen && (
           <PopUpConfirmReserve
             open={confirmationPopupOpen}
             onCancel={handleCloseConfirm}
@@ -244,7 +260,7 @@ const ReserveMeetingRoom = () => {
               endDate: selectedDates[0].format("YYYY-MM-DD"),
               startTime: selectedHour.startTime,
               endTime: selectedHour.endTime,
-              spaceDTO: { spaceType: '1' }, 
+              spaceDTO: { spaceType: "1" },
               userDTO: { name: user.name },
             }}
             button={{
@@ -269,4 +285,3 @@ const ReserveMeetingRoom = () => {
 };
 
 export default ReserveMeetingRoom;
-
