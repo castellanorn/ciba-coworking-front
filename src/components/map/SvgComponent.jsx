@@ -76,6 +76,10 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
         pointer-events: none; /* Disable click events */
         opacity: 0.5;         /* Visually indicate non-salable */
       }
+
+      .tableName {
+        pointer-events: none;
+      }
     `}
   </style>
 </defs>
@@ -113,26 +117,12 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
               onClick={() => {
                 if (block.available !== seatStates.NOT_SALABLE) {
                   const nextSeatState = getNextSeatState(block.available);
-            
-                  // Update the available state of the clicked block
                   block.available = nextSeatState;
-            
-                  // Call the onSeatClick handler to propagate changes
                   onSeatClick(block);
                 }
               }}
               onMouseEnter={() => setHoveredBlock(block.id)}
               onMouseLeave={() => setHoveredBlock(null)}
-              /* onFocus={() => setFocusedBlock(block.id)} */
-              onFocus={() => {
-                setFocusedBlock(block.id);
-                
-                // Change the color when the block is focused
-                if (block.available !== seatStates.NOT_SALABLE) {
-                  const nextSeatState = getNextSeatState(block.available);
-                  block.available = nextSeatState; // Change the color/state of the block
-                }
-              }}
               onBlur={() => setFocusedBlock(null)}
             />
           ))}
@@ -157,6 +147,7 @@ const SvgComponent = ({ blocks, title, titleId, onSeatClick, config, ...props })
             fill={config.style.block.title_color}
             fontSize="18"
             fontFamily="Marianina FY Bold"
+            className='tableName'
           >
             {block.title}
           </text>
