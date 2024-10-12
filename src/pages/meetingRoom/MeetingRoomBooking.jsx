@@ -44,10 +44,9 @@ const ReserveMeetingRoom = () => {
     Authorization: `Bearer ${authToken}`,
   };
 
-  //formatear la hora en 00:00
   const formatHour24hFormat = (hour) => {
     if (hour < 10) return "0" + hour;
-    return hour + ""; // Ensures returning always a string
+    return hour + ""; 
   };
 
   const generateDefaultHours = (bookedHours = []) => {
@@ -55,7 +54,6 @@ const ReserveMeetingRoom = () => {
     let startHour = 8;
     let endHour = 20;
 
-    // First generate all the hours as usual
     for (let i = startHour; i < endHour; i++) {
       const startHourFormatted = String(i).padStart(2, "0");
       const endHourFormatted = String(i + 1).padStart(2, "0");
@@ -65,15 +63,10 @@ const ReserveMeetingRoom = () => {
         endDate: `${endHourFormatted}:00:00`,
       });
     }
-    // Then, checks if are there existing bookings
-    // given by the bookedHours arg
     if (bookedHours && Array.isArray(bookedHours) && bookedHours.length > 0) {
-      // Contains the real hours without the already booked hours
       const newAvailableHours = [];
 
       hours.forEach((availableHour) => {
-        // First check if the start time of the available
-        // hour is already taken
         const isBusyStartTime = bookedHours.find((busyHour) =>
           busyHour.startTime.startsWith(availableHour.startDate)
         );
@@ -82,8 +75,6 @@ const ReserveMeetingRoom = () => {
         );
 
         if (!isBusyStartTime && !isBusyEndTime) {
-          //console.log("DISPONIBLE");
-          //console.log(availableHour);
           newAvailableHours.push(availableHour);
         }
       });
@@ -202,7 +193,7 @@ const ReserveMeetingRoom = () => {
       !selectedHour.startTime ||
       !selectedHour.endTime
     ) {
-      setError("Selecciona fechas y una hora antes de continuar.");
+      setError("Selecciona dates i una hora abans de continuar.");
       return;
     }
 

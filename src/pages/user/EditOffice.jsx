@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { apiRequest } from "../../services/apiRequest";
 import {
-  API_UPDATE_RESERVATION,
+API_UPDATE_RESERVATION,  
   API_GET_RESERVATIONS_BY_ID
 } from "../../config/apiEndpoints";
 import { AuthContext } from "../../auth/AuthProvider";
@@ -181,18 +181,7 @@ const ReserveOffice = () => {
 
 
   const handleAcceptConfirm = async () => {
-   /*  if (
-      !selectedDates.length ||
-      !selectedOffice ||
-      !selectedHour.startTime ||
-      !selectedHour.endTime
-    ) {
-      setError(
-        "Selecciona la data, una oficina y una hora abans de continuar."
-      );
-      return;
-    } */
-
+  
     try {
       const formattedStartDate = selectedDates[0].format("YYYY-MM-DD");
       const formattedEndDate = selectedDates[0].format("YYYY-MM-DD");
