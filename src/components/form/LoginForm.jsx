@@ -99,7 +99,6 @@ const LoginForm = () => {
         navigate("/panell-usuari");
       }
     }
-    //setSuccessPopupOpen(false);
   };
 
   return (

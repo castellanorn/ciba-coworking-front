@@ -183,7 +183,6 @@ const ReserveTable = () => {
       );
 
       setReservationData(response);
-      console.log(response)
     } catch (error) {
       setErrorModal({
         isOpen: true,
