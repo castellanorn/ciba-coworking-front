@@ -19,7 +19,7 @@ import {
   API_GET_SPACE_BY_ID,
 } from "../../config/apiEndpoints";
 import { AuthContext } from "../../auth/AuthProvider";
-import OfficesInput from "../../components/inputs/OfficesInput";
+import HourSelect from "../../components/inputs/HourSelect";
 
 const ReserveOffice = () => {
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
@@ -87,7 +87,7 @@ const ReserveOffice = () => {
         console.log(
           "No se encontraron horas disponibles. Mostrando horas por defecto."
         );
-        const defaultHours = generateDefaultHours(); 
+        const defaultHours = generateDefaultHours();
         setAvailableHours(defaultHours);
       } else {
         const availableHours = response.availableHours.map((item) => ({
@@ -145,7 +145,9 @@ const ReserveOffice = () => {
 
   const handleCloseSuccess = () => {
     setSuccessPopupOpen(false);
-    setConfirmationPopupOpen(false); 
+    userRole === "admin"
+    ? navigate("/gestio-reserves")
+    : navigate("/panell-usuari");
   };
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
@@ -158,7 +160,7 @@ const ReserveOffice = () => {
       !selectedHour.startTime ||
       !selectedHour.endTime
     ) {
-      setError("Selecciona fechas, una oficina y una hora antes de continuar.");
+      setError("Selecciona la data, una oficina y una hora abans de continuar.");
       return;
     }
     setError("");
@@ -177,7 +179,7 @@ const ReserveOffice = () => {
       !selectedHour.startTime ||
       !selectedHour.endTime
     ) {
-      setError("Selecciona fechas, una oficina y una hora antes de continuar.");
+      setError("Selecciona la data, una oficina y una hora abans de continuar.");
       return;
     }
 
@@ -195,7 +197,7 @@ const ReserveOffice = () => {
           id: user.id,
         },
         spaceDTO: {
-          id: selectedOffice === "Oficina 1" ? 1 : 2,  
+          id: selectedOffice === "Oficina 1" ? 1 : 2,
         },
       };
 
@@ -216,7 +218,7 @@ const ReserveOffice = () => {
   };
 
   const handleRadioChange = (event) => {
-    const office = event.target.value; 
+    const office = event.target.value;
     setSelectedOffice(office);
   };
 
@@ -228,11 +230,11 @@ const ReserveOffice = () => {
         break;
       case "offices":
         setFocus("offices");
-        navigate("/reserva-oficina"); 
+        navigate("/reserva-oficina");
         break;
       case "meetings":
         setFocus("meetings");
-        navigate("/reserva-reunio"); 
+        navigate("/reserva-reunio");
         break;
     }
   }
@@ -256,7 +258,7 @@ const ReserveOffice = () => {
                 onClick={() => handleManageClick("meetings")}
                 focus={focus === "meetings"}
             />
-        </ContainerButtons> 
+        </ContainerButtons>
 
         <Calendar
           onChange={setSelectedDates}
@@ -288,11 +290,11 @@ const ReserveOffice = () => {
         <Hr2 />
 
       {availableHours.length > 0 && (
-        <OfficesInput
-          availableHours={availableHours}
-          selectedHour={selectedHour}
-          onChange={handleHourChange}
-        />
+      <HourSelect
+        availableHours={availableHours}
+        selectedHour={selectedHour}
+        onChange={handleHourChange}
+      />
       )}
         <Hr2 />
         <ContainerButtons>

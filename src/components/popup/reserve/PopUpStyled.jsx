@@ -81,7 +81,7 @@ export const TitleMessageConfirm = styled.span`
 export const SubTitleMessage = styled.span`
     font-family: "Marianina FY Bold";
     color:var(--violet);
-    font-size:25px;
+    font-size:21px;
     display: flex;
     justify-content: center;
     margin-top:20px;
@@ -90,9 +90,9 @@ export const SubTitleMessage = styled.span`
 export const LineSpan = styled.span`
     font-family: "Marianina FY Bold";
     color:var(--salmon);
-    font-size:25px;
+    font-size:20px;
     margin-left:10px;
-    margin-right:10px;
+    margin-right:20px;
 `;
 
 export const ContainerDialog = styled.div` 
