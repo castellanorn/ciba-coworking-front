@@ -73,12 +73,14 @@ const UserDashboard = () => {
 
   const onEdit = (row) => {
     const spaceId = row.spaceDTO.id;
+    const reservationId = row.id;
+    console.log(reservationId)
     if (spaceId === 1) {
-      navigate("/edicio-reserva-sala-reunions");
+      navigate("/edicio-reserva-sala-reunions", {state: {reservationId}});
     } else if (spaceId === 2 || spaceId === 3) {
-      navigate("/edicio-reserva-oficina");
+      navigate("/edicio-reserva-oficina", {state: {reservationId}});
     } else {
-      navigate("/edicio-reserva-taula");
+      navigate("/edicio-reserva-taula", {state: {reservationId}});
     }
   };
 
