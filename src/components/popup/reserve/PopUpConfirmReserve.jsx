@@ -39,7 +39,7 @@ const PopUpConfirmReserve = ({ open, onConfirm, onCancel, space, table, pageType
           <DialogContentText>
             <TitleMessage>{isDeleteAction ? 'Eliminar reserva' : 'Confirmar reserva'}</TitleMessage>
           </DialogContentText>
-          <SubTitleMessage>{reservation.startDate} - {reservation.endDate} <LineSpan>|</LineSpan> {reservation.startTime} - {reservation.endTime}</SubTitleMessage>
+          <SubTitleMessage>{reservation.startDate} - {reservation.endDate}<LineSpan>|</LineSpan>{reservation.startTime} - {reservation.endTime}</SubTitleMessage>
           {table ? (<H6>Espai reservat: {table.title}</H6>) : (<></>)}
           {space ? (<H6>Espai reservat: {space.title}</H6>) : (<></>)} {/* //cambiar el nombre de atributo de space */}
         </DialogContent>
