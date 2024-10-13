@@ -26,6 +26,7 @@ export const ModalWindow = styled.div `
     padding: 1rem; 
     z-index: 10;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding-bottom: 3rem;
 `
 
 export const ErrorMessage = styled.p `

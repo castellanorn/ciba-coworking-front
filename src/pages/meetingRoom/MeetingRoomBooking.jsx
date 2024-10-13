@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { AuthContext } from "../../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
+
+import { apiRequest } from "../../services/apiRequest";
+import {
+  API_GET_RESERVATIONS_BY_ID,
+  API_CREATE_RESERVATIONS,
+} from "../../config/apiEndpoints";
+import { AuthContext } from "../../auth/AuthProvider";
+
 import { ButtonFind } from "../../components/buttons/ButtonStyled";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
-import PopUpSuccess from "../../components/popup/reserve/PopUpSuccess";
-import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
+import HourSelect from "../../components/inputs/HourSelect";
 import { Space } from "../../pages/meetingRoom/MeetingRoomBookingStyled";
 import { DivReserve } from "./MeetingRoomBookingStyled";
 import PlacesButton from "../../components/buttons/PlacesButton";
@@ -12,69 +18,81 @@ import Calendar from "../../components/calendar/Calendar";
 import { Hr2 } from "../../components/calendar/CalendarStyled";
 import ContainerButtons from "../../components/container/ButtonsContainer";
 import TitleMobile from "../../components/title/Title";
-import { apiRequest } from "../../services/apiRequest";
-import {
-  API_GET_RESERVATIONS_BY_ID,
-  API_CREATE_RESERVATIONS,
-} from "../../config/apiEndpoints";
+import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
+import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import OfficesInput from "../../components/inputs/OfficesInput";
-import { array } from 'prop-types';
-import { Subtitle } from '../user/UserPagesStyled';
+import { array } from "prop-types";
+import { Subtitle } from "../user/UserPagesStyled";
 
 const ReserveMeetingRoom = () => {
-  const { authToken, user } = useContext(AuthContext);
-  const [successPopupOpen, setSuccessPopupOpen] = useState(false);
-
-  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const navigate = useNavigate();
+  const { authToken, userRole, user } = useContext(AuthContext);
 
   const [selectedDates, setSelectedDates] = useState([]);
   const [availableHours, setAvailableHours] = useState([]);
-  const [selectedHour, setSelectedHour] = useState(null);
+  const [selectedHour, setSelectedHour] = useState("");
   const [error, setError] = useState("");
-  const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
   const [focus, setFocus] = useState("meetings");
-  const navigate = useNavigate();
+
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
+  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
+  const [errorModal, setErrorModal] = useState({ isOpen: false, message: "" });
+
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${authToken}`,
   };
 
-  //formatear la hora en 00:00
   const formatHour24hFormat = (hour) => {
-    if(hour < 10)
-      return "0" + hour;
-    return hour + "";// Ensures returning always a string
-  }
+    if (hour < 10) return "0" + hour;
+    return hour + ""; 
+  };
 
-  const generateDefaultHours = (bookedHours=[]) => {
+  const generateDefaultHours = (bookedHours = []) => {
     const hours = [];
     let startHour = 8;
-    let endHour = 20; 
+    let endHour = 20;
 
-    // First generate all the hours as usual 
     for (let i = startHour; i < endHour; i++) {
+      const startHourFormatted = String(i).padStart(2, "0");
+      const endHourFormatted = String(i + 1).padStart(2, "0");
+
       hours.push({
-        startDate: `${formatHour24hFormat(i)}:00`,
-        endDate: `${formatHour24hFormat(i + 1)}:00`,
+        startDate: `${startHourFormatted}:00:00`,
+        endDate: `${endHourFormatted}:00:00`,
       });
     }
-    // Then, checks if are there existing bookings 
-    // given by the bookedHours arg
-    if(bookedHours && Array.isArray(bookedHours) && bookedHours.length > 0){
-      // Contains the real hours without the already booked hours 
+    if (bookedHours && Array.isArray(bookedHours) && bookedHours.length > 0) {
       const newAvailableHours = [];
 
-      hours.forEach(availableHour => {
-        // First check if the start time of the available 
-        // hour is already taken 
-        const isBusyStartTime = bookedHours.find(busyHour => busyHour.startTime.startsWith(availableHour.startDate));
-        const isBusyEndTime = bookedHours.find(busyHour => busyHour.endTime.startsWith(availableHour.endDate));
+      hours.forEach((availableHour) => {
+        const isBusyStartTime = bookedHours.find((busyHour) =>
+          busyHour.startTime.startsWith(availableHour.startDate)
+        );
+        const isBusyEndTime = bookedHours.find((busyHour) =>
+          busyHour.endTime.startsWith(availableHour.endDate)
+        );
 
-        if(!isBusyStartTime && !isBusyEndTime){
-          //console.log("DISPONIBLE");          
-          //console.log(availableHour);          
+        if (!isBusyStartTime && !isBusyEndTime) {
+          newAvailableHours.push(availableHour);
+        }
+      });
+      return newAvailableHours;
+    }
+
+    if (bookedHours && Array.isArray(bookedHours) && bookedHours.length > 0) {
+      const newAvailableHours = [];
+
+      hours.forEach((availableHour) => {
+        const isBusyStartTime = bookedHours.find((busyHour) =>
+          busyHour.startTime.startsWith(availableHour.startDate)
+        );
+        const isBusyEndTime = bookedHours.find((busyHour) =>
+          busyHour.endTime.startsWith(availableHour.endDate)
+        );
+
+        if (!isBusyStartTime && !isBusyEndTime) {
           newAvailableHours.push(availableHour);
         }
       });
@@ -99,7 +117,7 @@ const ReserveMeetingRoom = () => {
   const fetchAvailableHours = async (dataRange) => {
     try {
       const response = await apiRequest(
-        API_GET_RESERVATIONS_BY_ID(1), 
+        API_GET_RESERVATIONS_BY_ID(1),
         "POST",
         dataRange,
         headers
@@ -135,31 +153,38 @@ const ReserveMeetingRoom = () => {
     }
     setError("");
 
-    const startDate = selectedDates[0].format("YYYY-MM-DD");
-    const endDate =
-      selectedDates[selectedDates.length - 1].format("YYYY-MM-DD");
+    const startDate = new Date(
+      selectedDates[0].$d.getTime() -
+        selectedDates[0].$d.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
+    const endDate = new Date(
+      selectedDates[selectedDates.length - 1].$d.getTime() -
+        selectedDates[selectedDates.length - 1].$d.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
 
     const dataRange = { startDate, endDate };
 
     await fetchAvailableHours(dataRange);
   };
 
-  const handleOpenSuccess = () => {
-    setSuccessPopupOpen(true);
-  };
-
   const handleCloseSuccess = () => {
-    setSuccessPopupOpen(false);
-    setConfirmationPopupOpen(false); 
-    navigate("/panell-usuari")
+    setConfirmationPopupOpen(false);
+    userRole === "admin"
+      ? navigate("/gestio-reserves")
+      : navigate("/panell-usuari");
   };
 
   const handleOpenConfirm = () => {
-    setConfirmationPopupOpen(true);
+    setConfirmPopupOpen(true);
   };
 
   const handleCloseConfirm = () => {
-    setConfirmationPopupOpen(false);
+    setConfirmPopupOpen(false);
+    navigate("/reserva-reunio");
   };
 
   const handleAcceptConfirm = async () => {
@@ -168,7 +193,7 @@ const ReserveMeetingRoom = () => {
       !selectedHour.startTime ||
       !selectedHour.endTime
     ) {
-      setError("Selecciona fechas y una hora antes de continuar.");
+      setError("Selecciona dates i una hora abans de continuar.");
       return;
     }
 
@@ -189,24 +214,26 @@ const ReserveMeetingRoom = () => {
         },
       };
 
-      console.log("Cuerpo de la solicitud:", dataToSend);
-
       const response = await apiRequest(
         API_CREATE_RESERVATIONS,
         "POST",
         dataToSend,
         headers
       );
-  
-      const newAvailableHours = availableHours
-      .filter((hour) => hour.startDate != selectedHour.startTime && hour.endDate !=selectedHour.endTime)
-      setAvailableHours(newAvailableHours)
+
+      const newAvailableHours = availableHours.filter(
+        (hour) =>
+          hour.startDate != selectedHour.startTime &&
+          hour.endDate != selectedHour.endTime
+      );
+      setAvailableHours(newAvailableHours);
       handleCloseConfirm();
-      handleOpenSuccess();
+      setConfirmationPopupOpen(true);
     } catch (error) {
+      setConfirmPopupOpen(false);
       setErrorModal({
         isOpen: true,
-        message: `No s'ha pogut fet la reserva: ${error.message}`,
+        message: `No s'ha pogut fet la reserva: ${error.message.slice(13)}`,
       });
     }
   };
@@ -255,56 +282,62 @@ const ReserveMeetingRoom = () => {
           onChange={setSelectedDates}
           value={selectedDates}
           setError={setError}
+          selectionMode="single"
         />
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <ContainerButtons>
-          <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
+          <ButtonFind onClick={handleFindResults}>Cercar</ButtonFind>
         </ContainerButtons>
 
         <Hr2 />
 
         {availableHours.length > 0 ? (
-          <OfficesInput
-            availableHours={availableHours}
-            selectedHour={selectedHour}
-            onChange={handleHourChange}
-          />
-        ) : <Subtitle>Tria una data vàlid</Subtitle>}
+          <>
+            <OfficesInput
+              availableHours={availableHours}
+              selectedHour={selectedHour}
+              onChange={handleHourChange}
+            />
+            <Hr2 />
 
-        <Hr2 />
-
-        <ContainerButtons>
-          <ConfirmButton onClick={handleOpenConfirm}>Acceptar</ConfirmButton>
-        </ContainerButtons>
-
-        {/* Confirmation and Success Popups */}
-        {confirmationPopupOpen && (
-          <PopUpConfirmReserve
-            open={confirmationPopupOpen}
-            onCancel={handleCloseConfirm}
-            onConfirm={handleAcceptConfirm}
-            reservation={{
-              startDate: selectedDates[0].format("YYYY-MM-DD"),
-              endDate: selectedDates[0].format("YYYY-MM-DD"),
-              startTime: selectedHour.startTime,
-              endTime: selectedHour.endTime,
-              spaceDTO: { spaceType: "1" },
-              userDTO: { name: user.name },
-            }}
-            button={{
-              confirmText: "Confirmar",
-              cancelText: "Cancelar",
-            }}
-            actionType="confirm"
-          />
+            <ContainerButtons>
+              <ConfirmButton onClick={handleOpenConfirm}>
+                Acceptar
+              </ConfirmButton>
+            </ContainerButtons>
+          </>
+        ) : (
+          <Subtitle>Tria una data vàlid</Subtitle>
         )}
-
-        <PopUpSuccess open={successPopupOpen} onClose={handleCloseSuccess} />
       </DivReserve>
 
       <Space></Space>
+
+      <PopUpConfirmReserve
+        open={confirmPopupOpen}
+        onCancel={handleCloseConfirm}
+        onConfirm={handleAcceptConfirm}
+        space="Sala de reunions"
+        reservation={{
+          startDate: selectedDates[0],
+          endDate: selectedDates[0],
+          startTime: selectedHour.startTime,
+          endTime: selectedHour.endTime,
+        }}
+        button={{
+          confirmText: "Confirmar",
+          cancelText: "Cancel·lar",
+        }}
+      />
+      {confirmationPopupOpen && (
+        <ConfirmationPopup
+          open={confirmationPopupOpen}
+          onClose={handleCloseSuccess}
+          subtitleConfirm={"Reserva feta amb èxit."}
+        />
+      )}
       <ErrorModal
         isOpen={errorModal.isOpen}
         onClose={() => setErrorModal({ isOpen: false, message: "" })}

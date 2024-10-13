@@ -46,6 +46,8 @@ const PopUpConfirmReserve = ({
     ? "Eliminar reserva"
     : "Confirmar reserva";
 
+    const spaceName = space === "office1" ? "Oficina 1" : space === "office2" ? "Oficina 2" : "Sala de reunions"
+
   return (
     <ContainerDialog>
       <Dialog open={open} onClose={onCancel}>
@@ -60,7 +62,7 @@ const PopUpConfirmReserve = ({
             {period}
           </SubTitleMessage>
           {table ? <H6>Espai reservat: {table.title}</H6> : null}
-          {space ? <H6>Espai reservat: {space.title}</H6> : null}
+          {space ? <H6>Espai reservat: {spaceName}</H6> : null}
         </DialogContent>
         <DialogActions>
           <ButtonConfirm onClick={onConfirm}>

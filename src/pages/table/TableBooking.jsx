@@ -183,7 +183,6 @@ const ReserveTable = () => {
       );
 
       setReservationData(response);
-      console.log(response)
     } catch (error) {
       setErrorModal({
         isOpen: true,
@@ -282,7 +281,7 @@ const ReserveTable = () => {
           <></>
         ) : (
           <>
-            <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
+            <TitleSelectDate>Tria la franja horària</TitleSelectDate>
 
             <RoleInput
               label="Matí"
@@ -307,7 +306,7 @@ const ReserveTable = () => {
 
         <Hr2 />
 
-        {availableTables.length === 0 ? (<Paragraph text = "Selecciona les dates, la franja i prem Cercar"/>) 
+        {availableTables.length === 0 ? (<Paragraph text = "Tria les dates, la franja i prem Cercar"/>) 
       : (<>
           <SeatSpace availableTables={availableTables} onSeatSelect={handleTableSelection} />
           <ContainerButtons>
@@ -328,7 +327,7 @@ const ReserveTable = () => {
         pageType="table"
         button={{
           confirmText: "Confirmar",
-          cancelText: "Cancelar",
+          cancelText: "Cancel·lar",
         }}
         reservation={dateRange}
       />

@@ -2,7 +2,7 @@
 import { useState, useCallback, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AuthContext } from "../../auth/AuthProvider"; // Importar AuthContext para usar el token de autenticación
+import { AuthContext } from "../../auth/AuthProvider"; 
 import { apiRequest } from "../../services/apiRequest";
 import { API_DELETE_RESERVATION, API_GET_RESERVATIONS_BY_ID } from "../../config/apiEndpoints";
 import { formatDate } from "../../config/formatDate";
@@ -27,7 +27,7 @@ import { formatTime } from '../../config/formatTime';
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
 
-// Componente ManageOffice
+
 const ManageOffice = () => {
   const { authToken } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -47,7 +47,6 @@ const ManageOffice = () => {
     Authorization: `Bearer ${authToken}`,
   };
 
- 
   
   const handleRadioChange = (event) => {
     const officeValue = event.target.value; 
@@ -55,7 +54,7 @@ const ManageOffice = () => {
     setAvailableReservations([]);
   };
 
-  // Buscar reservas
+  
   const handleFindResults = async () => {
     if (selectedDates.length !== 2) {
       setError("Por favor, selecciona un rango de fechas.");
@@ -71,13 +70,13 @@ const ManageOffice = () => {
         startDate: startDate,
         endDate: endDate,
       };
-      console.log("Cuerpo de la solicitud:", body);
+      
       const officeId = selectedOffice;
       if (!officeId) {
         setError("Selecciona una oficina antes de buscar.");
         return;
       }
-      console.log(officeId)
+      
       const reservations = await apiRequest(API_GET_RESERVATIONS_BY_ID(officeId), "POST", body,headers);
       if (reservations.length === 0) {
         setErrorModal({
@@ -86,17 +85,14 @@ const ManageOffice = () => {
         });
         return;  
       }
-      const formattedReservations = reservations.map(reservation => ({
-        ...reservation,
-        startDate: formatDate(reservation.startDate),  
-        endDate: formatDate(reservation.endDate),
-        startTime: formatTime(reservation.startTime),
-        endTime: formatTime(reservation.endTime),
-      }));
 
-      setAvailableReservations(formattedReservations);
+      const sortedReservations = reservations.sort((a, b) =>
+        a.startDate.localeCompare(b.startDate)
+        );
 
-      if (formattedReservations.length === 0) {
+      setAvailableReservations(sortedReservations);
+
+      if (sortedReservations.length === 0) {
         setError("Per aquestes dates no hi ha reserves");
       }
     } catch (error) {
@@ -105,8 +101,6 @@ const ManageOffice = () => {
     console.log(availableReservations)
   }
 
-
-  //Delete modal y function
   const handleDeleteClick = useCallback((reservation) => {
     setDeleteModalState({
       isOpen: true,
@@ -125,8 +119,6 @@ const ManageOffice = () => {
             (reservation) => reservation.id !== deleteModalState.selectedReservation.id
           )
         );
-       
-        // handleFindResults();
           setConfirmationPopupOpen({
             isOpen: true,
           });
@@ -169,7 +161,7 @@ const ManageOffice = () => {
   }
   return (
     <div>
-      <TitleMobile title="Edición de reservas" />
+      <TitleMobile title="Gestió de reserves de oficines" />
       <ContainerButtons>
       <PlacesButton
                 text="Taules individuals"

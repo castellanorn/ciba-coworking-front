@@ -18,13 +18,13 @@ export const ButtonConfirm = styled.button`
 `;
 export const ButtonCancel = styled.button`
     color:white;
-    padding:11px 27px 11px 27px;
+    width: 8.438rem;
+    height: 2.813rem;
     border-radius:3px;
     background-color: var(--salmon);
     font-family: "Marianina XWd FY W03 Medium";
-    font-weight:bold;
     border:none;
-    font-size:19px;
+    font-size:20px;
     cursor:pointer;
     margin-bottom:20px;
         &:active{
@@ -55,14 +55,15 @@ export const ButtonPlacesFocus = styled.button`
     cursor:pointer;
 `;
 export const ButtonFind = styled.button` 
-    display:flex;
-    justify-content:center;
+
+    width: 8.438rem;
+    height: 2.813rem;
     color:white;
-    font-family: "Marianina XWd FY W03 Medium";
-    font-size:25px;
+    font-family: "Marianina XWd FY W03 Medium"; //
+  
+    font-size:20px;
     border:none;
     background-color:#945BBB;
-    padding:7px 40px 7px 40px;
     border-radius:4px;
     cursor:pointer;
 `;

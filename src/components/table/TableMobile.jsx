@@ -62,7 +62,7 @@ const TableMobile = ({ data, type, actions, onEdit, onDelete }) => {
         return (
           <>
             <Field>
-              <span>Franja:</span> {row.startTime} - {row.endTime}
+              <span>Franja:</span> {formatTimeRange(row.startTime, row.endTime)}
             </Field>
             <Field>
               <span>Data:</span> {formatDate(row.startDate)} -{" "}

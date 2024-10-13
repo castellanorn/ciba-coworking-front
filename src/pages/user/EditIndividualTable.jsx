@@ -21,6 +21,7 @@ import { Space } from "../office/OfficeBookingStyled";
 import Map from "../../components/map/Map";
 import ConfirmButton from "../../components/buttons/ConfirmButton";
 import Paragraph from "../../components/textComponents/Paragraph";
+import CancelButton from "../../components/buttons/CancelButton";
 import ErrorModal from "../../components/popup/modals/ErrorModal";
 import PopUpConfirmReserve from "../../components/popup/reserve/PopUpConfirmReserve";
 import ConfirmationPopup from "../../components/popup/confirmationPopup/ConfirmationPopup";
@@ -183,7 +184,6 @@ const EditIndividualTable = () => {
       );
 
       setReservationData(response);
-      console.log(response);
 
     } catch (error) {
       setErrorModal({
@@ -219,6 +219,12 @@ const EditIndividualTable = () => {
     navigate("/edicio-reserva-taula");
   };
 
+  const handleCancelUpdate = () => {
+    userRole === "admin"
+    ? navigate("/gestio-reserves")
+    : navigate("/panell-usuari");
+  }
+
 
   return (
     <>
@@ -238,7 +244,7 @@ const EditIndividualTable = () => {
           <></>
         ) : (
           <>
-            <TitleSelectDate>Selecciona la franja horària</TitleSelectDate>
+            <TitleSelectDate>Tria la franja horària</TitleSelectDate>
 
             <RoleInput
               label="Matí"
@@ -259,6 +265,11 @@ const EditIndividualTable = () => {
 
         <ContainerButtons>
           <ButtonFind onClick={handleFindResults}>Cercar</ButtonFind>
+          <CancelButton 
+            onClick = {handleCancelUpdate}
+            type = "button">
+              Cancel·lar
+          </CancelButton>
         </ContainerButtons>
         <Hr2 />
 
@@ -288,7 +299,7 @@ const EditIndividualTable = () => {
         pageType="table"
         button={{
           confirmText: "Confirmar",
-          cancelText: "Cancelar",
+          cancelText: "Cancel·lar",
         }}
         reservation={dateRange}
       />
@@ -302,7 +313,7 @@ const EditIndividualTable = () => {
         <ConfirmationPopup
           open={confirmationPopupOpen}
           onClose={handleCloseSuccess}
-          subtitleConfirm={"Reserva feta amb èxit."}
+          subtitleConfirm={"La reserva s'ha actualitzat amb èxit."}
         />
       )}
     </>

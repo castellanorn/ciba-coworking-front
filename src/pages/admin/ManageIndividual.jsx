@@ -59,20 +59,16 @@ const ManageIndividual = () => {
           });
           return;  
         }
-        const formattedReservations = reservations.map(reservation => ({
-          ...reservation,
-          startDate: formatDate(reservation.startDate),  
-          endDate: formatDate(reservation.endDate), 
-          startTime: formatTime(reservation.startTime),
-          endTime: formatTime(reservation.endTime),
-        }));
-  
-      setAvailableReservations(formattedReservations);
+        const sortedReservations = reservations.sort((a, b) =>
+          a.startDate.localeCompare(b.startDate)
+          );
+      setAvailableReservations(sortedReservations);
     }catch (error) {
       console.error("API error:", error.message)
     }
   };
-  //Delete modal y function
+
+
   const handleDeleteClick = useCallback((reservation) => {
     setDeleteModalState({
       isOpen: true,
@@ -128,7 +124,7 @@ const ManageIndividual = () => {
 
   return (
     <div>
-      <TitleMobile title="Edició de reserves" />
+      <TitleMobile title="Gestió de reserves de taules" />
       <ContainerButtons>
             <PlacesButton
                 text="Taules individuals"
