@@ -71,14 +71,24 @@ const UserDashboard = () => {
     (reservation) => reservation.endDate === formattedDate
   );
 
+  const futureReservations = reservations.filter(
+    (reservation) => reservation.endDate !== formattedDate
+  );
+
+  const sortedFutureReservations = futureReservations.sort((a, b) => a.startDate.localeCompare(b.startDate));
+
+  const sortedPastReservations = pastReservarions.sort((a, b) => a.startDate.localeCompare(b.startDate));
+
   const onEdit = (row) => {
     const spaceId = row.spaceDTO.id;
+    const reservationId = row.id;
+
     if (spaceId === 1) {
-      navigate("/edicio-reserva-sala-reunions");
+      navigate("/edicio-reserva-sala-reunions", {state: {reservationId}});
     } else if (spaceId === 2 || spaceId === 3) {
-      navigate("/edicio-reserva-oficina");
+      navigate("/edicio-reserva-oficina", {state: {reservationId}});
     } else {
-      navigate("/edicio-reserva-taula");
+      navigate("/edicio-reserva-taula", {state: {reservationId}});
     }
   };
 
@@ -128,6 +138,7 @@ const UserDashboard = () => {
     <Paragraph text={`Error: ${error}`} />;
   }
 
+
   return (
     <div>
       <TitleMobile title="Panell  d'usuari" />
@@ -135,20 +146,20 @@ const UserDashboard = () => {
       <TableSection>
         <Subtitle>RESERVES PENDENTS</Subtitle>
 
-        {reservations.length === 0 ? (
+        {sortedFutureReservations.length === 0 ? (
           <Paragraph text="No hi ha reserves fetes." />
         ) : (
           <>
             <Table
               columns={columnsReserves}
-              data={reservations}
+              data={sortedFutureReservations}
               columnMapping={columnMappingReserves}
               actions={["edit", "delete"]}
               onEdit={onEdit}
               onDelete={onDelete}
             />
             <TableMobile
-              data={reservations}
+              data={sortedFutureReservations}
               type="reserveUser"
               actions={["edit", "delete"]}
               onEdit={onEdit}
@@ -158,19 +169,19 @@ const UserDashboard = () => {
         )}
 
         <Subtitle>RESERVES COMPLETADES</Subtitle>
-        {pastReservarions.length === 0 ? (
+        {sortedPastReservations.length === 0 ? (
           <Paragraph text="No hi ha reserves fetes." />
         ) : (
           <>
             <Table
               columns={columnsReserves}
-              data={pastReservarions}
+              data={sortedPastReservations}
               columnMapping={columnMappingReserves}
               onEdit={onEdit}
               onDelete={onDelete}
             />
             <TableMobile
-              data={pastReservarions}
+              data={sortedPastReservations}
               type="reserveUser"
               onEdit={onEdit}
               onDelete={onDelete}

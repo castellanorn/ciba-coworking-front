@@ -9,14 +9,8 @@ import {
   Field,
   Actions,
 } from "./TableStyled";
+import { formatDate } from "../../config/formatDate";
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
 
 const formatTimeRange = (startTime, endTime) => {
   if (startTime === "08:00:00" && endTime === "13:59:59") {
@@ -68,7 +62,7 @@ const TableMobile = ({ data, type, actions, onEdit, onDelete }) => {
         return (
           <>
             <Field>
-              <span>Franja:</span> {row.startTime} - {row.endTime}
+              <span>Franja:</span> {formatTimeRange(row.startTime, row.endTime)}
             </Field>
             <Field>
               <span>Data:</span> {formatDate(row.startDate)} -{" "}
