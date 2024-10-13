@@ -3,18 +3,125 @@
   width: auto;
   height: 100vh;
   --violet: #532D6D;
+  --lightviolet: #945BBB;
   --white: #FFFFFF;
   --darkgray: #1D1D1D;
   --ligthgray: #464652;
+  --grey: #656565;
   --yellow: #CFDE00;
   --salmon: #FF7962;
   --blue: #17C7D2;
+  --black: #000000;
+  --red: #FF0000;
 }
 
 body {
   padding: 0;
   margin: 0;
   display: flex;
+  flex-direction: column;
   width: auto;
   height: 100%;
 }
+img {
+  display: flex;
+  justify-content: center;
+  width:50px;
+}
+span{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+svg{
+  color:var(--violet);
+  height: 45px;
+  width: 45px;
+  display: flex;
+}
+main{
+  margin-bottom: 120px;
+}
+:root{
+  margin: 0;
+  padding: 0;
+}
+.css-23p0if-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected){
+  font-weight: bold;
+}
+
+.css-1c32n2y-MuiBadge-root{
+  color: var(--violet) !important;
+}
+.css-dplwbx-MuiPickersCalendarHeader-label{
+  font-family: "Marianina XWd FY W03 Medium" !important;
+  font-size: 16px !important;
+  color:var(--violet);
+}
+
+/*calendar*/
+.css-1rtg91x-MuiDateCalendar-root{
+  margin-top: 20px !important;
+  box-shadow: -4px 0px 6px rgba(0, 0, 0, 0.2), 4px 4px 6px rgba(0, 0, 0, 0.2), 0px 0px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  
+}
+/*days*/
+.css-ufcxyz-MuiTypography-root-MuiDayCalendar-weekDayLabel{
+  font-weight:bolder !important;
+  color:var(--violet) !important;
+  font-family: "Marianina XWd FY W03 Medium" !important;
+  font-size: 12px !important;
+}
+
+/*numbers*/
+.css-1wy8uaa-MuiButtonBase-root-MuiPickersDay-root{
+  font-family: "Marianina XWd FY W03 Medium" !important;
+  font-size: 12px !important;
+}
+.css-19kok5i-MuiDialogActions-root{
+  display: flex !important;
+  justify-content: center !important;
+  padding: 10px 30px 10px 30px !important;
+}
+.sc-eOzmre.gvleyR{
+  margin-bottom:0;
+  margin-top:40px;
+}
+.css-1apkmlw-MuiButtonBase-root-MuiButton-root{
+  background-color: var(--white) !important;
+}
+.css-1wy8uaa-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--violet) !important;
+}
+
+.css-23p0if-MuiButtonBase-root-MuiPickersDay-root.Mui-selected:hover{
+  background-color: var(--violet) !important;
+}
+.css-23p0if-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--violet) !important;
+}
+
+.hUoTwd{
+  margin-bottom: 10px;
+}
+.css-1914m0h-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--lightviolet) !important;
+}
+.css-1qruvc6-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--salmon) !important;
+
+}
+.css-g31t2f-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background-color: var(--lightviolet) !important;
+}
+.hSUaVN >:last-child{
+  border-radius: 20px 20px 0 0 !important;
+}
+.fDuTce{
+  width: 60px !important;
+  padding-left: 7px !important;
+  padding-top: 6px;
+  height: 60px !important;
+}
+
