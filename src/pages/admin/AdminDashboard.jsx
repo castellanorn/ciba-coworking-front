@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../auth/AuthProvider";
 import { apiRequest } from "../../services/apiRequest";
@@ -72,23 +72,25 @@ const AdminDashboard = () => {
     }
   };
 
- 
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-  const handleEditClick = (user) => {
+  const handleEditClick = useCallback((user) => {
     setModalState({
       isOpen: true,
       selectedUser: user,
     })
-  };
+  }, []);
 
-  const handleDeleteClick= (user)=>{
+  const handleDeleteClick= useCallback((user)=>{
     setDeleteModalState({
       isOpen: true,
       selectedUser: user,
     });
-  };
+  },[]);
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = useCallback(async () => {
     try {
       if (deleteModalState.selectedUser) {
         await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE", null, headers);
@@ -103,26 +105,26 @@ const AdminDashboard = () => {
         selectedUser: null,
       });
     }
-  };
+  }, [deleteModalState.selectedUser, fetchUsers]);
 
-  const handleCancelDelete = () => {
+  const handleCancelDelete = useCallback(() => {
     setDeleteModalState({
       isOpen: false,
       selectedUser: null,
     });
-  };
+  }, []);
 
 
-  const handleCloseEditModal = () => {
+  const handleCloseEditModal = useCallback(() => {
     setModalState({
       isOpen: false,
       selectedUser: null,
     });
-  };
+  }, []);
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
-  const handleSubmit = async (userData) => {
+  const handleSubmit = useCallback(async (userData) => {
     try {
       if (!userData.id) {
         await apiRequest(API_CREATE_USER, "POST", userData,headers);
@@ -173,7 +175,7 @@ const AdminDashboard = () => {
       });
 
     }
-  };
+  }, [fetchUsers, handleCloseEditModal, users]);
   
   const handlePlacesClick = (target) => {
     if (target === "users") {

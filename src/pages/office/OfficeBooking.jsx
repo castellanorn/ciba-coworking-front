@@ -226,7 +226,6 @@ const ReserveOffice = () => {
         },
       };
 
-      console.log(dataToSend);
       const response = await apiRequest(
         API_CREATE_RESERVATIONS,
         "POST",
@@ -240,7 +239,6 @@ const ReserveOffice = () => {
           hour.endDate != selectedHour.endTime
       );
       setAvailableHours(newAvailableHours);
-      console.log("newAvailableHours", newAvailableHours);
       handleCloseConfirm();
       setConfirmationPopupOpen(true);
     } catch (error) {

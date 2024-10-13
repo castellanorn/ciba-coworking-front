@@ -27,7 +27,6 @@ const CreateUserForm = ({ onCancel, onSubmit, initialData }) => {
 
   useEffect(() => {
     if (initialData) {
-      console.log("ID del usuario a editar:", initialData.id);
       setForm({
         name: initialData.name || "",
         email: initialData.email || "",

@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const ButtonConfirm = styled.button`
     color:var(--violet);
-    padding:8px 23px 8px 23px;
+    width: 8.438rem;
+    height: 2.813rem;
     border-radius:3px;
     border: 3px solid var(--violet);
     font-family: "Marianina XWd FY W03 Medium";

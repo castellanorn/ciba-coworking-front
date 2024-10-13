@@ -73,7 +73,7 @@ const ManageOffice = () => {
       
       const officeId = selectedOffice;
       if (!officeId) {
-        setError("Selecciona una oficina antes de buscar.");
+        setError("Selecciona una oficina abans de cercar..");
         return;
       }
       
@@ -98,7 +98,7 @@ const ManageOffice = () => {
     } catch (error) {
       setError(error.message);
     }
-    console.log(availableReservations)
+
   }
 
   const handleDeleteClick = useCallback((reservation) => {
@@ -202,7 +202,7 @@ const ManageOffice = () => {
       />
 
       <ContainerButtons>
-        <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
+        <ButtonFind onClick={handleFindResults}>Cercar</ButtonFind>
       </ContainerButtons>
 
       {error && <Paragraph text={error} color="red" />}      

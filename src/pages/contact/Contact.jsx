@@ -2,9 +2,16 @@ import { BiPhoneCall } from "react-icons/bi";
 import { TbWorldWww } from "react-icons/tb";
 import { ImLocation } from "react-icons/im";
 import { TfiEmail } from "react-icons/tfi";
-import cibaPhoto from '../../assets/ciba-photo.png';
+import cibaPhoto from "../../assets/ciba-photo.png";
 import TitleMobile from "../../components/title/Title";
-import { DivLogo, ImgLogo, InfoContainer, Space } from "./ContactStyled";
+import {
+  Container,
+  DivLogo,
+  ImgLogo,
+  InfoContainer,
+  IconContainer,
+  Text,
+} from "./ContactStyled";
 
 const Contact = () => {
   return (
@@ -13,25 +20,34 @@ const Contact = () => {
       <DivLogo>
         <ImgLogo src={cibaPhoto} alt="img" />
       </DivLogo>
+      <Container>
         <InfoContainer>
-          <BiPhoneCall />
-          <span>93 462 40 00</span>
+          <IconContainer>
+            <BiPhoneCall />
+          </IconContainer>
+          <Text>93 462 40 00</Text>
         </InfoContainer>
         <InfoContainer>
-        <TfiEmail />
-          <span>
+          <IconContainer>
+            <TfiEmail />
+          </IconContainer>
+          <Text>
             lacibacoworking@gramenet.cat, coworkinlaciba@grameimpuls.cat
-          </span>
+          </Text>
         </InfoContainer>
         <InfoContainer>
-          <TbWorldWww />
-          <span>https://laciba.gramenet.cat</span>
+          <IconContainer>
+            <TbWorldWww />
+          </IconContainer>
+          <Text>https://laciba.gramenet.cat</Text>
         </InfoContainer>
         <InfoContainer>
-          <ImLocation />
-          <span>Ps. de LLorenç Serra, 64 08921 Santa Coloma de Gramanet</span>
+          <IconContainer>
+            <ImLocation />
+          </IconContainer>
+          <Text>Ps. de LLorenç Serra, 64 08921 Santa Coloma de Gramanet</Text>
         </InfoContainer>
-        <Space></Space>
+      </Container>
     </>
   );
 };

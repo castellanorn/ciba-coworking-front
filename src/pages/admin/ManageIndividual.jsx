@@ -149,7 +149,7 @@ const ManageIndividual = () => {
         setError={setError}
       />
       <ContainerButtons>
-          <ButtonFind onClick={handleFindResults}>Buscar</ButtonFind>
+          <ButtonFind onClick={handleFindResults}>Cercar</ButtonFind>
         </ContainerButtons>
       <Line />
       {error && <p style={{ color: 'red' }}>{error}</p>}
