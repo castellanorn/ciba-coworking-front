@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useCallback } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../auth/AuthProvider";
 import { apiRequest } from "../../services/apiRequest";
@@ -58,7 +58,9 @@ const AdminDashboard = () => {
   const fetchUsers = async () => {
     try {
       const data = await apiRequest(API_GET_ALL_USERS, "GET", null, headers);
-      setUsers(data.slice(1));
+      const filteredData=data.filter((item) => item.role !== "ADMIN").sort((a, b) => a.name.localeCompare(b.name))
+      setUsers(filteredData);
+  
     } catch (error) {
       console.error("API Error:", error.message);
       setErrorModal({
@@ -70,25 +72,23 @@ const AdminDashboard = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+ 
 
-  const handleEditClick = useCallback((user) => {
+  const handleEditClick = (user) => {
     setModalState({
       isOpen: true,
       selectedUser: user,
     })
-  }, []);
+  };
 
-  const handleDeleteClick= useCallback((user)=>{
+  const handleDeleteClick= (user)=>{
     setDeleteModalState({
       isOpen: true,
       selectedUser: user,
     });
-  },[]);
+  };
 
-  const handleConfirmDelete = useCallback(async () => {
+  const handleConfirmDelete = async () => {
     try {
       if (deleteModalState.selectedUser) {
         await apiRequest(API_DELETE_USER(deleteModalState.selectedUser.id), "DELETE", null, headers);
@@ -103,26 +103,26 @@ const AdminDashboard = () => {
         selectedUser: null,
       });
     }
-  }, [deleteModalState.selectedUser, fetchUsers]);
+  };
 
-  const handleCancelDelete = useCallback(() => {
+  const handleCancelDelete = () => {
     setDeleteModalState({
       isOpen: false,
       selectedUser: null,
     });
-  }, []);
+  };
 
 
-  const handleCloseEditModal = useCallback(() => {
+  const handleCloseEditModal = () => {
     setModalState({
       isOpen: false,
       selectedUser: null,
     });
-  }, []);
+  };
 
   const [confirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
 
-  const handleSubmit = useCallback(async (userData) => {
+  const handleSubmit = async (userData) => {
     try {
       if (!userData.id) {
         await apiRequest(API_CREATE_USER, "POST", userData,headers);
@@ -173,7 +173,7 @@ const AdminDashboard = () => {
       });
 
     }
-  }, [fetchUsers, handleCloseEditModal, users]);
+  };
   
   const handlePlacesClick = (target) => {
     if (target === "users") {

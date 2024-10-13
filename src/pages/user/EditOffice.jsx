@@ -229,7 +229,6 @@ const ReserveOffice = () => {
   };
 
   const handleCancelUpdate = () => {
-    console.log("click", userRole)
     userRole === "admin"
     ? navigate("/gestio-reserves")
     : navigate("/panell-usuari");
