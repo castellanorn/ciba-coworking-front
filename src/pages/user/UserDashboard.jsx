@@ -196,7 +196,7 @@ const UserDashboard = () => {
           onClose={handleCancelDelete}
         >
           <ModalContentStyles>
-            <SubTitleMessage>Confirmar eliminación</SubTitleMessage>
+            <SubTitleMessage>Confirmar eliminació</SubTitleMessage>
             <ParrafConfirmDelete>Estàs segur/a que vols eliminar la reserva</ParrafConfirmDelete>
             <ButtonsContainer>
               <ConfirmButton onClick={handleConfirmDelete}>Aceptar</ConfirmButton>
