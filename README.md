@@ -1,5 +1,3 @@
-Aquí tienes una versión optimizada del README para tu proyecto en GitHub, con formato claro, un diseño coherente y enriquecido con Markdown. He mejorado la legibilidad y organización para que el contenido sea fácil de navegar y entender.
-
 ---
 
 # 🖥️💻 COWORKING LA CIBA 🏢📅
